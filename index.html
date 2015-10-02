@@ -4,6 +4,7 @@
 <head>
 <meta name="naver-site-verification" content="2ed519f80987a038251742fdd713dfff7aab292f"/>
 <meta name="google-site-verification" content="izQYEqG79lqMEdgtrjaqkWZMyH4b-egs8t0AxBF3E3I" />
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -55,9 +56,6 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top">셀폰</a>
-
-
-
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -68,7 +66,6 @@
                     </li>
                     <li>
                         <a class="page-scroll" href="#selphonePosts">셀폰 보증 휴대폰</a>
-                        <a href="http://54.178.140.51/sessionTest">세션, 쿠키 확인 </a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#services">서비스</a>
@@ -89,7 +86,7 @@
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{currentUser.user_name}} 님<span class="caret"></span></a>
                       <ul class="dropdown-menu">
                         <li role="separator" class="divider"></li>
-                        <li><a href="" data-ng-click="logout()">로그아웃</a></li>
+                        <li><a href="" data-ng-click="logout()"><font color="#44619c">로그아웃</font></a></li>
                       </ul>
                     </li>
                 </ul>
@@ -112,16 +109,14 @@
                   <a href="https://play.google.com/store/apps/details?id=kr.co.selphone" target="_blank"><img width="100%" src="./homepage/img/ic_playstore.png" /></a>
                 </div>
 						<br><br>
-
-
             </div>
         </div>
     </header>
 
 
 
-    <!-- Services Section -->
-    <section id="selphonePosts" data-ng-controller="selphonePostsCtrl">
+    <!-- SelphonePost Section -->
+    <div id="selphonePosts" data-ng-controller="selphonePostsCtrl">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -133,7 +128,7 @@
                 <div class="col-sm-4 col-lg-4 col-md-4" data-ng-repeat="selphone_post in selphone_posts">
                 <!-- <div class="col-sm-4 col-lg-4 col-md-4"> -->
                     <div class="thumbnail">
-                        <a href="" data-toggle="modal" data-target="#myModal" ng-click="getSelphonePost(selphone_post)"  style="text-decoration:none">
+                        <a href="#myModal" data-toggle="modal" ng-click="getSelphonePost(selphone_post)"  style="text-decoration:none">
                             <img src="{{selphone_post.post_main_picture}}" alt="...">
                             <div class="caption">
                                 <p>{{selphone_post.post_title}}</p>
@@ -143,16 +138,15 @@
                         </a>
                     </div>
                 </div>
-            </div><!--end elphonePosts Services row -->
-        </div><!--end elphonePosts Services container -->
-    </div><!-- end elphonePosts Services Section -->
-
+            </div><!--end SelphonePosts Services row -->
+        </div><!--end SelphonePosts Services container -->
+    <!-- </div>end SelphonePost Services Section -->
 
 
     <!-- 셀폰 보증 제품 조회 Modal -->
     <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-ng-controller="checkCheaterController"> -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-ng-controller="selphonePostsCtrl">
-        <div class="modal-dialog" role="document">
+    <div id="myModal" class="modal"  data-ng-controller="selphonePostsCtrl">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -188,9 +182,9 @@
                         </div>
                     </div>
                     <div class="caption-full">
-                            <h4 class="pull-right">{{md_sell_price|currency:undefined:0}}</h4>
-                            <h2 class="selphone-blue">{{md_product_name}}</h2>
-                            <h3>{{md_post_title}}</h3>
+                        <h4 class="pull-right">{{md_sell_price|currency:undefined:0}}</h4>
+                        <h2 class="selphone-blue">{{md_product_name}}</h2>
+                        <h3>{{md_post_title}}</h3>
                     </div>
                     <div class="well well-sm">
                         <h4 class="selphone-blue">상품설명</h4>
@@ -229,7 +223,7 @@
                         </table>
                     </div>
                     <div class="caption-full">
-                        <button type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#selphonePostInfoModal">셀폰 보증 판매글 안내</button>
+                        <a href="#selphonePostInfoModal" type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" >셀폰 보증 판매글 안내</a>
                     </div>
                 </div><!-- end modal-body -->
                 <div class="modal-footer">
@@ -238,30 +232,30 @@
                     <button ng-show="isLogin" type="button" class="btn btn-primary btn-lg">{{md_sell_price|currency:undefined:0}} 로그인됨</button>
                     <button ng-hide="isLogin" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal">{{md_sell_price|currency:undefined:0}} 구매하기</button>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div><!--modal-content -->
+        </div><!--modal-dialog -->
+    </div><!--end modal -->
 
 
     <!-- 셀폰 보증 안내 modal -->
-    <div class="modal fade" id="selphonePostInfoModal">
+    <div class="modal" id="selphonePostInfoModal" data-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">셀폰 보증 판매글 안내</h4>
                 </div>
                 <div class="modal-body">
-                    <img style="width: 400px; height: 264px;" src="./homepage/img/img_selphon_post_info.jpg" alt="셀폰 보증 판매글 안내">
+                    <!-- <img style="width: 400px; height: 264px;" src="./homepage/img/img_selphon_post_info.jpg" alt="셀폰 보증 판매글 안내"> -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                    <a href="#" type="button" class="btn btn-default" data-dismiss="modal">닫기</a>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
     <!-- 로그인 modal -->
-	    <div class="modal fade" id="loginModal" data-ng-controller="loginCtrl">
+	<div class="modal fade" id="loginModal" data-ng-controller="loginCtrl">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -274,9 +268,20 @@
                              <img width="350px" src="http://mud-kage.kakao.co.kr/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg"></img>
                         </a>
                         <br>
-                         <a href="">
+                        <a href="" data-ng-click="loginWithNaver()">
                              <img width="350px" src="./homepage/img/login_btn.png" width="231" height="50" id="NaverIdLoginBTN">
-                         </a>
+                        </a>
+
+<!--                         <span id="signinButton">
+                          <span
+                            class="g-signin"
+                            data-callback="signinCallback"
+                            data-clientid="878195477658-fc88tsgs8u4r11e0r2lmanvg65elimfd.apps.googleusercontent.com"
+                            data-cookiepolicy="single_host_origin"
+                            data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                            data-scope="https://www.googleapis.com/auth/plus.login">
+                          </span>
+                        </span> -->
                     </div>
                     로그인을 함으로써 셀폰의 <a href="">개인정보취급방침</a>,<a href="">서비스 이용약관</a>,
                     <a href="">위치기반 서비스 이용약관</a>에 동의 하시게 됩니다.
@@ -331,7 +336,6 @@
                   <h4 class="service-heading">매입 가격</h4>
                   <p class="text-muted">판매하려는 중고폰/깨진액정을 검색해보세요<br>최저가~최고가를 한눈에 확인할 수 있어요</p>
               </div>
-
               <div class="col-md-4">
                   <span class="fa-stack fa-4x">
                     <img width="100%" src="./homepage/img/icon/ic_info.png" />
@@ -354,10 +358,9 @@
 
 
 
-  <div class="container text-center">
- <a href="https://play.google.com/store/apps/details?id=kr.co.selphone"  target="_blank" class="btn btn-xl" >
-                        <i class="fa fa-download"> &nbsp;</i>앱 다운로드 </a>
-  </div>
+    <div class="container text-center">
+    <a href="https://play.google.com/store/apps/details?id=kr.co.selphone"  target="_blank" class="btn btn-xl" ><i class="fa fa-download"> &nbsp;</i>앱 다운로드</a>
+    </div>
 
 
 
@@ -542,19 +545,13 @@
                                 </div>
                                 <div class="timeline-body">
                                     <p class="text-muted">
-
-이 행사는 박원순 서울시장을 비롯해 여러 투자자와 예비창업가등이 참석한 행사였습니다.<br>
+                                    이 행사는 박원순 서울시장을 비롯해 여러 투자자와 예비창업가등이 참석한 행사였습니다.<br>
 									실제 투자를 진행하는 형태로 기획된 이번 설명회에는 상위 5개팀만이 수상하는 영예를 안았습니다<br>
- <a href='http://www.venturesquare.net/578478' target="_blank"><b>더보기</b></a><br>
-
+                                    <a href='http://www.venturesquare.net/578478' target="_blank"><b>더보기</b></a><br>
 									</p>
                                 </div>
                             </div>
                         </li>
-
-
-
-
                         <li class="timeline-inverted" >
                             <div class="timeline-image" >
                                 <h3>우리와<br>미래를
@@ -568,10 +565,9 @@
     </section>
 
 
-  <div class="container text-center">
- <a href="https://play.google.com/store/apps/details?id=kr.co.selphone"  target="_blank" class="btn btn-xl" >
-                        <i class="fa fa-download"> &nbsp;</i>앱 다운로드 </a>
-  </div>
+    <div class="container text-center">
+    <a href="https://play.google.com/store/apps/details?id=kr.co.selphone"  target="_blank" class="btn btn-xl" ><i class="fa fa-download"> &nbsp;</i>앱 다운로드</a>
+    </div>
 
 
     <!-- Team Section -->
@@ -584,8 +580,6 @@
                 </div>
             </div>
             <div class="row">
-
-
                 <div class="col-sm-4">
                     <div class="team-member">
                         <img src="./homepage/img/team/1.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
@@ -600,8 +594,6 @@
                         </ul>
                     </div>
                 </div>
-
-
                 <div class="col-sm-4">
                     <div class="team-member">
                         <img src="./homepage/img/team/2.jpg" width='185px' height='185px' class="img-responsive img-circle" alt="">
@@ -616,8 +608,6 @@
                         </ul>
                     </div>
                 </div>
-
-
                 <div class="col-sm-4">
                     <div class="team-member">
                         <img src="./homepage/img/team/3.jpg" width='185px' height='185px' class="img-responsive img-circle" alt="">
@@ -632,26 +622,6 @@
                         </ul>
                     </div>
                 </div>
-
-<!--
-
-                <div class="col-sm-4">
-                    <div class="team-member">
-                        <img src="./homepage/img/team/4.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
-                        <h4>임동수</h4>
-                        <p class="text-muted"><b>Developer</b></p>
-						 <p class="text-muted">개발소대 병장<br>개발소대장이 까라면 (생각해보고) 깐다!</p>
-                        <ul class="list-inline social-buttons">
-
-                            <li><a href="https://www.facebook.com/dongsu.lim.1" target="_blank"><i class="fa fa-facebook"></i></a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </div>
-
--->
-
                 <div class="col-sm-4">
                     <div class="team-member">
                         <img src="./homepage/img/team/5.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
@@ -666,9 +636,6 @@
                         </ul>
                     </div>
                 </div>
-
-
-
                 <div class="col-sm-4">
                     <div class="team-member">
                         <img src="./homepage/img/team/6.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
@@ -682,10 +649,6 @@
                         </ul>
                     </div>
                 </div>
-
-
-
-
             </div>
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 text-center">
@@ -696,11 +659,11 @@
     </section>
 
 
-<!-- 셀폰 옐로아이디 -->
+    <!-- 셀폰 옐로아이디 -->
 
- <a href='http://goto.kakao.com/ho1jqmha' target="_blank">
- <img src="./homepage/img/yellow_id.png" class="img-responsive" alt="Responsive image">
- </a>
+    <a href='http://goto.kakao.com/ho1jqmha' target="_blank">
+    <img src="./homepage/img/yellow_id.png" class="img-responsive" alt="Responsive image">
+    </a>
 
 
 
@@ -814,9 +777,11 @@
 
     <!-- jQuery -->
     <script src="./homepage/js/jquery.js"></script>
+    <!-- jQuery  cookies-->
+    <script src="./homepage/js/jquery-cookie.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="./homepage/js/bootstrap.min.js"></script>
+    <script src="./homepage/js/bootstrap.js"></script>
 
     <!-- Plugin JavaScript -->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
@@ -850,6 +815,13 @@
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script src="./homepage/js/login_kakao.js"></script>
 
+    <!-- 네아버 로그인 -->
+    <script src="./homepage/js/naverLogin.js"></script> <!-- 네이버에서 제공하는 sdk -->
+    <script src="./homepage/js/login_naver.js"></script>
+
+    <!-- 구글 로그인 -->
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
     <script>
 
         var DEV_HOST = "http://54.178.140.51"
@@ -859,17 +831,32 @@
         var app = angular.module('selphoneApp', ['ngRoute', 'ngCookies']);
 
         app.service('LoginService', function(SessionInfoService, $http){
-            this.Login = function(callback){
-                loginWithKakao(function(isSuccess, result){
-                    if(isSuccess){
-                        console.log('loginWithKakao isSuccess');
-                        SessionInfoService.reset(); // 이전 쿠키 데이터 다 지움
-                        SessionInfoService.setUserInfo(result.result); // 로그인한 정보 저장
-                        callback(result.result);
-                    }else{
-                        console.log('loginWithKakao error');
-                    }
-                });
+            this.Login = function(type, callback){
+
+                switch(type){
+                    case 'kakao' :
+                        loginWithKakao(function(isSuccess, result){
+                            if(isSuccess){
+                                SessionInfoService.reset(); // 이전 쿠키 데이터 다 지움
+                                SessionInfoService.setUserInfo(result.result); // 로그인한 정보 저장
+                                callback(result.result);
+                            }else{
+                                console.log('loginWithKakao error');
+                            }
+                        });
+                    break;
+                    case 'naver' :
+                        loginWithNaver(function(isSuccess, result){
+                            if(isSuccess){
+                                SessionInfoService.reset(); // 이전 쿠키 데이터 다 지움
+                                SessionInfoService.setUserInfo(result.result); // 로그인한 정보 저장
+                                callback(result.result);
+                            }else{
+                                console.log('loginWithNaver error');
+                            }
+                        });
+                    break;
+                }
             }
             this.Logout = function(callback){
                 http($http, "POST", DEV_HOST+"/logout", null, function(isSuccess, result){
@@ -880,8 +867,9 @@
 
 
         app.service('SessionInfoService', function($rootScope, $http, $cookies){
+
             try {
-                $rootScope.currentUser = JSON.parse($cookies.get('userInfo')) || null; // 쿠키에 유저 정보가 있으면 넣어준다.
+                $rootScope.currentUser = $cookies.getObject('userInfo') || null; // 쿠키에 유저 정보가 있으면 넣어준다.
             } catch(e) {
                 console.log("SessionInfoService e", e);
                 $rootScope.currentUser = null;
@@ -908,8 +896,7 @@
             };
 
             this.getCurrentUser = function() {
-                if(typeof($rootScope.currentUser) != 'object') // 객체가 아니면 객체화
-                return JSON.parse($rootScope.currentUser);
+                return $rootScope.currentUser;
             };
             this.isUserSignedIn = function() {
                 if(this.getCurrentUser() && this.getCurrentUser().id) {
@@ -922,14 +909,14 @@
             this.setUserInfo = function(info) {
                 if($rootScope.currentUser == null || $rootScope.currentUser == 'null') $rootScope.currentUser = {} // null에는 넣지 못하기 때문에
                 angular.extend($rootScope.currentUser, info); // info의 값을 $rootScope.currentUser로 복사
-                $cookies.put('userInfo',JSON.stringify(info));
+                $cookies.putObject('userInfo', info);
                 $rootScope.isLogin = true; // 로그인여부
                 // console.log('세션에 저장 완료', $cookies.get('userInfo'));
             };
 
             this.reset = function() {
                 $rootScope.currentUser = null; //루트 스코프 초기화
-                $cookies.put('userInfo', null);
+                $cookies.remove('userInfo');
                 $rootScope.isLogin =  false; // 로그인여부
             };
         });
@@ -961,14 +948,15 @@
         app.controller('loginCtrl', ['$scope', '$http', '$window', '$rootScope', 'LoginService', 'SessionInfoService', function($scope, $http, $window, $rootScope, LoginService, SessionInfoService){
             console.log('loginCtrl');
 
-            // $rootScope.isLogin = SessionInfoService.isUserSignedIn();
-            // $rootScope.currentUser = SessionInfoService.getCurrentUser();
-            // console.log('$rootScope.currentUser', $rootScope.currentUser);
-            // console.log('$rootScope.currentUser type', typeof($rootScope.currentUser));
 
-            $scope.loginWithKakao = function(){
-                LoginService.Login(changeState);
+            $scope.loginWithKakao = function(type){
+                LoginService.Login('kakao', changeState);
             };
+
+            $scope.loginWithNaver = function(type){
+                LoginService.Login('naver', changeState);
+            };
+
 
             $scope.logout = function(){
                 LoginService.Logout(function(isSuccess){
@@ -989,6 +977,50 @@
             }
         }])
     </script>
+    <script type="text/javascript">
+      function signinCallback(authResult) {
+        // console.log('authResult', authResult);
+        // console.log('authResult.access_token', authResult.access_token);
+        var accessToken = authResult.access_token;
+        var data = {
+          "accessToken":accessToken,
+          "type" : "google",
+          "regId" : "web"
+        };
+        if (authResult['access_token']) {
+          $.ajax({
+            url: "http://54.178.140.51/login",
+            type : "post",
+            crossDomain : true,
+            xhrFields: {withCredentials: true}, // 이게 세션 유지하는거
+            data : data,
+            success: function(res) {
+                console.log('성공 ', res.result);
+                callback(true, res)
+            },
+            error: function(res) {
+                callback(false, res.responseText)
+                alert("로그인 실패"+res.responseText);
+            }
+          });
+        } else if (authResult['error']) {
+          // 오류가 발생했습니다.
+          // 가능한 오류 코드:
+          //   "access_denied" - 사용자가 앱에 대한 액세스 거부
+          //   "immediate_failed" - 사용자가 자동으로 로그인할 수 없음
+          // console.log('오류 발생: ' + authResult['error']);
+        }
+      }
+    </script>
+    <!-- 이 비동기 자바스크립트를 </body> 태그 앞에 배치 -->
+    <script type="text/javascript">
+      (function() {
+       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+       po.src = 'https://apis.google.com/js/client:plusone.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+     })();
+    </script>
+
 
     <!-- angular service  -->
     <!-- <script src="./homepage/js/service.js"></script> -->
