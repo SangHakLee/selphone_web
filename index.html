@@ -4,6 +4,9 @@
 <head>
 <meta name="naver-site-verification" content="2ed519f80987a038251742fdd713dfff7aab292f"/>
 <meta name="google-site-verification" content="izQYEqG79lqMEdgtrjaqkWZMyH4b-egs8t0AxBF3E3I" />
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<script src="https://apis.google.com/js/api:client.js"></script>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,8 +19,9 @@
     <!-- Bootstrap Core CSS -->
     <link href="./homepage/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Foundation -->
-    <link href="./homepage/css/foundation.min.css" rel="stylesheet">
+    <!-- ng-dialog -->
+    <link href="./homepage/css/ngDialog.min.css" rel="stylesheet">
+    <link href="./homepage/css/ngDialog-theme-default.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="./homepage/css/agency.css" rel="stylesheet">
@@ -30,7 +34,7 @@
     <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -39,7 +43,40 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    <style type="text/css">
+        #customBtn {
+          display: inline-block;
+          background: #4285f4;
+          color: white;
+          width: 190px;
+          border-radius: 5px;
+          white-space: nowrap;
+        }
+        #customBtn:hover {
+          cursor: pointer;
+        }
+        span.label {
+          font-weight: bold;
+        }
+        span.icon {
+          background: url('/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
+          display: inline-block;
+          vertical-align: middle;
+          width: 42px;
+          height: 42px;
+          border-right: #2265d4 1px solid;
+        }
+        span.buttonText {
+          display: inline-block;
+          vertical-align: middle;
+          padding-left: 42px;
+          padding-right: 42px;
+          font-size: 14px;
+          font-weight: bold;
+          /* Use the Roboto font that is loaded in the <head> */
+          font-family: 'Roboto', sans-serif;
+        }
+    </style>
 </head>
 
 <body id="page-top" class="index" data-ng-app="selphoneApp">
@@ -108,7 +145,7 @@
                 <div class="googleplay btn">
                   <a href="https://play.google.com/store/apps/details?id=kr.co.selphone" target="_blank"><img width="100%" src="./homepage/img/ic_playstore.png" /></a>
                 </div>
-						<br><br>
+                        <br><br>
             </div>
         </div>
     </header>
@@ -229,7 +266,7 @@
                 <div class="modal-footer">
                     <!-- <button type="submit" class="btn btn-primary" data-ng-click="checkCheater(type, keyword)">조회</button> -->
                     <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-                    <button ng-show="isLogin" type="button" class="btn btn-primary btn-lg">{{md_sell_price|currency:undefined:0}} 로그인됨</button>
+                    <button ng-show="isLogin" type="button" class="btn btn-primary btn-lg" data-ng-click="clickToOpen()">{{md_sell_price|currency:undefined:0}} 로그인됨</button>
                     <button ng-hide="isLogin" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal">{{md_sell_price|currency:undefined:0}} 구매하기</button>
                 </div>
             </div><!--modal-content -->
@@ -255,7 +292,7 @@
     </div><!-- /.modal -->
 
     <!-- 로그인 modal -->
-	<div class="modal fade" id="loginModal" data-ng-controller="loginCtrl">
+    <div class="modal fade" id="loginModal" data-ng-controller="loginCtrl">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -272,16 +309,14 @@
                              <img width="350px" src="./homepage/img/login_btn.png" width="231" height="50" id="NaverIdLoginBTN">
                         </a>
 
-<!--                         <span id="signinButton">
-                          <span
-                            class="g-signin"
-                            data-callback="signinCallback"
-                            data-clientid="878195477658-fc88tsgs8u4r11e0r2lmanvg65elimfd.apps.googleusercontent.com"
-                            data-cookiepolicy="single_host_origin"
-                            data-requestvisibleactions="http://schemas.google.com/AddActivity"
-                            data-scope="https://www.googleapis.com/auth/plus.login">
-                          </span>
-                        </span> -->
+                        <div id="gSignInWrapper">
+                            <span class="label">Sign in with:</span>
+                            <div id="customBtn" class="customGPlusSignIn">
+                              <span class="icon"></span>
+                              <span class="buttonText">Google</span>
+                            </div>
+                        </div>
+                        <div id="name"></div>
                     </div>
                     로그인을 함으로써 셀폰의 <a href="">개인정보취급방침</a>,<a href="">서비스 이용약관</a>,
                     <a href="">위치기반 서비스 이용약관</a>에 동의 하시게 됩니다.
@@ -300,7 +335,7 @@
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">셀폰 서비스를 소개합니다</h2>
                  <!--   <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>-->
-				 <br>
+                 <br>
                 </div>
             </div>
             <div class="row text-center">
@@ -329,7 +364,7 @@
                     <p class="text-muted">지도를 통해 내 주변에서 가까운<br>판매자, 업체를 볼 수 있어요</p>
                 </div>
 
-			         <div class="col-md-4">
+                     <div class="col-md-4">
                   <span class="fa-stack fa-4x">
                     <img width="100%" src="./homepage/img/icon/ic_money.png" />
                   </span>
@@ -373,8 +408,8 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">우리는 셀폰을 서비스하는 <img  width='180px'  src="./homepage/img/logos/logo.png"> 입니다</h2>
-					<br>
-                    <h3 class="section-subheading text-muted"><b> <img  width='100px'  src="./homepage/img/logos/logo.png"></b> 회사는	증권회사 출신의 입사동기 3명이서 창업한 회사입니다<br><br>
+                    <br>
+                    <h3 class="section-subheading text-muted"><b> <img  width='100px'  src="./homepage/img/logos/logo.png"></b> 회사는 증권회사 출신의 입사동기 3명이서 창업한 회사입니다<br><br>
 세 친구 중 한명인 박상권 공동창업자는 취미로 휴대폰을 300개 이상을 매매해왔습니다.<br>
 
 지인이 손해를 보고 전화기를 팔까 싶으면 박 창업자는 대신 팔아주기도 하며 친구들 사이에선 유명한 휴대폰 매매업자로 통했습니다.<br>
@@ -385,7 +420,7 @@
 이날의 모임은 증권회사에서 3명의 직원이 퇴사를 결심하는 날이었습니다.<br><br>
 
 <a href='http://www.gukjenews.com/news/articleView.html?idxno=217088' target="_blank"><b>기사 더보기</b></a><br>
-					</h3>
+                    </h3>
                 </div>
             </div>
             <div class="row">
@@ -416,10 +451,10 @@
                                 </div>
                                 <div class="timeline-body">
                                     <p class="text-muted">SK플래닛에서 3개월간 진행한 [인사이더2014]프로그램 입니다.<br>
-									 13대 1이라는 치열한 경쟁률을 뚫고 선정된 10팀의 오픈 IR과 모의 투자 대회가 진행되었습니다.<br>
+                                     13대 1이라는 치열한 경쟁률을 뚫고 선정된 10팀의 오픈 IR과 모의 투자 대회가 진행되었습니다.<br>
 
 <a href='https://oic.skplanet.com/front/centernews/viewCenterNews.action?seq=371' target="_blank"><b>더보기</b></a><br>
-									</p>
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -434,9 +469,9 @@
                                 </div>
                                 <div class="timeline-body">
                                     <p class="text-muted">현역 벤처투자자인 Capstone Partners 송은강 대표, IDG Ventures Korea 이희우 대표가 스타트업 창업자를 만나 회사의 성장 가능성과 투자 가능성을 직접 상담합니다.<br>
-									 출연 스타트업의 사업내용과 벤처캐피탈의 시각을 모두 경험해 볼 수 있는 국내 유일 스타트업 진단방송입니다.<br>
-									 <a href='https://www.youtube.com/watch?v=wrj0B0IbaAM' target="_blank"><b>방송보기</b></a><br>
-									</p>
+                                     출연 스타트업의 사업내용과 벤처캐피탈의 시각을 모두 경험해 볼 수 있는 국내 유일 스타트업 진단방송입니다.<br>
+                                     <a href='https://www.youtube.com/watch?v=wrj0B0IbaAM' target="_blank"><b>방송보기</b></a><br>
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -452,7 +487,7 @@
                                 <div class="timeline-body">
                                     <p class="text-muted">대한민국 창업리그는 ’07년부터 운영된 국내 최대 규모·최고 권위의 창업경진대회로 전국의 창업경진대회에서 선발된 최우수 수상자를 전국 본선에 추천하는 방식으로 진행됩니다.<br>
 
-									</p>
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -470,7 +505,7 @@
                                 <div class="timeline-body">
                                     <p class="text-muted">두 달간 진행된 트라이앵글 토크 콘서트는 지역 간 창업 생태계 불균형 해소를 통해 창조경제 활성화에 기여하고 있는 SK플래닛의 동반성장 프로그램입니다.<br>
  <a href='https://oic.skplanet.com/front/centernews/viewCenterNews.action?seq=381' target="_blank"><b>더보기</b></a><br>
-									</p>
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -486,7 +521,7 @@
                                 <div class="timeline-body">
                                     <p class="text-muted">앱출시 100일만에 플레이스토어 10만다운로드를 달성하였습니다.<br>
 
-									</p>
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -494,7 +529,7 @@
 
 
 
-						 <li>
+                         <li>
                             <div class="timeline-image">
                                 <img class="img-circle img-responsive" src="./homepage/img/about/7.png" alt="">
                             </div>
@@ -505,11 +540,11 @@
                                 </div>
                                 <div class="timeline-body">
                                     <p class="text-muted">
-									SK플래닛의 대표 스타트업 프로그램 '101스타트업 코리아'<br>
-									이번 3기는 약 30여명의 심사위원이 3번의 심사를 거쳐 총 10팀이 선정되었습니다.<br>
-									12대 1의 경쟁률을 뚷고 선정된 3기가  처음으로 모인 부트캠프에서 한 스타트업은 각 팀의 발표를 들으며 "이곳은 오션스 일레븐 같다."라는 평을 남겼습니다.<br>
-									 <a href='https://oic.skplanet.com/front/centernews/viewCenterNews.action?seq=383' target="_blank"><b>더보기</b></a><br>
-									</p>
+                                    SK플래닛의 대표 스타트업 프로그램 '101스타트업 코리아'<br>
+                                    이번 3기는 약 30여명의 심사위원이 3번의 심사를 거쳐 총 10팀이 선정되었습니다.<br>
+                                    12대 1의 경쟁률을 뚷고 선정된 3기가  처음으로 모인 부트캠프에서 한 스타트업은 각 팀의 발표를 들으며 "이곳은 오션스 일레븐 같다."라는 평을 남겼습니다.<br>
+                                     <a href='https://oic.skplanet.com/front/centernews/viewCenterNews.action?seq=383' target="_blank"><b>더보기</b></a><br>
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -526,15 +561,15 @@
                                 </div>
                                 <div class="timeline-body">
                                     <p class="text-muted">
-									<br>
-									</p>
+                                    <br>
+                                    </p>
                                 </div>
                             </div>
                         </li>
 
 
 
-					 <li>
+                     <li>
                             <div class="timeline-image">
                                 <img class="img-circle img-responsive" src="./homepage/img/about/9.jpg" alt="">
                             </div>
@@ -546,9 +581,9 @@
                                 <div class="timeline-body">
                                     <p class="text-muted">
                                     이 행사는 박원순 서울시장을 비롯해 여러 투자자와 예비창업가등이 참석한 행사였습니다.<br>
-									실제 투자를 진행하는 형태로 기획된 이번 설명회에는 상위 5개팀만이 수상하는 영예를 안았습니다<br>
+                                    실제 투자를 진행하는 형태로 기획된 이번 설명회에는 상위 5개팀만이 수상하는 영예를 안았습니다<br>
                                     <a href='http://www.venturesquare.net/578478' target="_blank"><b>더보기</b></a><br>
-									</p>
+                                    </p>
                                 </div>
                             </div>
                         </li>
@@ -585,7 +620,7 @@
                         <img src="./homepage/img/team/1.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
                         <h4>최중필</h4>
                         <p class="text-muted"><b>CEO & Co-Founder</b></p>
-						 <p class="text-muted">라꾸라꾸를 뼈속까지 싫어하는 대표<br>1의 가능성을 10으로 만드는 능력을 보유</p>
+                         <p class="text-muted">라꾸라꾸를 뼈속까지 싫어하는 대표<br>1의 가능성을 10으로 만드는 능력을 보유</p>
                         <ul class="list-inline social-buttons">
 
                             <li><a href="https://www.facebook.com/cjphynmu" target="_blank"><i class="fa fa-facebook"></i></a>
@@ -598,8 +633,8 @@
                     <div class="team-member">
                         <img src="./homepage/img/team/2.jpg" width='185px' height='185px' class="img-responsive img-circle" alt="">
                         <h4>전승철</h4>
-						 <p class="text-muted"><b>CMO & Co-Founder</b></p>
-						 <p class="text-muted">소통으로 다가가 마케팅하고,<br>진심으로 세일즈 하고싶은 순수청년</p>
+                         <p class="text-muted"><b>CMO & Co-Founder</b></p>
+                         <p class="text-muted">소통으로 다가가 마케팅하고,<br>진심으로 세일즈 하고싶은 순수청년</p>
                         <ul class="list-inline social-buttons">
 
                             <li><a href="https://www.facebook.com/seungchul.jeon" target="_blank"><i class="fa fa-facebook"></i></a>
@@ -613,7 +648,7 @@
                         <img src="./homepage/img/team/3.jpg" width='185px' height='185px' class="img-responsive img-circle" alt="">
                         <h4>박상권</h4>
                         <p class="text-muted"><b>Developer & Co-Founder</b></p>
-						 <p class="text-muted">라꾸라꾸를 사랑하는 뼛속까지 개발자<br>휴대폰 300개이상 구입/판매 경험</p>
+                         <p class="text-muted">라꾸라꾸를 사랑하는 뼛속까지 개발자<br>휴대폰 300개이상 구입/판매 경험</p>
                         <ul class="list-inline social-buttons">
 
                             <li><a href="https://www.facebook.com/gun860912" target="_blank"><i class="fa fa-facebook"></i></a>
@@ -627,7 +662,7 @@
                         <img src="./homepage/img/team/5.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
                         <h4>이상학</h4>
                         <p class="text-muted"><b>Developer</b></p>
-						 <p class="text-muted">개발소대 상병(진)<br>개발소대장이 까라면 깐다!</p>
+                         <p class="text-muted">개발소대 상병(진)<br>개발소대장이 까라면 깐다!</p>
                         <ul class="list-inline social-buttons">
 
                             <li><a href="https://www.facebook.com/Ryan.7298" target="_blank"><i class="fa fa-facebook"></i></a>
@@ -641,7 +676,7 @@
                         <img src="./homepage/img/team/6.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
                         <h4>이지연</h4>
                         <p class="text-muted"><b>Designer</b></p>
-						 <p class="text-muted">디자인은 내 손에서!<br>무엇이든 만들어 드려요</p>
+                         <p class="text-muted">디자인은 내 손에서!<br>무엇이든 만들어 드려요</p>
                         <ul class="list-inline social-buttons">
                             <li><a href="https://www.facebook.com/jeeyeon.lee.9" target="_blank"><i class="fa fa-facebook"></i></a>
                             </li>
@@ -735,8 +770,8 @@
                                 <a href="http://rocketpunch.com/company/selphone/" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-rocket"></i></a>
                             </li>
 
-							<!-- 2015.08.04추가 네이버 블로그 -->
-							<li>
+                            <!-- 2015.08.04추가 네이버 블로그 -->
+                            <li>
                                 <a href="http://blog.naver.com/selphone0" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-bold"></i></a>
                             </li>
                         </ul>
@@ -765,10 +800,8 @@
     //   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     //   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     //   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
     //   ga('create', 'UA-54112184-1', 'auto');
     //   ga('send', 'pageview');
-
     </script>
 
 
@@ -799,10 +832,8 @@
     <script src="./homepage/js/angular.js"></script>
     <script src="./homepage/js/angular-route.min.js"></script>
     <script src="./homepage/js/angular-cookies.min.js"></script>
+    <script src="./homepage/js/ngDialog.min.js"></script>
 
-    <!-- foundation.js -->
-    <script src="./homepage/js/foundation.min.js"></script>
-    <script src="./homepage/js/foundation.equalizer.js"></script>
 
     <!-- 필터 한국에 맞게 i18n 지정 -->
     <script src="./homepage/js/angular-locale_ko.js"></script>
@@ -823,16 +854,12 @@
     <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 
     <script>
-
         var DEV_HOST = "http://54.178.140.51"
         var PRD_HOST = "http://api.selphone.co.kr"
         url = DEV_HOST;
-
-        var app = angular.module('selphoneApp', ['ngRoute', 'ngCookies']);
-
+        var app = angular.module('selphoneApp', ['ngRoute', 'ngCookies', 'ngDialog']);
         app.service('LoginService', function(SessionInfoService, $http){
             this.Login = function(type, callback){
-
                 switch(type){
                     case 'kakao' :
                         loginWithKakao(function(isSuccess, result){
@@ -846,7 +873,23 @@
                         });
                     break;
                     case 'naver' :
+
+                        onSignIn();
+                        return;
+
                         loginWithNaver(function(isSuccess, result){
+                            if(isSuccess){
+                                SessionInfoService.reset(); // 이전 쿠키 데이터 다 지움
+                                SessionInfoService.setUserInfo(result.result); // 로그인한 정보 저장
+                                callback(result.result);
+                            }else{
+                                console.log('loginWithNaver error');
+                            }
+                        });
+                    break;
+                    case 'google' :
+                        console.log('서비스 단');
+                        loginWithGoogle(function(isSuccess, result){
                             if(isSuccess){
                                 SessionInfoService.reset(); // 이전 쿠키 데이터 다 지움
                                 SessionInfoService.setUserInfo(result.result); // 로그인한 정보 저장
@@ -864,10 +907,7 @@
                 })
             }
         });
-
-
         app.service('SessionInfoService', function($rootScope, $http, $cookies){
-
             try {
                 $rootScope.currentUser = $cookies.getObject('userInfo') || null; // 쿠키에 유저 정보가 있으면 넣어준다.
             } catch(e) {
@@ -879,22 +919,18 @@
             }else{
                 $rootScope.isLogin = true;
             }
-
             console.log('$rootScope.currentUser ', $rootScope.currentUser);
             console.log('$rootScope.isLogin ', $rootScope.isLogin);
-
             this.checkIsLogin = function(){
                 http($http, "GET", DEV_HOST+"/is-login", null, function(isSuccess, result){
                     console.log('로그인 체크 ', result.login_info)
                     if(result.is_login){
-
                     }else{ // 로그인 안됨
                         alert('로그인 필요');
                         $window.location.reload();
                     }
                 })
             };
-
             this.getCurrentUser = function() {
                 return $rootScope.currentUser;
             };
@@ -905,7 +941,6 @@
                     return false;
                 }
             };
-
             this.setUserInfo = function(info) {
                 if($rootScope.currentUser == null || $rootScope.currentUser == 'null') $rootScope.currentUser = {} // null에는 넣지 못하기 때문에
                 angular.extend($rootScope.currentUser, info); // info의 값을 $rootScope.currentUser로 복사
@@ -913,27 +948,23 @@
                 $rootScope.isLogin = true; // 로그인여부
                 // console.log('세션에 저장 완료', $cookies.get('userInfo'));
             };
-
             this.reset = function() {
                 $rootScope.currentUser = null; //루트 스코프 초기화
                 $cookies.remove('userInfo');
                 $rootScope.isLogin =  false; // 로그인여부
             };
         });
-
-        app.controller('selphonePostsCtrl', ['$scope', '$http', '$rootScope', function($scope, $http, $rootScope){
+        app.controller('selphonePostsCtrl', ['$scope', '$http', '$rootScope', 'ngDialog', function($scope, $http, $rootScope, ngDialog){
             console.log('selphonePostsCtrl');
             http($http, 'GET', url+'/selphone-posts', null, function(isSuccess, data){
-                // console.log('data.results1', data.results);
                 var selphone_posts = data.results
                 for (i in selphone_posts){
                     selphone_posts[i].post_main_picture = selphone_posts[i].post_pictures.split(',')[0];
                 }
                 $scope.selphone_posts = selphone_posts
                 $scope.isLogin = $rootScope.isLogin // hide show를 위한 변수
-
                 $scope.getSelphonePost =function(selphone_post){
-                    console.log('selphone_post', selphone_post);
+                    // console.log('selphone_post', selphone_post);
                     $scope.md_product_name = selphone_post.TB_PRODUCT.product_name
                     $scope.md_sell_price = selphone_post.sell_price
                     $scope.md_post_title = selphone_post.post_title
@@ -941,23 +972,42 @@
                     $scope.md_post_product_storage = selphone_post.post_product_storage
                     $scope.md_post_product_telecom = selphone_post.post_product_telecom
                     $scope.pictures = selphone_post.post_pictures.split(',')
+
+                    // 다음 결제창으로 넘기기 위한
+                    $rootScope.selphone_posts = {}
+                    $rootScope.selphone_posts.post_title = selphone_post.post_title
+                    $rootScope.selphone_posts.product_name = selphone_post.TB_PRODUCT.product_name
+                    $rootScope.selphone_posts.sell_price = selphone_post.sell_price
+                    $rootScope.selphone_posts.post_pictures = selphone_post.post_pictures.split(',')[0]
                 }
-            })
+            });
+            $scope.clickToOpen = function () {
+                ngDialog.open({ template: 'order.html' });
+            };
+        }]);
+
+        app.controller('selphoneOrderCtrl', ['$scope', '$rootScope',  function($scope, $rootScope){
+            console.log('$rootScope.selphone_posts', $rootScope.selphone_posts);
+            console.log('현재유저 ', $rootScope.currentUser);
+            $scope.post_main_picture = $rootScope.selphone_posts.post_pictures
+            $scope.post_title = $rootScope.selphone_posts.post_title
+            $scope.product_name = $rootScope.selphone_posts.product_name
+            $scope.sell_price = $rootScope.selphone_posts.sell_price
         }]);
 
         app.controller('loginCtrl', ['$scope', '$http', '$window', '$rootScope', 'LoginService', 'SessionInfoService', function($scope, $http, $window, $rootScope, LoginService, SessionInfoService){
             console.log('loginCtrl');
-
-
             $scope.loginWithKakao = function(type){
                 LoginService.Login('kakao', changeState);
             };
-
             $scope.loginWithNaver = function(type){
                 LoginService.Login('naver', changeState);
             };
 
-
+            $scope.loginWithGoogle = function(type){
+                console.log('controller 왔음 ');
+                LoginService.Login('google', changeState);
+            };
             $scope.logout = function(){
                 LoginService.Logout(function(isSuccess){
                     if(isSuccess){
@@ -969,7 +1019,6 @@
                     $window.location.reload();
                 });
             }
-
             function changeState(){
                 // alert(SessionInfoService.getCurrentUser().user_id + '님 반갑습니다 :)');
                 $window.location.reload(); // 로그인 후 새로고침
@@ -977,49 +1026,37 @@
             }
         }])
     </script>
-    <script type="text/javascript">
-      function signinCallback(authResult) {
-        // console.log('authResult', authResult);
-        // console.log('authResult.access_token', authResult.access_token);
-        var accessToken = authResult.access_token;
-        var data = {
-          "accessToken":accessToken,
-          "type" : "google",
-          "regId" : "web"
-        };
-        if (authResult['access_token']) {
-          $.ajax({
-            url: "http://54.178.140.51/login",
-            type : "post",
-            crossDomain : true,
-            xhrFields: {withCredentials: true}, // 이게 세션 유지하는거
-            data : data,
-            success: function(res) {
-                console.log('성공 ', res.result);
-                callback(true, res)
-            },
-            error: function(res) {
-                callback(false, res.responseText)
-                alert("로그인 실패"+res.responseText);
-            }
+    <script>
+        // var googleUser = {};
+        var startApp = function() {
+          gapi.load('auth2', function(){
+
+            auth2 = gapi.auth2.init({
+              client_id: '175032780584-npoihbmnjes29gup7dgo2v992cdgbd0p.apps.googleusercontent.com',
+              cookiepolicy: 'single_host_origin',
+              scope: 'profile'
+            });
+            attachSignin(document.getElementById('customBtn'));
           });
-        } else if (authResult['error']) {
-          // 오류가 발생했습니다.
-          // 가능한 오류 코드:
-          //   "access_denied" - 사용자가 앱에 대한 액세스 거부
-          //   "immediate_failed" - 사용자가 자동으로 로그인할 수 없음
-          // console.log('오류 발생: ' + authResult['error']);
-        }
-      }
-    </script>
-    <!-- 이 비동기 자바스크립트를 </body> 태그 앞에 배치 -->
-    <script type="text/javascript">
-      (function() {
-       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-       po.src = 'https://apis.google.com/js/client:plusone.js';
-       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-     })();
-    </script>
+        };
+
+        function attachSignin(element) {
+          console.log("click");
+          auth2.attachClickHandler(element, {}, function(googleUser) {authSuccess(googleUser)}, function(error) { authError(error)});
+        };
+
+        function authSuccess(googleUser){
+          console.log('access_token', googleUser.getAuthResponse().access_token);
+          document.getElementById('name').innerText = "Signed in: " + googleUser.getBasicProfile().getName();
+        };
+
+        function authError(error){
+          alert(JSON.stringify(error, undefined, 2));
+        };
+
+        startApp();
+      </script>
+
 
 
     <!-- angular service  -->
