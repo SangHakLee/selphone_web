@@ -1,84 +1,107 @@
-<!DOCTYPE html>
-<html lang="ko">
-
-<head>
-<meta name="naver-site-verification" content="2ed519f80987a038251742fdd713dfff7aab292f"/>
-<meta name="google-site-verification" content="izQYEqG79lqMEdgtrjaqkWZMyH4b-egs8t0AxBF3E3I" />
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>내가 잘파는 이유, 셀폰</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="./homepage/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Foundation -->
-    <link href="./homepage/css/foundation.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="./homepage/css/agency.css" rel="stylesheet">
-    <link href="./homepage/css/color.css" rel="stylesheet">
-    <link href="./homepage/css/custom.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link href="./homepage/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-	<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-    <link href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-</head>
-<body>
-    결제
+<link href="./homepage/css/bootstrap.min.css" rel="stylesheet">
 
 
-    <!-- jQuery -->
-    <script src="./homepage/js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="./homepage/js/bootstrap.min.js"></script>
+<div data-ng-controller="selphoneOrderCtrl">
+	<div class="thumbnail">
+		<img src="{{post_main_picture}}" alt=""/>
+		<div class="caption">
+		    <p>{{post_title}}</p>
+            <h4 class="pull-right selphone-blue">{{sell_price|currency:undefined:0}}</h4>
+            <h4>{{product_name}}</h4>
+   		</div>
+	</div>
+		<div class="well well-sm table-responsive">
+	    <h4 class="selphone-blue">배송정보</h4>
+	    <table class="table">
+	        <thead></thead>
+	        <tbody>
+	            <tr>
+	                <td class="selphone-blue">받으시는 분</td>
+	                <td><input id="" type="text" name="" value="{{currentUser.user_name}}" placeholder="이름을 입력해주세요"/></td>
+	            </tr>
+	            <tr>
+	                <td class="selphone-blue">연락처</td>
+	                <td><input id="" type="text" name="" value="{{currentUser.user_number}}" placeholder="전화번호를 입력해주세요"/></td>
+	            </tr>
+	            <tr>
+	                <td class="selphone-blue">주소</td>
+	                <td>
+		                <textarea id="address" name="" onclick="sample6_execDaumPostcode()" placeholder="주소를 입력해주세요" ></textarea>
+	                </td>
+	                
+	            </tr>
+	            <tr>
+	                <td class="selphone-blue">상세주소</td>
+	                <td><textarea id="address_detail" name="" placeholder="상세주소를 입력해주세요" ></textarea></td>
+	            </tr>
+	        </tbody>
+	    </table>
+	</div>
+	<div class="well well-sm">
+	    <h4 class="selphone-blue">결제방법</h4>
+	    <div class="radio">
+		  <label>
+		    <input type="radio" name="payment" id="pay_radio_card" value="option1" checked>
+		    신용카드
+		  </label>
+		  <label>
+		    <input type="radio" name="payment" id="pay_radio_account" value="option2">
+		    계좌이체
+		  </label>
+		  <label>
+		    <input type="radio" name="payment" id="pay_radio_vbank" value="option2">
+		    가상계좌(무통장입금)
+		  </label>
+		</div>
+	</div>
+	
+	<div class="caption-full">
+		<button type="button" class="btn btn-danger btn-lg btn-block">결제하기</button>
+	</div>                      	
+</div>
 
-    <!-- Plugin JavaScript -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-    <script src="./homepage/js/classie.js"></script>
-    <script src="./homepage/js/cbpAnimatedHeader.js"></script>
 
-    <!-- Contact Form JavaScript -->
-    <script src="./homepage/js/jqBootstrapValidation.js"></script>
-    <script src="./homepage/js/contact_me.js"></script>
+<!-- <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script> -->
+<script>
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
-    <!-- Custom Theme JavaScript -->
-    <script src="./homepage/js/agency.js"></script>
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var fullAddr = ''; // 최종 주소 변수
+                var extraAddr = ''; // 조합형 주소 변수
 
-    <!-- angular -->
-    <script src="./homepage/js/angular.js"></script>
-    <script src="./homepage/js/angular.min.js"></script>
-    <script src="./homepage/js/angular-route.min.js"></script>
+                // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    fullAddr = data.roadAddress;
 
-    <!-- foundation.js -->
-    <script src="./homepage/js/foundation.min.js"></script>
-    <script src="./homepage/js/foundation.equalizer.js"></script>
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    fullAddr = data.jibunAddress;
+                }
 
-    <!-- 필터 한국에 맞게 i18n 지정 -->
-    <script src="./homepage/js/angular-locale_ko.js"></script>
+                // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+                if(data.userSelectedType === 'R'){
+                    //법정동명이 있을 경우 추가한다.
+                    if(data.bname !== ''){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있을 경우 추가한다.
+                    if(data.buildingName !== ''){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+                    fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+                }
 
-    <!-- 공통 모듈 -->
-    <script src="./homepage/js/common.js"></script>
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('address').value = fullAddr;
 
-    <!-- 카카오톡 로그인 -->
-    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-    <script src="./homepage/js/login_kakao.js"></script>
-</body>
-</html>
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById('address_detail').focus();
+            }
+        }).open();
+    }
+</script>

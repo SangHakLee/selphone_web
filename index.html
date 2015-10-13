@@ -5,7 +5,6 @@
 <meta name="naver-site-verification" content="2ed519f80987a038251742fdd713dfff7aab292f"/>
 <meta name="google-site-verification" content="izQYEqG79lqMEdgtrjaqkWZMyH4b-egs8t0AxBF3E3I" />
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-<script src="https://apis.google.com/js/api:client.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
     <meta charset="utf-8">
@@ -117,10 +116,11 @@
                         <a class="page-scroll" href="#contact">제휴문의</a>
                     </li>
                     <li ng-hide="isLogin">
-                        <a class="page-scroll" href="" data-toggle="modal" data-target="#loginModal">로그인</a>
+                        <!-- <a class="page-scroll" href="" data-toggle="modal" data-target="#loginModal">로그인</a> -->
+                        <a href="#" ng-click="clickLoginBtn()">로그인</a>
                     </li>
                     <li class="dropdown" ng-show="isLogin">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{currentUser.user_name}} 님<span class="caret"></span></a>
+                      <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{currentUser.user_name}} 님<span class="caret"></span></a>
                       <ul class="dropdown-menu">
                         <li role="separator" class="divider"></li>
                         <li><a href="" data-ng-click="logout()"><font color="#44619c">로그아웃</font></a></li>
@@ -267,7 +267,8 @@
                     <!-- <button type="submit" class="btn btn-primary" data-ng-click="checkCheater(type, keyword)">조회</button> -->
                     <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
                     <button ng-show="isLogin" type="button" class="btn btn-primary btn-lg" data-ng-click="clickToOpen()">{{md_sell_price|currency:undefined:0}} 로그인됨</button>
-                    <button ng-hide="isLogin" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal">{{md_sell_price|currency:undefined:0}} 구매하기</button>
+                    <!-- <button ng-hide="isLogin" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal">{{md_sell_price|currency:undefined:0}} 구매하기</button> -->
+                    <button ng-hide="isLogin" type="button" class="btn btn-primary btn-lg">{{md_sell_price|currency:undefined:0}} 구매하기</button>
                 </div>
             </div><!--modal-content -->
         </div><!--modal-dialog -->
@@ -291,42 +292,7 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <!-- 로그인 modal -->
-    <div class="modal fade" id="loginModal" data-ng-controller="loginCtrl">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">로그인</h4>
-                </div>
-                <div class="modal-body">
-                    <div style="text-align:center">
-                        <!-- <a href="javascript:loginWithKakao()" id="custom-login-btn"> -->
-                        <a href="" id="custom-login-btn" data-ng-click="loginWithKakao()">
-                             <img width="350px" src="http://mud-kage.kakao.co.kr/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg"></img>
-                        </a>
-                        <br>
-                        <a href="" data-ng-click="loginWithNaver()">
-                             <img width="350px" src="./homepage/img/login_btn.png" width="231" height="50" id="NaverIdLoginBTN">
-                        </a>
 
-                        <div id="gSignInWrapper">
-                            <span class="label">Sign in with:</span>
-                            <div id="customBtn" class="customGPlusSignIn">
-                              <span class="icon"></span>
-                              <span class="buttonText">Google</span>
-                            </div>
-                        </div>
-                        <div id="name"></div>
-                    </div>
-                    로그인을 함으로써 셀폰의 <a href="">개인정보취급방침</a>,<a href="">서비스 이용약관</a>,
-                    <a href="">위치기반 서비스 이용약관</a>에 동의 하시게 됩니다.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기 </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
     <!-- Services Section -->
     <section id="services">
@@ -841,6 +807,8 @@
     <!-- 공통 모듈 -->
     <script src="./homepage/js/common.js"></script>
 
+    <!-- 구글 로그인 -->
+    <script src="./homepage/js/login_google.js"></script>
 
     <!-- 카카오톡 로그인 -->
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
@@ -888,7 +856,6 @@
                         });
                     break;
                     case 'google' :
-                        console.log('서비스 단');
                         loginWithGoogle(function(isSuccess, result){
                             if(isSuccess){
                                 SessionInfoService.reset(); // 이전 쿠키 데이터 다 지움
@@ -995,17 +962,23 @@
             $scope.sell_price = $rootScope.selphone_posts.sell_price
         }]);
 
-        app.controller('loginCtrl', ['$scope', '$http', '$window', '$rootScope', 'LoginService', 'SessionInfoService', function($scope, $http, $window, $rootScope, LoginService, SessionInfoService){
+        app.controller('loginCtrl', ['$scope', '$http', '$window', '$rootScope', 'LoginService', 'SessionInfoService', 'ngDialog', function($scope, $http, $window, $rootScope, LoginService, SessionInfoService, ngDialog){
             console.log('loginCtrl');
-            $scope.loginWithKakao = function(type){
+
+            $scope.clickLoginBtn = function () {
+                console.log('클릭');
+                ngDialog.open({ template: 'login.html' });
+            };
+
+            $scope.loginWithKakaoBtn = function(type){
                 LoginService.Login('kakao', changeState);
             };
-            $scope.loginWithNaver = function(type){
+            $scope.loginWithNaverBtn = function(type){
                 LoginService.Login('naver', changeState);
             };
 
-            $scope.loginWithGoogle = function(type){
-                console.log('controller 왔음 ');
+            $scope.loginWithGoogleBtn = function(type){
+                console.log('loginWithGoogle controller 왔음 ');
                 LoginService.Login('google', changeState);
             };
             $scope.logout = function(){
@@ -1026,36 +999,7 @@
             }
         }])
     </script>
-    <script>
-        // var googleUser = {};
-        var startApp = function() {
-          gapi.load('auth2', function(){
 
-            auth2 = gapi.auth2.init({
-              client_id: '175032780584-npoihbmnjes29gup7dgo2v992cdgbd0p.apps.googleusercontent.com',
-              cookiepolicy: 'single_host_origin',
-              scope: 'profile'
-            });
-            attachSignin(document.getElementById('customBtn'));
-          });
-        };
-
-        function attachSignin(element) {
-          console.log("click");
-          auth2.attachClickHandler(element, {}, function(googleUser) {authSuccess(googleUser)}, function(error) { authError(error)});
-        };
-
-        function authSuccess(googleUser){
-          console.log('access_token', googleUser.getAuthResponse().access_token);
-          document.getElementById('name').innerText = "Signed in: " + googleUser.getBasicProfile().getName();
-        };
-
-        function authError(error){
-          alert(JSON.stringify(error, undefined, 2));
-        };
-
-        startApp();
-      </script>
 
 
 
