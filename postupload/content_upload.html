@@ -175,8 +175,8 @@
               </div>
             </fieldset>
             <div style="text-align:right">
-              <button id="submit" type="submit" class="btn btn-primary">수정하기</button>
-              <button id="delete" type="button" class="btn btn-danger">삭제하기</button>
+              <button id="submit" type="submit" class="btn btn-lg btn-primary">수정하기</button>
+              <button id="delete" type="button" class="btn btn-lg btn-danger">삭제하기</button>
             </div>
           </form>
         </div>
@@ -376,6 +376,8 @@
     }
 
     function updateContent(e, callback){
+      var contents = [];
+      var content = {};
       e.preventDefault();
       var formData   = new FormData(),
           $form     = $(e.target),
@@ -389,17 +391,29 @@
         formData.append(val.name, val.value);
       });
 
-
-      if(out_picture) formData.append("pictures", out_picture, "content_out_picture"+getExtension(out_picture.name));
+      if(out_picture) formData.append("content_out_picture", out_picture);
       // if(out_picture) formData.append("pictures", out_picture);
-      if(background_picture) formData.append("pictures", background_picture, "content_background_picture"+getExtension(background_picture.name));
+      if(background_picture) formData.append("content_background_picture", background_picture);
       // if(background_picture) formData.append("pictures", background_picture);
 
       $.each(files, function(i, file) {
         // console.log('file', file.files[0]);
         if(file.files[0])
-          formData.append("content_picture", file.files[0], i+getExtension(file.files[0].name)); // req.files.content_picture 각 이름이 세번째 인자값
+          formData.append("content_pictures", file.files[0]); // req.files.content_picture 각 이름이 세번째 인자값
       });
+
+      $('.md_description').each(function(i, v){
+        var input = $(this).prevAll("input")
+        var img = $(this).prevAll("img")
+        // console.log('input', input);
+        content = {};
+        content.picture = input[0].files.length == 1 ? "_"+img.attr("src") : img.attr("src"); // 변경되는 데이터는 url 앞에 _ 붙인다.
+        content.description = $(this).val();
+        contents.push(content);
+      });
+
+      console.log('contents', contents);
+      formData.append("content_contents", JSON.stringify(contents));
 
       $.ajax({
         type : 'PUT',
@@ -654,7 +668,7 @@
         apppend2 += '    <h6>'+(index++)+'</h6>'
         apppend2 += '    <img id="md_picture" src="'+content_contents[i].picture+'">'
         apppend2 += '    <input type="file" id="'+picture+'" name="picture" enctype="multipart/form-data" />'
-        apppend2 += '    <textarea id="md_description" rows="4" cols="30">'+content_contents[i].description+'</textarea>'
+        apppend2 += '    <textarea id="md_description" class="md_description" rows="4" cols="30">'+content_contents[i].description+'</textarea>'
         apppend2 += '  </button>'
         apppend2 += '</div>'
         $("#md_content_contents").append(apppend2)
