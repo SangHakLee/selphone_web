@@ -1,0 +1,226 @@
+	<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>중고매매 개인거래 임시 등록</title>
+<!-- local env -->
+<!-- <script src="./script/script/jquery-1.11.0.min.js"></script>
+<script src="./script/script/logincheck.js" ></script>
+<script src="./script/script/ajaxRequest.js"></script>
+<script src="./script/script/loginjs.js"></script>s
+<script src="./script/script/file_upload.js"></script>
+<script src="./script/script/tempuser.js"></script>
+ -->
+
+<script src="./script/jquery-1.11.0.min.js"></script>
+<script src="./script/custom/logincheck.js" ></script>
+<script src="./script/custom/ajaxRequest.js"></script>
+<script src="./script/custom/loginjs.js"></script>
+<script src="./script/custom/file_upload.js"></script>
+<script src="./script/custom/tempuser.js"></script>
+
+<!-- <script src="./script/ajaxRequest.js"></script>
+<script src="./script/logincheck.js" ></script>
+<script src="./script/file_upload.js"></script>
+<script src="./script/tempuser.js"></script> -->
+
+
+<script type="text/javascript">
+
+function assert(value, employee){
+	console.log('value', value);
+	if(value){
+		$('body').attr('class', 'block');
+		$('#employee_id').text(employee);
+	}else{
+		alert('로그인이 필요합니다.');
+		//location.href="/login";
+		location.href="./login.html";
+		return false;
+	}
+};
+
+window.onload = function(){
+	sessionCheckReq();
+};
+
+
+</script>
+
+<link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
+<style>
+	body{
+		margin-left:10px;
+	}
+	div#box_logout{
+		display:inline;
+		margin-bottom: 10px;
+	}
+	div#tmp_container{
+		margin-top:10px;
+		padding-top:10px;
+	}
+	.hidden{
+		display:none;
+	}
+
+	.redisplay_block{
+		display:block;
+	}
+
+	#btn_addPicture, #btn_delPicture{
+		border:1px solid;
+
+	}
+
+	.inline{
+		display:inline;
+		float:left;
+	}
+	.block{
+		display:block;
+		clear:both;
+	}
+
+	.divbottom{
+		margin-bottom: 10px;
+	}
+
+	label{
+		display:inline;
+		width:400px;
+		margin: 0 10px 5px 10px;
+		font-weight: bold;
+	}
+	select{
+		margin-left:72px;
+		width:310px;
+	}
+
+	div.container {
+		width:80%;
+	}
+
+</style>
+
+
+
+</head>
+
+<body class="hidden">
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Selphone</a>
+    </div>
+
+    <div id="navbar" class="navbar-collapse collapse">
+
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="./post_jungoform.html">임시게시하기</a></li>
+        <li ><a href="./post_delete.html">게시글관리</a></li>
+        <li ><a href="http://54.178.140.51/naver-login" target="_blank">블로그업로드</a></li>
+        <li ><a href="#">결제 정보 관리</a></li>
+        <li ><a href="./report.html">신고 내역</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+      	<li class="dropdown">
+      		<a id="employee_id" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ></a>
+					<ul class="dropdown-menu">
+						<li><a onclick="javascript:logoutReq(this, event)">Log out</a></li>
+
+					</ul>
+      	</li>
+      </ul>
+
+    </div>
+
+	</div>
+</nav>
+<br><br><br>
+
+<div class="container">
+<div id="tmp_container" class="divbottom">
+	<form id="user" name="get_userinfo" method="post" enctype="" >
+		<fieldset>
+			<div class="inline"><label>ID/닉네임: </label><input type="text" name="user_name" title="ID/닉네임" required></div>
+			<div class="inline"><label>전화번호: </label><input type="tel" name="user_number" title="전화번호" required></div>
+			<input type="button" name="btn_posteach" value="임시계정얻기" onclick="javascript:getTempUser(this, event)" />
+		</fieldset>
+	</form>
+</div>
+
+<div id="tmpuser_summary" class="hidden">
+
+	<fieldset>
+		<div><label>임시아이디 : </label><span id="summary_userName"></span></div>
+		<div><label>전화번호 : </label><span id="summary_userNumber"></span></div>
+		<div><label>등록 여부 : </label><span id="summary_isNewRecord"></span></div>
+		<div><label>최초등록시간 : </label><span id="summary_created"></span></div>
+	</fieldset>
+
+</div>
+
+<div id="data_form" class="hidden">
+	<form id="data" name="postform" method="post" enctype="multipart/form-data">
+		<fieldset>
+			<legend> 내용 </legend>
+
+			<input id="form_userName" type="hidden" name="user_id" title="user_id" >
+
+			<div class="inline">
+				<label> 원문URL : </label><input type="text" name="post_origin_url" title="원문URL" size="40" required>
+			</div>
+			<div class="inline">
+				<div>
+					<label >모델명 : </label>
+					<input id="select-textbox" type="text" size="40" title="모델명">
+				</div>
+				<select name="product_model" id="model-select" size="10" multiple>
+					<option vale="">--고르세요--</option>
+				</select>
+
+			</div>
+
+
+
+			<div class="inline">
+				<label> 가격 : </label><input type="number" name="sell_price" title="가격" size="40" onkeypress='validate(event)' onkeyup='validate(event)' required>
+			</div>
+
+			<div id="menu-image" class="block">
+				<label> 이미지URL </label>
+				<div>
+					<label id="btn_addPicture" onclick="javascript:addPicture();"> 이미지추가 </label>
+				</div>
+				<span>
+					<label>URL : </label><input type="text" name="post_pictures" title="이미지URL" size="40" required>
+					<label id="btn_delPicture" onclick="javascript:delPicture(this)">제거</label>
+				</span>
+
+			</div>
+
+			<div>
+				<label> 내용  : </label>
+				<textarea name="post_description" title="내용" rows="7" cols="100" required></textarea>
+			</div>
+
+		</fieldset>
+		<input type="button" name="btn_posteach" value="등록하기" onclick="javascript:postEach(this, event)" />
+	</form>
+	</div>
+</div>
+	 <script src="./script/bootstrap/bootstrap.min.js"></script>
+
+</body>
+
+</html>

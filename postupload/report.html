@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>신고</title>
+
+<!-- server origin -->
+<!-- <script src="/script/jquery-1.11.0.min.js" ></script>
+<script src="/script/custom/ajaxRequest.js"></script>
+<script src="/script/custom/logincheck.js" ></script>
+<script src="/script/custom/datalist.js" ></script> -->
+
+<script src="./script/jquery-1.11.0.min.js" ></script>
+<script src="./script/custom/moment.js" ></script>
+<script src="./script/jquery-dateFormat.min.js"></script>
+<script src="./script/custom/ajaxRequest.js"></script>
+<!--<script src="./script/custom/logincheck.js" ></script>-->
+<script src="./script/custom/loginjs.js"></script>
+<script src="./script/custom/datalist.js" ></script>
+<script src="./script/custom/showModalDialog.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+<script src="./script/custom/common.js" ></script>
+<script src="./script/excelexport.js" ></script>
+
+
+<script type="text/javascript" >
+  var DEV_URL = 'http://54.178.140.51'
+  var PRD_URL = 'http://api.selphone.co.kr'
+
+  var URL = DEV_URL;
+
+  var reports;
+
+  $(function(){
+    $('#dialog_post').dialog({
+      autoOpen: false,
+      resizable: true,
+      width : "500px",
+      buttons : {
+        Close : function() {
+            $(this).dialog("close"); // button 실행을 직접 선언하려면 function안에 기능을 써준다.
+        }
+      }
+    });
+  });
+
+
+
+  $(document).ready(function(){
+
+
+    $('#example tbody').on('mouseover', 'tr', function (){
+        var data = table.row(this).data();
+        $(this).css('cursor','pointer');
+    });
+    $('#example tbody').on('click', 'tr', function (){
+        var data = table.row(this).data();
+        var index = data[0];
+        makePostDialog(index);
+        $('#dialog_post').dialog('open');
+    });
+
+    $("#download_btn").on('click', function () {
+      var uri = $("#example").battatech_excelexport({
+          containerid: "example"
+          , datatype: 'table'
+          , returnUri: true
+      });
+      $(this).attr('download', 'ExportToExcel.xls').attr('href', uri).attr('target', '_blank');
+    });
+
+
+    var table = $('#example').DataTable();
+    table.clear().draw();
+
+
+    ajax('GET', URL+'/reports', '', function(isSuccess, result){
+      if(isSuccess){
+        console.log('result', result);
+        reports = result.results
+        makeReportTable(table, result.results)
+      }else{
+        alert(result)
+        if(result.match('203')){
+          location.href="./login.html";
+        }
+      }
+    });
+  });
+
+  var getReportType = function(post_id, comment_id){
+    if(comment_id == null){
+      return post_id+'번 글 신고'
+    }else{
+      return post_id+'번 글 '+comment_id+'번 댓글 신고'
+    }
+  }
+
+  var makePostDialog = function(index){
+
+
+    var report = reports[index]
+    $('#report_id').val(report.id);
+    $('#text').val(report.text);
+    $('#type').val(getReportType(report.post_id, report.comment_id));
+    $('#post_id').val(report.TB_POST.id);
+    $('#post_status').val(report.TB_POST.post_status);
+    $('#post_status_name').val(getPostStatusName(report.TB_POST.post_status));
+    if(report.TB_POST.TB_USER == undefined){
+      $('#poster').val("삭제된 유저");
+  }else{
+    $('#poster').val(report.TB_POST.TB_USER.user_id);
+  }
+    $('#post_description').val(report.TB_POST.post_description);
+    $('#sell_price').val(report.TB_POST.sell_price);
+    $('#product_model').val(report.TB_POST.product_model+'('+report.TB_POST.TB_PRODUCT.product_name+')');
+    var post_imgs = report.TB_POST.post_pictures.split(',');
+    for(i in post_imgs){
+      $('#post_img_'+ i ).attr('src', post_imgs[i]);
+    }
+    if($('#post_status').val()==999){
+      $('.postDelete').css("display", "none");
+    }else{
+      $('.postDelete').css("display", "inline");
+    }
+
+    if(report.report_status==0){ //신고 처리 안함
+      $('#report_result_span').text("신고 처리내용:");
+      $('#report_result').attr("readonly", false);
+      $('#report_result').val("");
+
+      $('#resultBtn').css("display", "inline");
+      $('#postDeleteBtn').css("display", "none");
+
+    }else{
+      if($('#post_status').val()==1){ // 글 삭제만 하는 버튼 보이기
+        $('.postDelete').css("display", "none");
+        $('#postDeleteBtn').css("display", "inline");
+      }else{
+        $('#postDeleteBtn').css("display", "none");
+      }
+
+      $('#report_result_span').text("신고 처리완료");
+      $('#report_result').attr("readonly", true);
+      $('#report_result').val(report.result);
+
+      $('#resultBtn').css("display", "none");
+    }
+
+
+
+  }
+
+  var getReportStatusName = function(status){
+    switch(status){
+      case 0 : return '처리대기';
+      case 1 : return '처리완료';
+    }
+  }
+
+  var getPostStatusName = function(status){
+    switch(status){
+      case 0 : return '판매완료';
+      case 1 : return '판매중';
+      case 999 : return '삭제';
+    }
+  }
+
+
+
+  var makeReportTable = function(table, results){
+    for(i in results){
+      var appendData = [];
+      appendData.push(i);
+      appendData.push(getReportType(results[i].post_id, results[i].comment_id));
+      appendData.push(results[i].user_id);
+      appendData.push(results[i].text);
+      appendData.push(getReportStatusName(results[i].report_status));
+      appendData.push(results[i].result);
+      appendData.push($.format.date( Date.parse(results[i].createdAt), "yyyy-MM-dd a hh:mm:ss" ));
+      table.row.add(appendData).draw();
+    }
+  }
+
+
+</script>
+
+<style >
+  div.container {
+    width:80%;
+  }
+  .hidden{
+      display:none;
+  }
+
+  .display{
+      display:block;
+  }
+
+  dialog{
+      width:1000;
+      height:auto;
+  }
+
+
+/*  테이블 데이터 고정
+  table{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }*/
+
+</style>
+
+<link rel="stylesheet" href="./css/datatable/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+<!-- <link rel="stylesheet" href="/stylesheets/jquery.dataTables.min.css" /> -->
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Selphone</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+
+      <ul class="nav navbar-nav">
+        <li ><a href="./post_jungoform.html">임시게시하기</a></li>
+        <li ><a href="./post_delete.html">게시글관리</a></li>
+        <li ><a href="http://api.selphone.co.kr/naver-login" target="_blank">블로그업로드</a></li>
+        <li ><a href="./post_orderPayment.html">결제 정보 관리</a></li>
+        <li class="active"><a href="#">신고 내역</a></li>
+      </ul>
+
+       <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a id="employee_id" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ></a>
+          <ul class="dropdown-menu">
+            <li><a onclick="javascript:logoutReq(this, event)">Log out</a></li>
+
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</nav>
+  <br><br><br>
+
+  <br><br><br>
+  <div class="container">
+    <br><br><br>
+      <!-- <table id="order_table" class="display" cellspacing="0" width="100%"> -->
+      <table id="example" class="display" style="table-layout:fixed" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>INDEX</th>
+                <th>신고형태</th>
+                <th>신고자</th>
+                <th>신고내용</th>
+                <th>처리현황</th>
+                <th>처리내용</th>
+                <th>신고일시</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>INDEX</th>
+                <th>신고형태</th>
+                <th>신고자</th>
+                <th>신고내용</th>
+                <th>처리현황</th>
+                <th>처리내용</th>
+                <th>신고일시</th>
+            </tr>
+        </tfoot>
+        <tbody >
+        </tbody>
+    </table>
+  </div>
+  <div id="dialog_post" title="신고 상세">
+    <div class="form-group">
+      <label for="order_id">글 정보</label>
+      <table>
+        <tr>
+          <td>신고 유형</td>
+          <td><input type="text" class="form-control" id="type"  value="type" readonly></td>
+        </tr>
+        <tr>
+          <td>신고 내용</td>
+          <td><textarea id="text"  cols="30" rows="3" readonly></textarea></td>
+        </tr>
+      </table>
+    </div>
+    <div class="form-group">
+      <label for="order_id">신고 정보</label>
+      <table>
+        <tr>
+          <td>글 ID</td>
+          <td><input type="text" class="form-control" id="post_id"  value="post_id" readonly></td>
+        </tr>
+        <tr>
+          <td>글 작성자</td>
+          <td><input type="text" class="form-control" id="poster"  value="poster" readonly></td>
+        </tr>
+        <tr>
+          <td>글 내용</td>
+          <td><textarea id="post_description"  cols="30" rows="5" readonly></textarea></td>
+        </tr>
+        <tr>
+          <td>가격</td>
+          <td><input type="text" class="form-control" id="sell_price" value="sell_price" readonly></td>
+        </tr>
+        <tr>
+          <td>글 휴대폰 모델</td>
+          <td><input type="text" class="form-control" id="product_model" value="product_model" readonly></td>
+        </tr>
+        <tr>
+          <td>글 사진</td>
+          <td>
+            <img class="post_img" id="post_img_0" width="100px" height="100px" src="" alt="">
+            <img class="post_img" id="post_img_1" width="100px" height="100px" src="" alt="">
+            <img class="post_img" id="post_img_2" width="100px" height="100px" src="" alt="">
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="form-group">
+      <label for="order_id">신고 처리</label>
+      <div id="postDeleteDiv">
+        <span>판매글 현황 : </span>
+        <input type="hidden" id="post_status" />
+        <input type="text" id="post_status_name" size="4" readonly />
+        <button id="postDeleteBtn" style="display:none;">글 삭제</button>
+        <input type="checkbox" id="postDeleteCheck" class="postDelete" value="1" /><span class="postDelete">글 삭제</span>
+      </div>
+      <div>
+        <span id="report_result_span"></span>
+        <input type="hidden" id="report_id" size="30"  />
+        <textarea id="report_result"  cols="30" rows="2"></textarea>
+      </div>
+      <div>
+        <button id="resultBtn">신고 내용 처리하기</button>
+      </div>
+    </div>
+  </div><!-- dialog_post -->
+  </body>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+   -->
+  <script src="./script/bootstrap/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.8/datatables.min.css"/>
+  <script src="./script/datatable/jquery.dataTables.min.js" ></script>
+  <script>
+    $(document).ready(function(){
+      $('#resultBtn').on('click',  function (){
+
+        var report_id = $('#report_id').val();
+        var report_result = $('#report_result').val();
+        var report_datas = "result="+report_result
+
+        ajax('PUT', URL+'/reports/'+report_id, report_datas, function(isSuccess, result){
+          if(isSuccess){
+            var is_checked_delete = $('#postDeleteCheck').is(':checked')
+            if(is_checked_delete){
+              var post_id = $('#post_id').val();
+              var user_id = $('#poster').val();
+              var datas = "post_id="+post_id+"&user_id="+user_id
+              ajax('PUT', URL+'/posts/'+post_id+'/999', datas, function(isSuccess, result){
+                if(isSuccess){
+                  location.reload();
+                }else{
+                  alert(result);
+                  if(result.match('203')){
+                    location.href="./login.html";
+                  }
+                }
+              });
+            }else{
+              location.reload();
+            }
+          }else{
+            alert(result);
+            if(result.match('203')){
+              location.href="./login.html";
+            }
+          }
+        });
+      });
+
+      $('#postDeleteBtn').on('click',  function (){
+        var post_id = $('#post_id').val();
+        var user_id = $('#poster').val();
+        var datas = "post_id="+post_id+"&user_id="+user_id
+        ajax('PUT', URL+'/posts/'+post_id+'/999', datas, function(isSuccess, result){
+          if(isSuccess){
+            location.reload();
+          }else{
+            alert(result);
+            if(result.match('203')){
+              location.href="./login.html";
+            }
+          }
+        });
+      });
+
+      $('.post_img').on('mouseover', function (){
+        $('#dialog_post').width(800);
+        $(this).width(400);
+        $(this).height(400);
+        $(this).on('mouseleave', function(){
+          $('#dialog_post').width(500);
+          $(this).width(100);
+          $(this).height(100);
+        })
+      });
+    });
+  </script>
+
+
+</html>

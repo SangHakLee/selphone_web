@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>셀폰 콘텐츠</title>
+
+  <!-- Latest compiled and minified CSS -->
+  <!-- <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+  <style>
+    html, body {
+      height: 100%;
+    }
+    #actions {
+      margin: 2em 0;
+    }
+    /* Mimic table appearance */
+    div.table {
+      display: table;
+    }
+    div.table .file-row {
+      display: table-row;
+    }
+    div.table .file-row > div {
+      display: table-cell;
+      vertical-align: top;
+      border-top: 1px solid #ddd;
+      padding: 8px;
+    }
+    div.table .file-row:nth-child(odd) {
+      background: #f9f9f9;
+    }
+
+    /* The total progress gets shown by event listeners */
+    #total-progress {
+      opacity: 0;
+      transition: opacity 0.3s linear;
+    }
+
+    /* Hide the progress bar when finished */
+    #previews .file-row.dz-success .progress {
+      opacity: 0;
+      transition: opacity 0.3s linear;
+    }
+
+    /* Hide the delete button initially */
+    #previews .file-row .delete {
+      display: none;
+    }
+
+    #previews .file-row.dz-success .start,
+    #previews .file-row.dz-success .cancel {
+      display: none;
+    }
+    #previews .file-row.dz-success .delete {
+      display: block;
+    }
+
+    #md_content_out_picture{
+      height: 100px;
+      background-size: auto 100px;
+      position: relative;
+      overflow: hidden;
+      background-repeat:no-repeat;
+    }
+    #md_content_background_picture{
+      height: 200px;
+      background-size: auto 200px;
+      position: relative;
+      overflow: hidden;
+      background-repeat:no-repeat;
+    }
+    .content{
+      height: 400px
+    }
+  </style>
+
+</head>
+<body>
+      <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Selphone</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li ><a href="./post_jungoform.html">임시게시하기</a></li>
+          <li ><a href="./post_delete.html">게시글관리</a></li>
+          <li ><a href="http://api.selphone.co.kr/naver-login" target="_blank">블로그업로드</a></li>
+          <li ><a href="./post_orderPayment.html">결제 정보 관리</a></li>
+          <li ><a href="./report.html">신고 내역</a></li>
+          <li class="active"><a href="#">콘텐츠 올리기</a></li>
+        </ul>
+         <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a id="employee_id" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ></a>
+            <ul class="dropdown-menu">
+              <li><a onclick="javascript:logoutReq(this, event)">Log out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div><!-- container -->
+  </nav>
+
+  <br><br><br>
+
+  <div class="container" id="content_container">
+    <div class="row">
+      <a id="contentEditBtn" class="btn btn-primary" role="button" data-toggle="collapse" href="#content_collapse" aria-expanded="false" aria-controls="content_collapse">
+        컨텐츠 수정하기
+      </a>
+      <div class="collapse" id="content_collapse">
+      </div>
+    </div><!-- row -->
+  <div><!-- container -->
+  <div class="modal fade" id="contentEditModal" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">컨텐츠 수정</h4>
+          <input type="hidden" id="md_content_id"  />
+        </div>
+        <div class="modal-body">
+          <form id="addSelphonePostFrm" method="POST">
+            <fieldset class="form-group">
+              <label for="md_content_out_title">외부 제목</label>
+              <textarea class="form-control" id="md_content_out_title" name="content_out_title"  required>
+              </textarea>
+            </fieldset>
+            <fieldset class="form-group">
+              <label for="md_content_out_picture">외부 사진</label>
+              <div id="md_content_out_picture">
+              </div>
+              사진변경<input type="file" id="file_md_content_out_picture" name="content_out_picture" enctype="multipart/form-data" />
+            </fieldset>
+            <fieldset class="form-group">
+              <label for="md_content_in_title">내부 제목</label>
+              <textarea class="form-control" id="md_content_in_title" name="content_in_title"  required></textarea>
+            </fieldset>
+            <fieldset class="form-group">
+              <label for="md_content_background_picture">내부 배경사진</label>
+              <div id="md_content_background_picture">
+              </div>
+              사진변경<input type="file" id="file_md_content_background_picture" name="content_out_picture" enctype="multipart/form-data"/>
+            </fieldset>
+            <fieldset class="form-group">
+              <label for="md_content_summary">세줄요약</label>
+              <textarea  class="form-control" id="md_content_summary" name="content_summary" rows="3" placeholder="내용을 입력해주세요." required></textarea>
+            </fieldset>
+            <fieldset class="form-group">
+              <label for="md_content_contents">내용</label>
+              <div class="row" id="md_content_contents">
+              </div>
+            </fieldset>
+            <div style="text-align:right">
+              <button id="submit" type="submit" class="btn btn-primary">수정하기</button>
+              <button id="delete" type="button" class="btn btn-danger">삭제하기</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- Modal -->
+
+  <div class="container" id="container">
+    <div>
+      <h3>제목 및 세줄요약</h3>
+    </div>
+    <div>
+      <label for="content_out_title">외부제목</label>
+      <br>
+      <textarea style="resize:none;" name="" id="content_out_title" cols="50" rows="2"></textarea>
+    </div>
+    <div>
+      <label for="content_in_title">내부제목</label>
+      <br>
+      <textarea style="resize:none;" name="" id="content_in_title" cols="50" rows="2"></textarea>
+    </div>
+    <div>
+      <label for="content_out_picture">메인사진</label>
+      <input type="file" id="content_out_picture" enctype="multipart/form-data">
+    </div>
+    <hr>
+    <div>
+      <label for="content_summary">세줄요악</label>
+      <br>
+      <textarea style="resize:none;" name="" id="content_summary" cols="50" rows="3"></textarea>
+    </div>
+    <div>
+      <label for="content_background_picture">배경사진</label>
+      <input type="file" id="content_background_picture" enctype="multipart/form-data">
+    </div>
+  </div>
+
+  <br><br><br>
+
+  <div class="container" id="picture-container">
+    <h3>사진 올리기</h3>
+    <div id="actions" class="row">
+      <div class="col-lg-7">
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>파일추가</span>
+        </span>
+        <button id="uploadAllBtn" type="submit" class="btn btn-primary start">
+            <i class="glyphicon glyphicon-upload"></i>
+            <span>전체 업로드</span>
+        </button>
+        <button id="reset" type="reset" class="btn btn-warning cancel">
+            <i class="glyphicon glyphicon-repeat"></i>
+            <span>초기화 / 다른 게시물 올리기</span>
+        </button>
+      </div>
+      <div class="col-lg-5">
+        <span class="fileupload-process">
+          <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="table table-striped files" id="previews">
+    <div id="template" class="file-row">
+      <div>
+          <span class="preview"><img data-dz-thumbnail /></span>
+      </div>
+      <div>
+          <p class="name" data-dz-name></p>
+          <strong class="error text-danger" data-dz-errormessage></strong>
+            <h4 class="content-tag">내용</h4>
+            <textarea  class="content_description" style="resize:none;" id="content" cols="30" rows="3" class="textarea"></textarea>
+          <p class="size" data-dz-size></p>
+          <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+          </div>
+          <div>
+                <button class="btn btn-default start" disabled>
+                    <i class=""></i>
+                    <span></span>
+                </button>
+                <button data-dz-remove class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>취소</span>
+                </button>
+                <button data-dz-remove class="btn btn-danger delete btn-xs">
+                  <i class="glyphicon glyphicon-trash"></i>
+                  <span>삭제</span>
+                </button>
+              </div>
+      </div>
+    </div>
+  </div>
+
+<!--   <div class="image-preview">
+    <input type="file" name="image" class="upload" />
+  </div> -->
+
+  <h2><a href="#content_out_title" style="float:right">맨위로 (전체 업로드 버튼)</a></h2>
+
+  </body>
+  <script src="./script/jquery-2.1.4.min.js"></script>
+  <script src="./script/dropzone.js"></script>
+  <script src="./script/custom/logincheck.js" ></script>
+  <script src="./script/custom/ajaxRequest.js"></script>
+  <script src="./script/custom/loginjs.js"></script>
+  <script src="./script/custom/common.js" ></script>
+  <script src="./script/bootstrap/bootstrap.min.js" ></script>
+  <script src="./script/uploadPreview.js" ></script>
+  <script>
+    function editToggle(now){
+      if((now.innerHTML).match("컨텐츠 수정하기")){
+        now.innerHTML = "수정 끝내기"
+      }else{
+        now.innerHTML = "컨텐츠 수정하기"
+      }
+    };
+
+    function check(){
+      var pw = prompt("글을 삭제합니다")
+      if(pw != 1)
+        {alert("비번틀림"); return false; }
+      else
+        return true
+    }
+
+    (function(){
+      sessionCheckReq();
+      $("#contentEditBtn").click(function(){
+        // console.log();
+        editToggle($(this)[0]);
+        getAllContents();
+      })
+      $.uploadPreview({
+        input_field: "#file_md_content_out_picture",   // Default: .image-upload
+        preview_box: "#md_content_out_picture",  // Default: .image-preview
+      });
+      $.uploadPreview({
+        input_field: "#file_md_content_background_picture",   // Default: .image-upload
+        preview_box: "#md_content_background_picture",  // Default: .image-preview
+      });
+
+
+      $('#contentEditModal').on('hidden.bs.modal', function(e){
+        // alert('hide')
+        $("#addSelphonePostFrm")[0].reset();
+      });
+
+      $('#addSelphonePostFrm').submit(function(e) { // 수정 폼 전송 이벤트
+        console.log('e', e);
+        console.log('this', this);
+        updateContent(e, function(isSuccess, result){
+          if(isSuccess){
+            // for(i in contents){
+            //   if(contents[i].id == result.id){
+            //     delete result.TB_USER;
+            //     contents[i] = result;
+            //   }
+            // }
+            alert('성공');
+            //나중에 바뀐 데이터만 바꿔주는 걸로
+            location.reload();
+          }else{
+            alert('실패 :'+result);
+          }
+        });
+      });
+
+      $('#delete').click(function(){
+        if(!check()) return;
+        deleteContent(function(isSuccess, result){
+          if(isSuccess){
+            alert('성공');
+            location.reload();
+          }else{
+            alert('실패 :'+result);
+          }
+        })
+      })
+
+    })(jQuery);
+
+    var DEV_URL = 'http://54.178.140.51'
+    var PRD_URL = 'api.selphone.co.kr'
+    var URL = DEV_URL;
+
+    function getExtension(name){
+      return "."+name.split('.')[1];
+    }
+
+    function updateContent(e, callback){
+      e.preventDefault();
+      var formData   = new FormData(),
+          $form     = $(e.target),
+          params    = $form.serializeArray(),
+          out_picture = $("#file_md_content_out_picture")[0].files[0],
+          background_picture = $("#file_md_content_background_picture")[0].files[0],
+          files     = $('input[name="picture"]'),
+          content_id = $("#md_content_id").val();
+
+      $.each(params, function(i, val) {
+        formData.append(val.name, val.value);
+      });
+
+
+      if(out_picture) formData.append("pictures", out_picture, "content_out_picture"+getExtension(out_picture.name));
+      // if(out_picture) formData.append("pictures", out_picture);
+      if(background_picture) formData.append("pictures", background_picture, "content_background_picture"+getExtension(background_picture.name));
+      // if(background_picture) formData.append("pictures", background_picture);
+
+      $.each(files, function(i, file) {
+        // console.log('file', file.files[0]);
+        if(file.files[0])
+          formData.append("content_picture", file.files[0], i+getExtension(file.files[0].name)); // req.files.content_picture 각 이름이 세번째 인자값
+      });
+
+      $.ajax({
+        type : 'PUT',
+        url : 'http://54.178.140.51/contents/'+content_id,
+        crossDomain: true ,//multidomain optiond
+        data : formData,
+        processData: false, // processData false 해야만 formData 갈수 있다 Illegal invocation
+        contentType: false, // contentType false 해야만 body 내용이 이상하게 안간다
+        dataType: 'json',
+        success: function(data, textStatus, jqXHR) {
+          callback(true, data.result)
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          callback(false, jqXHR.responseText)
+        }
+      });
+    }
+
+    Dropzone.autoDiscover = false;
+    function assert(value, employee){
+      if(!value){
+        alert('로그인이 필요합니다.');
+        location.href="./login.html";
+        return false;
+      }
+    };
+
+    function deleteContent(callback){
+      var content_id = $("#md_content_id").val()
+      $.ajax({
+        type : 'DELETE',
+        url : 'http://54.178.140.51/contents/'+content_id,
+        crossDomain: true ,//multidomain optiond
+        processData: false, // processData false 해야만 formData 갈수 있다 Illegal invocation
+        contentType: false, // contentType false 해야만 body 내용이 이상하게 안간다
+        dataType: 'json',
+        success: function(data, textStatus, jqXHR) {
+          callback(true, data)
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          callback(false, jqXHR.responseText)
+        }
+      });
+    }
+
+    var error = false;
+    var contents = null;
+    var fileCount = 0;
+    var sendingCount = 0;
+    var contentsStr = "";
+    var contentsArr = [];
+    var filesArr = [];
+    var textsArr = [];
+    var tmp = { picture:"", description:"" };
+
+    function required(){
+      if($("#content_out_title").val() == ""){
+        alert('외부 제목을 입력해주세요')
+        $("#content_out_title").focus();
+        return false;
+      };
+      if($("#content_in_title").val() == ""){
+        alert('내부 제목을 입력해주세요')
+        $("#content_in_title").focus();
+        return false;
+      };
+      if($("#content_summary").val() == ""){
+        alert('세줄 요약을 입력해주세요')
+        $("#content_summary").focus();
+        return false;
+      };
+      if(!$("#content_out_picture")[0].files[0]){
+        $("#content_out_picture").focus();
+        alert('메인 사진을 선택해주세요')
+        return false;
+      };
+      if(!$("#content_background_picture")[0].files[0]){
+        alert('배경으로 쓸 사진을 선택해주세요')
+        $("#content_background_picture").focus();
+        return false;
+      };
+
+      return true;
+    }
+
+
+    function appendData(formData){
+      formData.append("content_out_title", $("#content_out_title").val());
+      formData.append("content_in_title", $("#content_in_title").val());
+      formData.append("content_summary", $("#content_summary").val());
+      formData.append("pictures", $("#content_out_picture")[0].files[0]);
+      formData.append("pictures", $("#content_background_picture")[0].files[0]);
+      formData.append("user_id", "selphone");
+      return formData
+    }
+
+
+    // Get the template HTML and remove it from the doument
+    var previewNode = document.querySelector("#template");
+    previewNode.id = "";
+    var previewTemplate = previewNode.parentNode.innerHTML;
+    previewNode.parentNode.removeChild(previewNode);
+
+    var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+      url: "http://54.178.140.51/contents", // Set the url
+      thumbnailWidth: 250,
+      thumbnailHeight: 250,
+      parallelUploads: 20,
+      previewTemplate: previewTemplate,
+      autoQueue: false, // Make sure the files aren't queued until manually added
+      uploadMultiple: true,
+      previewsContainer: "#previews", // Define the container to display the previews
+      clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+    });
+
+    myDropzone.on("addedfile", function(file) {
+      fileCount++;
+      file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
+    });
+
+    myDropzone.on("removedfile", function(file) {
+      fileCount--;
+      file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
+    });
+
+    // Update the total progress bar
+    myDropzone.on("totaluploadprogress", function(progress) {
+      document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+    });
+
+    myDropzone.on("sending", function(file, xhr, formData) {
+      // console.log('fileCount', fileCount);
+      filesArr.push(file.name);
+      // console.log('filesArr', filesArr);
+      if(fileCount == ++sendingCount){
+        $('.content_description').each(function(){
+          var val = $(this).val();
+          textsArr.push(val);
+        });
+        for (var i=0 ; i < fileCount ; i++){
+          tmp = {}
+          tmp.picture = filesArr[i];
+          tmp.description = textsArr[i];
+          contentsArr.push(tmp)
+        }
+        formData.append("content_contents", JSON.stringify(contentsArr));
+        formData = appendData(formData)
+      }
+      document.querySelector("#total-progress").style.opacity = "1";
+      // And disable the start button
+      file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+    });
+
+    // Hide the total progress bar when nothing's uploading anymore
+    myDropzone.on("queuecomplete", function() {
+      initContentConfig(); // 변수 초기화
+      document.querySelector("#total-progress").style.opacity = "0";
+      document.querySelector("textarea#content").readOnly = true;
+      // location.reload();
+    });
+
+    myDropzone.on("successmultiple", function(files, results) {
+      if(results) alert('성공');
+      location.reload();
+      // console.log('successmultiple files', files);
+      // console.log('successmultiple results', results);
+    });
+
+    myDropzone.on("error", function(files, results) {
+      if(!error) {
+        alert("실패\n"+results.error_description);
+        error = !error;
+      }
+    });
+
+    // Setup the buttons for all transfers
+    // The "add files" button doesn't need to be setup because the config
+    // `clickable` has already been specified.
+    document.querySelector("#actions .start").onclick = function() {
+      if(!required()) {
+        return;
+      }
+      myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+    };
+    document.querySelector("#actions .cancel").onclick = function() {
+      myDropzone.removeAllFiles(true);
+    };
+
+
+    function initContentConfig(){
+      error = false;
+      fileCount = 0;
+      sendingCount = 0;
+      contentsStr = ""
+      contentsArr= [];
+      filesArr = [];
+      textsArr = [];
+      tmp = { picture:"", description:"" };
+    };
+
+    function getAllContents(){
+      if(!contents){
+        ajax('GET', URL+'/contents', '', function(isSuccess, result){
+          if(isSuccess){
+            contents = result.results;
+            appendContents(contents);
+          }
+          else{
+            if(result.match('203'))
+              location.href="./post_delete.html";
+          }
+        });
+      }
+    }
+
+    function getContentById(content_id){
+      // console.log('$$ contents', contents);
+      if(!contents) return null;
+      for(i in contents){
+        if(contents[i].id == content_id)
+          return contents[i]
+      }
+      return null
+    }
+
+    function contentClick(content_id){
+      // console.log('content_id', content_id);
+      var content = getContentById(content_id);
+      // console.log('content', content);
+      makeContentModal(content)
+    }
+
+    function makeContentModal(content){
+      // console.log('content', content);
+      $("#md_content_out_title").val(content.content_out_title);
+      $("#md_content_out_picture").css("background-image", "url("+content.content_out_picture+")");
+      $("#md_content_in_title").val(content.content_in_title);
+      $("#md_content_background_picture").css("background-image", "url("+content.content_background_picture+")");
+      $("#md_content_summary").val(content.content_summary);
+      $("#md_content_id").val(content.id);
+
+      appendCotentContents(content.content_contents);
+    };
+    function appendCotentContents(content_contents){ //수정 모달
+      $("#md_content_contents>div").remove();
+      var index = 1;
+      for(i in content_contents){
+        var picture = "picture_"+i; // 0부터 해야함
+        var apppend2 =''
+        apppend2 += '<div class="col-xs-6 col-md-4">';
+        apppend2 += '  <button class="thumbnail content" disabled>'
+        apppend2 += '    <h6>'+(index++)+'</h6>'
+        apppend2 += '    <img id="md_picture" src="'+content_contents[i].picture+'">'
+        apppend2 += '    <input type="file" id="'+picture+'" name="picture" enctype="multipart/form-data" />'
+        apppend2 += '    <textarea id="md_description" rows="4" cols="30">'+content_contents[i].description+'</textarea>'
+        apppend2 += '  </button>'
+        apppend2 += '</div>'
+        $("#md_content_contents").append(apppend2)
+      }
+    };
+
+    function appendContents(contents){ // 수정하기 버튼 클릭시 보이는 것
+      for(i in contents){
+        var apppend =''
+        apppend += '<div class="col-xs-2 col-md-2">';
+        apppend += '  <button class="thumbnail" data-toggle="modal" data-target="#contentEditModal" onclick="contentClick('+contents[i].id+')">'
+        apppend += '    <img style="height:100px" src="'+contents[i].content_out_picture+'"/>'
+        apppend += '    <h5 style="height:40px">'+contents[i].content_out_title+'</h5>'
+        apppend += '  </button>'
+        apppend += '</div>'
+        $("#content_collapse").append(apppend)
+        // $("#content_container").append(apppend)
+      }
+    }
+  </script>
+</html>

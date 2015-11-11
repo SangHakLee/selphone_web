@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>셀폰 보증글 올리기</title>
+	<link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
+</head>
+<body>
+	<div class="container">
+		<form id="addSelphonePostFrm" method="POST">
+		  <fieldset class="form-group">
+		    <label for="post_title">셀폰 보증글 제목</label>
+		    <textarea class="form-control" id="post_title" name="post_title" placeholder="제목을 입력해주세요." required></textarea>
+		  </fieldset>
+		  <fieldset class="form-group">
+		    <label for="post_description">내용</label>
+		    <textarea  class="form-control" id="post_description" name="post_description" rows="7" placeholder="내용을 입력해주세요." required></textarea>
+		  </fieldset>
+		  <fieldset class="form-group">
+		    <label for="product_model">핸드폰 모델</label>
+		    <select class="form-control" name="product_model" id="product_model" required>
+		      <option value="1">1</option>
+		    </select>
+		  </fieldset>
+		  <fieldset class="form-group">
+		    <label for="post_pictures">사진</label>
+		    <input type="file" class="form-control" id="post_pictures" name="post_pictures" enctype="multipart/form-data" multiple required>
+		  </fieldset>
+		  <fieldset class="form-group">
+		    <label for="sell_price">가격</label>
+		    <input type="number" class="form-control" id="sell_price" name="sell_price" placeholder="" required>
+		  </fieldset>
+		  <fieldset class="form-group">
+		    <label for="post_product_telecom">통신사</label>
+		    <select class="form-control" id="post_product_telecom" name="post_product_telecom" required>
+		      <option value="SK">SK</option>
+		      <option value="KT">KT</option>
+		      <option value="LG">LG</option>
+		      <option value="">상관없음</option>
+		    </select>
+		  </fieldset>
+		  <fieldset class="form-group">
+		    <label for="post_product_storage">저장공간</label>
+		    <select class="form-control" id="post_product_storage" name="post_product_storage" required>
+		      <option value="8GB">8GB</option>
+		      <option value="16GB">16GB</option>
+		      <option value="32GB">32GB</option>
+		      <option value="64GB">64GB</option>
+		      <option value="128GB">128GB</option>
+		      <option value="">불확실</option>
+		    </select>
+		  </fieldset>
+		  <button type="reset" class="btn btn-warning">취소</button>
+		  <button id="submit" type="submit" class="btn btn-primary">올리기</button>
+		</form>
+	</div>
+</body>
+<script src="./script/jquery-1.11.0.min.js"></script>
+<script src="./script/custom/logincheck.js"></script>
+<script src="./script/custom/ajaxRequest.js"></script>
+<script src="./script/custom/loginjs.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#submit").click(function(e){
+		e.preventDefault(); // 올리기 막기
+		// var formData = $("#addSelphonePostFrm").serialize();
+		var formData = new FormData($("#addSelphonePostFrm"));
+		console.log('formData', formData);
+	});
+});
+
+</script>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>중고매매 개인거래 임시 등록</title>
+
+<!-- server origin -->
+<!-- <script src="/script/jquery-1.11.0.min.js" ></script>
+<script src="/script/custom/ajaxRequest.js"></script>
+<script src="/script/custom/logincheck.js" ></script>
+<script src="/script/custom/datalist.js" ></script> -->
+
+<script src="./script/jquery-1.11.0.min.js" ></script>
+<script src="./script/jquery-dateFormat.min.js"></script>
+<script src="./script/custom/ajaxRequest.js"></script>
+<!--<script src="./script/custom/logincheck.js" ></script>-->
+<script src="./script/custom/loginjs.js"></script>
+<script src="./script/custom/datalist.js" ></script>
+<script src="./script/custom/showModalDialog.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+<script src="./script/excelexport.js" ></script>
+
+
+
+<script type="text/javascript" >
+
+	// function assert(value, employee){
+	// 	console.log('value', value);
+	// 	if(value){
+	// 		$('body').attr('class', 'block');
+	// 		$('#employee_id').text(employee);
+	// 	}else{
+	// 		alert('로그인이 필요합니다.');
+	// 		//location.href="/login";
+	// 		location.href="./login.html";
+	// 		return false;
+	// 	}
+	// };
+
+	// window.onload = function(){
+	// 	sessionCheckReq();
+	// };
+
+  $(function(){
+      //날짜 선택하기
+      $("#date-start").datepicker({
+        maxDate : 0, //today를 기준으로
+        showButtonPanel : true, //today로 바로 이동
+        dateFormat : "yymmdd" + "000000" //날짜선택포맷
+      });
+
+      $("#date-end").datepicker({
+        maxDate : 0,
+        showButtonPanel : true,
+        dateFormat : "yymmdd" + "235959"
+      });
+    });
+
+  $(document).ready(function(){
+    $("#download_btn").on('click', function () {
+      var uri = $("#example").battatech_excelexport({
+          containerid: "example"
+          , datatype: 'table'
+          , returnUri: true
+      });
+      $(this).attr('download', '셀폰유저글.xls').attr('href', uri).attr('target', '_blank');
+    });
+  });
+
+</script>
+
+<style >
+	div.container {
+		width:80%;
+	}
+    .hidden{
+        display:none;
+    }
+
+    .display{
+        display:block;
+    }
+
+    dialog{
+        width:750;
+        height:auto;
+
+    }
+
+</style>
+
+<link rel="stylesheet" href="./css/datatable/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+<!-- <link rel="stylesheet" href="/stylesheets/jquery.dataTables.min.css" /> -->
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Selphone</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+
+      <ul class="nav navbar-nav">
+        <li ><a href="./post_jungoform.html">임시게시하기</a></li>
+        <li class="active"><a href="./post_delete.html">게시글관리</a></li>
+        <!-- <li ><a href="http://api.selphone.co.kr/naver-login" target="_blank">블로그업로드</a></li> -->
+        <li ><a href="http://54.178.140.51/naver-login" target="_blank">블로그업로드</a></li>
+        <li><a href="./post_orderPayment.html">결제 정보 관리</a></li>
+        <li ><a href="./report.html">신고 내역</a></li>
+      </ul>
+
+       <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a id="employee_id" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ></a>
+          <ul class="dropdown-menu">
+            <li><a onclick="javascript:logoutReq(this, event)">Log out</a></li>
+
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+	</div>
+</nav>
+
+    <br><br><br>
+    <a id="download_btn" href="#" download="">엑셀로 뽑기</a>
+	<br><br><br>
+
+	<div class="container">
+    <label>모델명 : </label>
+    <input id="product_model" type="text"  />
+
+
+    <select id="post_select_type" >
+        <option value="empty" >-----선택하세요-----</option>
+        <option value="posts?tmp_">임시계정 게시글</option>
+        <option value="posts?user">셀폰회원 게시글</option>
+        <option value="posts?">판매중인 모든 게시글</option>
+
+    </select>
+
+    <input id="date-start" type="text" placeholder="시작일" readonly />
+    <input id="date-end" type="text" placeholder="마지막일" readonly />
+
+		<input id="get_selected_posts" type="button" class="button" value="GET LIST" />
+
+    <br><br><br>
+
+	<dialog id="favDialog">
+        <input type="text" size="70" id="text_subject" readonly/>
+        <div id="post_pictures"></div>
+        <textarea id="text_html" rows="10" cols="80" readonly>
+        </textarea>
+    </dialog>
+<!-- <div id="favDialog" class="hidden" data-role="dialog" data-close-btn-text="close">
+        <textarea id="test_posts">
+
+
+        </textarea>
+
+
+        <menu>
+          <button id="cancel" type="reset">Cancel</button>
+        </menu>
+    </div> -->
+
+    <!-- <div id="favDialog" class="hidden" title="basic dialog">
+
+        <p id="test_posts">
+
+
+        </p>
+    </div> -->
+
+
+<table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>회원 이름</th>
+                <th>회원 전화번호</th>
+                <th>글 ID</th>
+                <th>회원 ID</th>
+                <th>가격</th>
+                <th>모델명</th>
+                <th>글 내용</th>
+                <th>Original URL</th>
+                <th>등록일</th>
+                <th>카페업로드</th>
+                <th>판매완료</th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <tr>
+                <th>회원 이름</th>
+                <th>회원 전화번호</th>
+                <th>글 ID</th>
+                <th>회원 ID</th>
+                <th>가격</th>
+                <th>모델명</th>
+                <th>글 내용</th>
+                <th>Original URL</th>
+                <th>등록일</th>
+                <th>카페업로드</th>
+                <th>판매완료</th>
+            </tr>
+        </tfoot>
+
+        <tbody >
+
+
+        </tbody>
+    </table>
+</div>
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+     -->
+    <script src="./script/bootstrap/bootstrap.min.js"></script>
+    <script src="./script/datatable/jquery.dataTables.min.js" ></script>
+
+
+
+
+
+  </body>
+
+</html>

@@ -1,0 +1,156 @@
+	<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내폰팔땐 셀폰! 관리자 로그인</title>
+<!-- <script src="./script/jquery-2.1.3.min.js"></script> -->
+<!-- server orizin -->
+<!-- <script src="./script/jquery-1.11.0-beta3.js"></script>
+<script src="./script/logincheck.js"></script>
+<script src="./script/ajaxRequest.js"></script>
+<script src="./script/loginjs.js"></script>
+<script src="./script/jquery.form.min.js"> </script> -->
+
+<!-- file orizin -->
+<script src="./script/jquery-1.11.0.min.js"></script>
+<script src="./script/custom/logincheck.js"></script>
+<script src="./script/custom/ajaxRequest.js"></script>
+<script src="./script/custom/loginjs.js"></script>
+
+<script src="./script/jquery.form.min.js"> </script>
+
+<script type="text/javascript">
+
+	//login check
+	function assert(isLogin, employeeId){
+		console.log('isLogin', isLogin);
+		console.log('employeeId', employeeId);
+
+		if(!isLogin){
+			$(document).ready(function(){
+				$('#box_logout').attr('class', 'hidden');
+			});
+
+		}else{
+			$(document).ready(function(){
+				$('#box_logout').attr('class', 'ondisplay');
+				$('#box_input').attr('class', 'hidden');
+				$('#box_login').attr('class', 'hidden');
+				$('#box_summary span').text(employeeId + '님 로그인중이십니다.');
+
+				location.href="./post_delete.html";
+			});
+		}
+	};
+
+	window.onload = function(){
+		sessionCheckReq();
+	};
+
+	$(document).ready(function(){
+		// $('#btn_login').click(function(){
+		// 	//$('#form_login').
+		// 	loginReq()
+		// });
+	});
+
+	var initPassword = function(){
+
+	}
+
+
+</script>
+
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<style>
+	input{
+		font-size:20px;
+		margin-top:5px;
+	}
+
+	legend{
+		text-align:center;
+		font-size:20px;
+	}
+	span{
+
+	}
+
+	.box_input{
+		display:inline;
+		float:left;
+		text-align: center;
+	}
+
+	div#box_summary{
+		text-align:center;
+	}
+
+	div#box_login{
+
+		clear:both;
+		text-align: center;
+	}
+
+	div#box_logout{
+
+		clear:both;
+		text-align: center;
+	}
+
+	div#box_loginform{
+		text-align: center;
+		position:absolute;
+		top:50%;
+		left:50%;
+		overflow:hidden;
+		margin-left:-250px;
+		margin-top:-150px;
+	}
+
+	.hidden{
+		display:none;
+	}
+	.ondisplay{
+		display:block;
+	}
+
+	.btn_login{
+		width:310px;
+	}
+</style>
+
+</head>
+
+<body>
+
+	<div id="box_loginform" class="starter-template">
+		<fieldset>
+			<legend>어서오세요</legend>
+			<div id="box_summary" ><span> </span></div>
+			<div id="box_input" class="box_input">
+				<form  id="form_login" name="form_login" method="post" >
+			    <input type="text" id="employee_id"  name="employee_id" title="아이디" size="40" placeholder="ID" /><br>
+			    <input type="password" id="employee_password" name="employee_password" title="패스워드" size="40" placeholder="PASSWORD" />
+			    <input type="hidden" id="type" name="type" value="employee_web"/>
+				</form>
+		  </div>
+		</fieldset>
+
+		<div id="box_login">
+		  	<input type="button" id="btn_login" class="btn_login" name="btn_login" value="임원 로그인" onclick="javascript:loginReq(event)" />
+	  </div>
+	  <div id="box_logout" class="hidden">
+			<input type="button" id="btn_logout" class="btn_login" name="btn_logout" value="로그아웃" onclick="javascript:logoutReq(event)" />
+	  </div>
+		<div>
+	  	<!-- 비밀번호 찾기 추가 0805 -->
+			<input type="button" id="btn_login" class="btn_login" name="btn_login" value="비밀번호 변경" onclick="javascript:initPassword(event)" />
+		</div>
+	</div>
+
+</body>
+
+</html>
