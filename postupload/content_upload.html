@@ -126,32 +126,45 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">컨텐츠 수정</h4>
+          <h3 class="modal-title" id="myModalLabel">컨텐츠 수정</h3>
           <input type="hidden" id="md_content_id"  />
         </div>
         <div class="modal-body">
           <form id="addSelphonePostFrm" method="POST">
-            <fieldset class="form-group">
-              <label for="md_content_out_title">외부 제목</label>
-              <textarea class="form-control" id="md_content_out_title" name="content_out_title"  required>
-              </textarea>
-            </fieldset>
-            <fieldset class="form-group">
-              <label for="md_content_out_picture">외부 사진</label>
-              <div id="md_content_out_picture">
+            <div class="row">
+              <div class="col-xs-6 col-md-6">
+                <fieldset class="form-group">
+                  <label for="md_content_out_title">외부 제목</label>
+                  <textarea class="form-control" id="md_content_out_title" name="content_out_title"  required>
+                  </textarea>
+                </fieldset>
               </div>
-              사진변경<input type="file" id="file_md_content_out_picture" name="content_out_picture" enctype="multipart/form-data" />
-            </fieldset>
-            <fieldset class="form-group">
-              <label for="md_content_in_title">내부 제목</label>
-              <textarea class="form-control" id="md_content_in_title" name="content_in_title"  required></textarea>
-            </fieldset>
-            <fieldset class="form-group">
-              <label for="md_content_background_picture">내부 배경사진</label>
-              <div id="md_content_background_picture">
+              <div class="col-xs-6 col-md-6">
+                <fieldset class="form-group">
+                  <label for="md_content_out_picture">외부 사진</label>
+                  <div id="md_content_out_picture">
+                  </div>
+                  <input type="file" id="file_md_content_out_picture" name="content_out_picture" enctype="multipart/form-data" />
+                </fieldset>
               </div>
-              사진변경<input type="file" id="file_md_content_background_picture" name="content_out_picture" enctype="multipart/form-data"/>
-            </fieldset>
+            </div>
+            <!-- <hr style="border: solid 1px #c0c0c0;"> -->
+            <div class="row">
+              <div class="col-xs-6 col-md-6">
+                <fieldset class="form-group">
+                  <label for="md_content_in_title">내부 제목</label>
+                  <textarea class="form-control" id="md_content_in_title" name="content_in_title"  required></textarea>
+                </fieldset>
+              </div>
+              <div class="col-xs-6 col-md-6">
+                <fieldset class="form-group">
+                  <label for="md_content_background_picture">내부 배경사진</label>
+                  <div id="md_content_background_picture">
+                  </div>
+                  <input type="file" id="file_md_content_background_picture" name="content_out_picture" enctype="multipart/form-data"/>
+                </fieldset>
+              </div>
+            </div>
             <fieldset class="form-group">
               <label for="md_content_summary">세줄요약</label>
               <textarea  class="form-control" id="md_content_summary" name="content_summary" rows="3" placeholder="내용을 입력해주세요." required></textarea>
