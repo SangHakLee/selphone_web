@@ -144,6 +144,7 @@
                   <label for="md_content_out_picture">외부 사진</label>
                   <div id="md_content_out_picture">
                   </div>
+                  <input id="md_content_out_picture_hidden" type="hidden" name="content_out_picture" value="" />
                   <input type="file" id="file_md_content_out_picture" name="content_out_picture" enctype="multipart/form-data" />
                 </fieldset>
               </div>
@@ -161,7 +162,8 @@
                   <label for="md_content_background_picture">내부 배경사진</label>
                   <div id="md_content_background_picture">
                   </div>
-                  <input type="file" id="file_md_content_background_picture" name="content_out_picture" enctype="multipart/form-data"/>
+                  <input id="md_content_background_picture_hidden" type="hidden" name="content_background_picture" value="" />
+                  <input type="file" id="file_md_content_background_picture" name="content_background_picture" enctype="multipart/form-data"/>
                 </fieldset>
               </div>
             </div>
@@ -304,7 +306,7 @@
     };
 
     function check(){
-      var pw = prompt("글을 삭제합니다")
+      var pw = prompt("글을 삭제합니다");
       if(pw != 1)
         {alert("비번틀림"); return false; }
       else
@@ -354,7 +356,8 @@
       });
 
       $('#delete').click(function(){
-        if(!check()) return;
+        // if(!check()) return;
+        // confirm("해당 컨텐츠를 삭제하시겠습니다?");
         deleteContent(function(isSuccess, result){
           if(isSuccess){
             alert('성공');
@@ -375,6 +378,10 @@
       return "."+name.split('.')[1];
     }
 
+    function getBackgroundUrl(url){
+      return url.replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '')
+    }
+
     function updateContent(e, callback){
       var contents = [];
       var content = {};
@@ -388,18 +395,42 @@
           content_id = $("#md_content_id").val();
 
       $.each(params, function(i, val) {
+        if(val.name == "content_out_picture"){
+          console.log("content_out_picture");
+          if(out_picture){
+            formData.append("content_out_picture", out_picture);
+            formData.append(val.name, val.value);
+          }
+          return true; // continue;
+        }
+        if(val.name == "content_background_picture"){
+          if(background_picture){
+            formData.append("content_background_picture", background_picture);
+            formData.append(val.name, val.value);
+          }
+          return true; // continue;
+        }
+        // console.log('val.name', val.name);
+        // console.log('val.value', val.value);
         formData.append(val.name, val.value);
       });
 
-      if(out_picture) formData.append("content_out_picture", out_picture);
-      // if(out_picture) formData.append("pictures", out_picture);
-      if(background_picture) formData.append("content_background_picture", background_picture);
-      // if(background_picture) formData.append("pictures", background_picture);
+
+      // if(out_picture){
+      //   formData.append("content_out_picture", out_picture);
+      // }else{
+      //   formData.delete("content_out_picture");
+      // }
+      // if(background_picture){
+      //   formData.append("content_background_picture", background_picture);
+      // }else{
+      //   formData.delete("content_background_picture");
+      // }
 
       $.each(files, function(i, file) {
         // console.log('file', file.files[0]);
         if(file.files[0])
-          formData.append("content_pictures", file.files[0]); // req.files.content_picture 각 이름이 세번째 인자값
+          formData.append("content_pictures", file.files[0]);
       });
 
       $('.md_description').each(function(i, v){
@@ -422,6 +453,7 @@
         data : formData,
         processData: false, // processData false 해야만 formData 갈수 있다 Illegal invocation
         contentType: false, // contentType false 해야만 body 내용이 이상하게 안간다
+        xhrFields: {withCredentials: true},
         dataType: 'json',
         success: function(data, textStatus, jqXHR) {
           callback(true, data.result)
@@ -449,6 +481,7 @@
         crossDomain: true ,//multidomain optiond
         processData: false, // processData false 해야만 formData 갈수 있다 Illegal invocation
         contentType: false, // contentType false 해야만 body 내용이 이상하게 안간다
+        xhrFields: {withCredentials: true},
         dataType: 'json',
         success: function(data, textStatus, jqXHR) {
           callback(true, data)
@@ -525,6 +558,7 @@
       previewTemplate: previewTemplate,
       autoQueue: false, // Make sure the files aren't queued until manually added
       uploadMultiple: true,
+      withCredentials: true, // cors를 위한 세션 데이터 전송
       previewsContainer: "#previews", // Define the container to display the previews
       clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
     });
@@ -650,8 +684,10 @@
       // console.log('content', content);
       $("#md_content_out_title").val(content.content_out_title);
       $("#md_content_out_picture").css("background-image", "url("+content.content_out_picture+")");
+      $("#md_content_out_picture_hidden").val(content.content_out_picture);
       $("#md_content_in_title").val(content.content_in_title);
       $("#md_content_background_picture").css("background-image", "url("+content.content_background_picture+")");
+      $("#md_content_background_picture_hidden").val(content.content_background_picture);
       $("#md_content_summary").val(content.content_summary);
       $("#md_content_id").val(content.id);
 

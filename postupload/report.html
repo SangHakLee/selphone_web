@@ -19,10 +19,8 @@
 <script src="./script/custom/datalist.js" ></script>
 <script src="./script/custom/showModalDialog.js"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-
 <script src="./script/custom/common.js" ></script>
 <script src="./script/excelexport.js" ></script>
-
 
 <script type="text/javascript" >
   var DEV_URL = 'http://54.178.140.51'
@@ -48,7 +46,6 @@
 
 
   $(document).ready(function(){
-
 
     $('#example tbody').on('mouseover', 'tr', function (){
         var data = table.row(this).data();
@@ -240,6 +237,7 @@
         <li ><a href="http://api.selphone.co.kr/naver-login" target="_blank">블로그업로드</a></li>
         <li ><a href="./post_orderPayment.html">결제 정보 관리</a></li>
         <li class="active"><a href="#">신고 내역</a></li>
+        <li><a href="./content_upload.html">콘텐츠 올리기</a></li>
       </ul>
 
        <ul class="nav navbar-nav navbar-right">
@@ -257,9 +255,27 @@
 </nav>
   <br><br><br>
 
+  <div class="container">
+    <h4>금지 유저 추가하기</h4>
+    <form id="addUserVanFrm">
+      <fieldset>
+        <label for=""> 아이디 : </label>
+        <input type="text" name="user_id">
+      </fieldset>
+      <fieldset>
+        <label for="">엑셀 다운 :</label>
+        <input type="checkbox" id="do_csv" checked>
+      </fieldset>
+      <fieldset>
+        <label for="">금지 유저 추가기재 사항 : </label>
+        <input name="comment" id="van_comment" size="50"/>
+      </fieldset>
+      <input type="submit" value="전송">
+    </form>
+  </div>
   <br><br><br>
   <div class="container">
-    <br><br><br>
+    <h4>신고 내역</h4>
       <!-- <table id="order_table" class="display" cellspacing="0" width="100%"> -->
       <table id="example" class="display" style="table-layout:fixed" cellspacing="0" width="100%">
         <thead>
@@ -425,6 +441,90 @@
       });
     });
   </script>
+  <script type="text/javascript">
+    // 금지유저 추가
+    $("#addUserVanFrm").submit(function(e){
+      e.preventDefault();
+      var $form = $(e.target),
+          data = {},
+          params = $form.serializeArray();
+      console.log('params', params);
 
+      if(params.length < 0){
+        alert("보낼게 없음");
+      }
+
+      data.user_id = params[0].value; // 순서 바뀌는 경우 조심
+      data.comment = params[1].value
+
+      var do_csv = $("#do_csv").is(":checked");
+
+
+
+
+      ajax("POST", URL+'/users-van', jsonSerialize(data), function(isSuccess, result){
+        if(isSuccess){
+          if(do_csv) jsonToCsvConvertor(result.result, "사기꾼", true);
+          // do something
+          $("input[name=user_id]").focus();
+          $("input[name=user_id]").val("");
+          $("#van_comment").val("");
+          alert("금지유저 추가 성공");
+
+        }else{
+          alert(result);
+        }
+      })
+    })
+
+
+    var jsonSerialize = function(data){
+      return JSON.stringify(data).replace(/(\s*)/g,"").slice(1, -1).split(",").map(function(item, index, array){return array[index] = item.replace(":", "=");}).join("&").replace(/"/g,"")
+    }
+    function jsonToCsvConvertor(JSONData, ReportTitle, ShowLabel) {
+        var _JSONData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+        var arrData =[];
+        if( _JSONData.constructor === Array ){
+          arrData = _JSONData;
+        }else{
+          arrData.push(_JSONData);
+        }
+        var CSV = '';
+        d = new Date();
+        date = d.getFullYear()+("0" + (d.getMonth()+1) ).slice(-2)+("0" + d.getDate() ).slice(-2) // ex 20151113 20150105
+        CSV += ReportTitle + '\r\n';
+        CSV += date + '\r\n';
+        if (ShowLabel) {
+            var row = "";
+            for (var index in arrData[0]) {
+                row += index + ',';
+            }
+            row = row.slice(0, -1);
+            CSV += row + '\r\n';
+        }
+        for (var i = 0; i < arrData.length; i++) {
+            var row = "";
+            for (var index in arrData[i]) {
+                row += '"' + arrData[i][index] + '",';
+            }
+            row.slice(0, row.length - 1);
+            CSV += row + '\r\n';
+        }
+        if (CSV == '') {
+            alert("Invalid data");
+            return;
+        }
+        var fileName = "";
+        fileName += ReportTitle.replace(/ /g,"_");
+        var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+        var link = document.createElement("a");
+        link.href = uri;
+        link.style = "visibility:hidden";
+        link.download = fileName + ".csv";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+  </script>
 
 </html>

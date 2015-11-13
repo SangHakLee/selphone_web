@@ -5,6 +5,7 @@ var ajax = function(type, url, data, callback){
     crossDomain: true ,//multidomain option
     dataType: 'json',
     data : data,
+    // contentType: false, // contentType false 해야만 body 내용이 이상하게 안간다
     // cache:false,
     processData:false,
     xhrFields: {withCredentials: true}, //use cookie

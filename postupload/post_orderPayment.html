@@ -60,12 +60,13 @@
         orders = result.results;
         console.log('orders', orders);
         makeOrderTable(table, result.results)
-      }
-      else
+      }else{
         alert(result)
         if(result.match('203')){
           location.href="./post_delete.html";
         }
+      }
+
     });
 
     // $.ajax({
@@ -362,6 +363,7 @@
         <li ><a href="http://54.178.140.51/naver-login" target="_blank">블로그업로드</a></li>
         <li class="active"><a href="#">결제 정보 관리</a></li>
         <li ><a href="./report.html">신고 내역</a></li>
+        <li><a href="./content_upload.html">콘텐츠 올리기</a></li>
       </ul>
 
        <ul class="nav navbar-nav navbar-right">
