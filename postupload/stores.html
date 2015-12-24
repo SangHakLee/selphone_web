@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> 업체관리 </title>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.8/datatables.min.css"/>
+<link rel="stylesheet" href="./css/datatable/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Selphone</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="./dashboard.html">Dash board</a></li>
+          <li><a href="./posts.html">게시글관리</a></li>
+          <li><a href="./orders.html">결제 정보 관리</a></li>
+          <li><a href="./reports.html">신고 내역</a></li>
+          <li><a href="./content_upload.html">셀폰 콘텐츠</a></li>
+          <li><a href="./users.html">회원관리</a></li>
+          <li class="active"><a href="./stores.html">업체관리</a></li>
+        </ul>
+         <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a id="userIdNav" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a id="logoutBtn" >로그아웃</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <br><br><br>
+
+  <div class="container">
+
+  </div>
+
+
+  </body>
+  <script src="./script/jquery-2.1.4.min.js" ></script>
+  <script src="./script/custom/common.js" ></script>
+  <script src="./script/bootstrap/bootstrap.min.js"></script>
+  <script type="text/javascript" >
+    $(document).ready(function(){
+      loginCheck().done(function(data){
+        if(!data.is_login){
+          alert("로그인이 필요합니다.")
+          location.href = "./login.html"
+        }else{
+          getStoresClick();
+        }
+      });
+
+    });
+
+    var getStoresClick = function(query){
+      ajax('GET', '/employees/stores-monthly-click?'+ ( query || '') , null, {})
+      .done(function(result){
+        console.log('result', result);
+      })
+      .fail(function(err){
+        alert('실패');
+        console.log(err);
+      });
+    }
+
+  </script>
+
+</html>

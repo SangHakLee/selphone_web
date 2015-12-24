@@ -11,7 +11,6 @@
 //var EMPLOYEE = "employees";
 
 $(document).ready(function(){
-	console.log('are you ready?');
 
 	// dataTable 준비
 	$('#example').dataTable();
@@ -42,19 +41,6 @@ $(document).ready(function(){
 
 });
 
-function convertUTCDateToLocalDate(date){
-	var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
-	console.log('newDate', newDate);
-
-  var offset = date.getTimezoneOffset() / 60;
-  console.log('offset : ', offset);
-  var hours = date.getHours();
-  console.log('hours : ', hours);
-
-  newDate.setHours(hours);
-
-  return newDate;
-}
 
 // function req_tempUsersPosts(){
 // 	console.log('req_tempUserPosts start');

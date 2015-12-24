@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>중고매매 개인거래 임시 등록</title>
+
+<link rel="stylesheet" href="./css/datatable/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+<!-- <link rel="stylesheet" href="/stylesheets/jquery.dataTables.min.css" /> -->
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Selphone</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="./dashboard.html">Dash board</a></li>
+        <li class="active"><a href="./posts.html">게시글관리</a></li>
+        <li><a href="./board.html">게시판관리</a></li>
+        <li><a href="./orders.html">결제 정보 관리</a></li>
+        <li ><a href="./reports.html">신고 내역</a></li>
+        <li><a href="./content_upload.html">셀폰 콘텐츠</a></li>
+        <li><a href="./users.html">회원관리</a></li>
+      </ul>
+       <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a id="userIdNav" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a id="logoutBtn" >로그아웃</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+	</div>
+</nav>
+
+
+
+
+
+	<br><br><br>
+
+  <div class="container">
+    <a id="a_naver-login" class="btn btn-lg btn-success" target="_blank">블로그업로드</a>
+  </div>
+	<div class="container">
+    <br><br><br>
+
+    <!-- <label>모델명 : </label>
+    <input id="product_model" type="text"  />
+
+
+    <select id="post_select_type" >
+        <option value="empty" >-----선택하세요-----</option>
+        <option value="posts?tmp_">임시계정 게시글</option>
+        <option value="posts?user">셀폰회원 게시글</option>
+        <option value="posts?">판매중인 모든 게시글</option>
+
+    </select>
+
+    <input id="date-start" type="text" placeholder="시작일" readonly />
+    <input id="date-end" type="text" placeholder="마지막일" readonly /> -->
+
+		<input id="get_selected_posts" type="button" class="btn btn-primary" value="글 가져오기" />
+    <a id="tooltip" class="btn btn-default" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+      옵션
+    </a>
+    &nbsp
+    <a id="download_btn" class="btn  btn-info" href="#" download="">엑셀로 뽑기</a>
+    <!-- <div class="collapse" id="collapseExample"> 임시제거 -->
+    <div class="" id="collapseExample">
+      <div class="well">
+        <form id="optionFrm">
+          <div class="form-group">
+            <label for="product_model">모델명(영문) : </label>
+            <input id="product_model" name="product_model" type="text"  />
+          </div>
+          <!-- <div class="form-group">
+            <label for="user_id">작성자 : </label>
+            <input id="user_id" name="user_id" type="text"  />
+          </div> 임시제거  -->
+          <!-- <div class="form-group">
+            <label for="post_select_type">조건 : </label>
+            <select id="post_select_type" name="post_status" >
+              <option value="">모든 게시글</option>
+              <option value="1">판매중</option>
+              <option value="0">판매완료</option>
+              <option value="999">삭제</option>
+            </select>
+          </div> 임시제거 -->
+          <div class="form-group">
+            <label>기간 : </label>
+            <input id="date-start" type="text" placeholder="시작일" readonly />
+            <input id="date-end" type="text" placeholder="마지막일" readonly />
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <br><br><br>
+
+	   <dialog id="favDialog">
+        <input type="text" size="70" id="text_subject" readonly/>
+        <div id="post_pictures"></div>
+        <textarea id="text_html" rows="10" cols="80" readonly>
+        </textarea>
+    </dialog>
+
+    <table id="example" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>회원 이름</th>
+                <th>회원 전화번호</th>
+                <th>글 ID</th>
+                <th>회원 ID</th>
+                <th>가격</th>
+                <th>모델명</th>
+                <th>글 내용</th>
+                <th>Original URL</th>
+                <th>등록일</th>
+                <th>카페업로드</th>
+                <th>판매완료</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>회원 이름</th>
+                <th>회원 전화번호</th>
+                <th>글 ID</th>
+                <th>회원 ID</th>
+                <th>가격</th>
+                <th>모델명</th>
+                <th>글 내용</th>
+                <th>Original URL</th>
+                <th>등록일</th>
+                <th>카페업로드</th>
+                <th>판매완료</th>
+            </tr>
+        </tfoot>
+        <tbody >
+
+        </tbody>
+    </table>
+  </div>
+
+
+</body>
+
+
+  <script src="./script/jquery-2.1.4.min.js" ></script>
+  <script src="./script/jquery-dateFormat.min.js"></script>
+  <script src="./script/custom/common.js"></script>
+  <script src="./script/custom/moment.js" ></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script src="./script/bootstrap/bootstrap.min.js"></script>
+  <script src="./script/datatable/jquery.dataTables.min.js" ></script>
+
+  <script src="./script/excelexport.js" ></script>
+  <script type="text/javascript" >
+    var Posts = function(posts){
+      var posts;
+      return{
+        setPost : function(_posts){
+        console.log('setPost');
+        posts = _posts;
+        },
+        getAll : function(){
+          console.log('getAll');
+          return posts;
+        },
+        getPost : function(_id){
+          console.log('getPost');
+          for(i in posts){
+            if(posts[i].id == _id)
+              return posts[i]
+          }
+          return null;
+        },
+        getLength : function(){
+          return posts.length;
+        }
+
+      }
+    }
+
+    // var $Class = function(oClassMember) {
+    //   var origin = function() {
+    //       this.$init.apply(this, arguments);
+    //   };
+    //   origin.prototype = oClassMember;
+    //   origin.prototype.constructor = Post;
+    //   return origin;
+    // };
+
+    // var Post = $Class({
+    //   $init : function(_posts){
+    //     this.posts = _posts;
+    //   },
+    //   setPost : function(_posts){
+    //     console.log('setPost');
+    //     this.posts = _posts;
+    //   },
+    //   getAll : function(){
+    //     console.log('getAll');
+    //     return this.posts;
+    //   },
+    //   getPost : function(_id){
+    //     console.log('getPost');
+    //     for(i in this.posts){
+    //       if(posts[i].id == _id)
+    //         return posts[i]
+    //     }
+    //     return null;
+    //   }
+    // })
+
+    // var Post = function(posts){
+    //   this.posts = posts;
+    // }
+    // Post.prototype={
+    //   setPost : function(_posts){
+    //     console.log('setPost');
+    //     this.posts = _posts;
+    //   },
+    //   getAll : function(){
+    //     console.log('getAll');
+    //     return this.posts;
+    //   },
+    //   getPost : function(_id){
+    //     console.log('getPost');
+    //     for(i in this.posts){
+    //       if(posts[i].id == _id)
+    //         return posts[i]
+    //     }
+    //     return null;
+    //   }
+    // }
+
+    $(document).ready(function(){
+      loginCheck().done(function(data){
+        if(!data.is_login){
+          alert("로그인이 필요합니다.")
+          location.href = "./login.html"
+        }
+      });
+      $("#a_naver-login").attr("href", URL+"/naver-login");
+      $('#tooltip')
+      .tooltip({
+        title : "옵션을 설정하면 해당 글만 빠르게 가져옵니다."
+      });
+
+
+      var table = $('#example').DataTable({"order":[[8,"desc"]]});
+
+      table.clear().draw();
+
+      $("#download_btn").on('click', function () {
+        var uri = $("#example").battatech_excelexport({
+            containerid: "example"
+            , datatype: 'table'
+            , returnUri: true
+        });
+        $(this).attr('download', '셀폰유저글.xls').attr('href', uri).attr('target', '_blank');
+      });
+
+      $("#date-start").datepicker({
+        maxDate : 0, //today를 기준으로
+        showButtonPanel : true, //today로 바로 이동
+        dateFormat : "yy-mm-dd"//날짜선택포맷
+        // dateFormat : "yymmdd" + "000000" //날짜선택포맷
+      });
+
+      $("#date-end").datepicker({
+        maxDate : 0,
+        showButtonPanel : true,
+        dateFormat : "yy-mm-dd"//날짜선택포맷
+        // dateFormat : "yymmdd" + "235959"
+      });
+
+      var limit;
+      var offset;
+      var size = 100;
+      $("#get_selected_posts").click(function(e){
+        var params = [];
+        var product_model = $("#product_model").val();
+        // var user_id = $("#user_id").val(); // 임시제거
+        // var post_status = $("#post_select_type option:selected").val(); // 임시제거
+        var startDate = $('#date-start').val() && moment($('#date-start').val()).format("YYYYMMDD")+"000000" || false; // 판매글 createdAt 시작일
+        var endDate = $('#date-end').val() && moment($('#date-end').val()).format("YYYYMMDD")+"235959" || false; // 판매글 createdAt 마지막일
+
+        if( !startDate ) {
+          alert("시작 날짜를 선택해주세요.")
+          $('#date-start').focus(); return;
+        }
+        if( !endDate ) {
+          alert("끝 날짜를 선택해주세요.")
+          $('#date-end').focus(); return;
+        }//임시추가
+
+        if(product_model) params.push("product_model="+product_model);
+        // if(user_id) params.push("user_id="+user_id);  // 임시제거
+        // if(post_status) params.push("post_status="+post_status);  // 임시제거
+        if(startDate) params.push("startDate="+startDate);
+        if(endDate) params.push("endDate="+endDate);
+  /*      if(limit) {
+          limit += size;
+          offset = limit-size;
+        }
+        else{
+          limit = size;
+          offset = 0;
+        }
+        params.push("limit="+limit) // 임시제거
+        params.push("offset="+offset)) // 임시제거*/
+        params = params.join("&")
+        console.log('params', params);
+        // $(this).val( ((limit-size)+1)+"~"+limit+ " / 다음으로") // 임시제거
+        ajax('GET', '/employees/posts/?'+params, null, {})
+        .done(function(result){
+          // console.log('result', result);
+          posts = new Posts(result.results)
+     /*     if(posts.getLength() < size ){ 임시제거
+            $("#get_selected_posts").val("글 가져오기");
+            limit = 0;
+            offset = 0;
+            alert("마지막입니다.");
+          }*/
+          makePostsTable(table, posts.getAll())
+        })
+        .fail(function(err){
+          console.log("err",err);
+          alert(err)
+        });
+        // var product_model = $("#product_model").val();
+        // var user_id = $("#user_id").val();
+        // var post_status = $("#post_select_type option:selected").val();
+        // console.log('product_model', product_model);
+        // console.log('user_id', user_id);
+        // console.log('post_status', post_status);
+
+
+      })
+    });
+
+
+
+
+
+    var checkIsEnd = function(length, size){
+      if(length < size){
+        return true;
+      }else{
+        return false;
+      }
+    }
+
+    var makePostsTable = function(table, posts){
+      table.clear().draw(); // table 초기화
+      for(i in posts){
+        var appendData = [];
+        // console.log(posts[i]);
+        appendData.push(posts[i].TB_USER && posts[i].TB_USER.user_name || "유저 정보 없음");
+        appendData.push(posts[i].TB_USER && posts[i].TB_USER.user_number || "유저 정보 없음");
+        appendData.push(posts[i].id);
+        appendData.push(posts[i].user_id);
+        appendData.push(posts[i].sell_price);
+        appendData.push(posts[i].product_model);
+        appendData.push(posts[i].post_description);
+        posts[i].post_origin_url ? appendData.push('<a href=' + posts[i].post_origin_url + ' target=\'_blank\'>' + posts[i].post_origin_url + '</a>') : appendData.push('셀폰에서 올린 글입니다');
+
+        var timeformat = $.format.date( Date.parse(posts[i].createdAt), "yyyy-MM-dd a hh:mm:ss" )
+        //appendData.push(makeTimeFormat);
+        appendData.push(timeformat);
+        appendData.push('<input type="button" value="보기" onclick="javascript:postHtmlGenerate('+ posts[i].id +')" />');
+        // appendData.push('<input type="button" value="보기" onclick="javascript:postHtmlGenerate('+ i +', this)" />');
+        appendData.push('<input type="button" value="판매완료" onclick="javascript:postDelete(' + posts[i].id + ', \''+posts[i].user_id+'\')" />');
+
+        table.row.add(appendData).draw();
+      }
+    }
+
+
+
+    // $("#logoutBtn").click(function(){
+    //   logout();
+    // })
+    function postHtmlGenerate(objIdx){
+      var postHTML = makeContentHtmlGenerator(objIdx);
+      var favDialog = $('#favDialog');
+      favDialog.attr('open', 'open');
+
+      $('#text_subject').val(postHTML.subject);
+
+      var append_imgurl = ""
+      for(i in postHTML.img_urls){
+
+        append_imgurl += "이미지"+i+1+": <a href='" + postHTML.img_urls[i] + "'>"+ postHTML.img_urls[i] +"</a><br/>";
+      }
+      $('#post_pictures').html(append_imgurl);
+
+      $('#text_html').text(postHTML.content);
+
+      favDialog.dialog({
+        modal:true
+        , resizable:true
+        , title:"복사해서 쓰세요. (수정, 입력 불가능)"
+        , width:750
+      });
+    };
+
+    function postDelete(post_id, user_id){
+      console.log('post_id', post_id);
+      console.log('user_id', user_id);
+      data = "user_id="+user_id
+      var confirmResult = confirm(user_id + '님의 ' + post_id + '번 게시글을 삭제하시겠습니까?');
+      if(confirmResult){
+        ajax('PUT',  '/posts/' + post_id + '/0', data, {})
+        .done(function(result){
+          alert("변경 성공")
+        })
+        .fail(function(err){
+          alert(err)
+        });
+      }
+    }
+
+    function makeContentHtmlGenerator(i){
+      var post = posts.getPost(i)
+      var subject="";
+          subject += "[";
+          subject += post.TB_PRODUCT.product_name || "TB_PRODUCT 가져올수 없음";
+          subject += "]";
+          subject += "[";
+          subject += post.TB_PRODUCT.product_model || "TB_PRODUCT 가져올수 없음";
+          subject += "]";
+          subject += "중고폰 " + post.sell_price + " 원에 팝니다";
+          console.log('subject', subject);
+      var content = changeText(post.post_description);
+      var img_urls = post.post_pictures.split(',');
+      return {"subject":subject, "content":content, "img_urls" : img_urls};
+    };
+
+    var changeText = function(text){
+      var number = null;
+      if(text.match(/\d{3}-\d{3,4}-\d{4}/g)){
+        number = text.match(/\d{3}-\d{3,4}-\d{4}/g);
+        text = text.replace(number.toString(), "xxx-xxxx-xxxx")
+      }else if(text.match(/\d{3} \d{3,4} \d{4}/g)){
+        number = text.match(/\d{3} \d{3,4} \d{4}/g);
+        text = text.replace(number.toString(), "xxx-xxxx-xxxx")
+      }else if(text.match(/\d{3}\d{3,4}\d{4}/g)){
+        number = text.match(/\d{3}\d{3,4}\d{4}/g);
+        text = text.replace(number.toString(), "xxx-xxxx-xxxx")
+      }else if(text.match(/\d{3}.\d{3,4}.\d{4}/g)){
+        number = text.match(/\d{3}\d{3,4}\d{4}/g);
+        text = text.replace(number.toString(), "xxx-xxxx-xxxx")
+      }else{
+      }
+      //0714 - replace <br/> to carriage code and new line code
+      return text;
+    }
+  </script>
+
+</html>

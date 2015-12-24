@@ -3,190 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>신고</title>
-
-<!-- server origin -->
-<!-- <script src="/script/jquery-1.11.0.min.js" ></script>
-<script src="/script/custom/ajaxRequest.js"></script>
-<script src="/script/custom/logincheck.js" ></script>
-<script src="/script/custom/datalist.js" ></script> -->
-
-<script src="./script/jquery-1.11.0.min.js" ></script>
-<script src="./script/custom/moment.js" ></script>
-<script src="./script/jquery-dateFormat.min.js"></script>
-<script src="./script/custom/ajaxRequest.js"></script>
-<!--<script src="./script/custom/logincheck.js" ></script>-->
-<script src="./script/custom/loginjs.js"></script>
-<script src="./script/custom/datalist.js" ></script>
-<script src="./script/custom/showModalDialog.js"></script>
-<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-<script src="./script/custom/common.js" ></script>
-<script src="./script/excelexport.js" ></script>
-
-<script type="text/javascript" >
-  var DEV_URL = 'http://54.178.140.51'
-  var PRD_URL = 'http://api.selphone.co.kr'
-
-  var URL = DEV_URL;
-
-  var reports;
-
-  $(function(){
-    $('#dialog_post').dialog({
-      autoOpen: false,
-      resizable: true,
-      width : "500px",
-      buttons : {
-        Close : function() {
-            $(this).dialog("close"); // button 실행을 직접 선언하려면 function안에 기능을 써준다.
-        }
-      }
-    });
-  });
-
-
-
-  $(document).ready(function(){
-
-    $('#example tbody').on('mouseover', 'tr', function (){
-        var data = table.row(this).data();
-        $(this).css('cursor','pointer');
-    });
-    $('#example tbody').on('click', 'tr', function (){
-        var data = table.row(this).data();
-        var index = data[0];
-        makePostDialog(index);
-        $('#dialog_post').dialog('open');
-    });
-
-    $("#download_btn").on('click', function () {
-      var uri = $("#example").battatech_excelexport({
-          containerid: "example"
-          , datatype: 'table'
-          , returnUri: true
-      });
-      $(this).attr('download', 'ExportToExcel.xls').attr('href', uri).attr('target', '_blank');
-    });
-
-
-    var table = $('#example').DataTable();
-    table.clear().draw();
-
-
-    ajax('GET', URL+'/reports', '', function(isSuccess, result){
-      if(isSuccess){
-        console.log('result', result);
-        reports = result.results
-        makeReportTable(table, result.results)
-      }else{
-        alert(result)
-        if(result.match('203')){
-          location.href="./login.html";
-        }
-      }
-    });
-  });
-
-  var getReportType = function(post_id, comment_id){
-    if(comment_id == null){
-      return post_id+'번 글 신고'
-    }else{
-      return post_id+'번 글 '+comment_id+'번 댓글 신고'
-    }
-  }
-
-  var makePostDialog = function(index){
-
-
-    var report = reports[index]
-    $('#report_id').val(report.id);
-    $('#text').val(report.text);
-    $('#type').val(getReportType(report.post_id, report.comment_id));
-    $('#post_id').val(report.TB_POST.id);
-    $('#post_status').val(report.TB_POST.post_status);
-    $('#post_status_name').val(getPostStatusName(report.TB_POST.post_status));
-    if(report.TB_POST.TB_USER == undefined){
-      $('#poster').val("삭제된 유저");
-  }else{
-    $('#poster').val(report.TB_POST.TB_USER.user_id);
-  }
-    $('#post_description').val(report.TB_POST.post_description);
-    $('#sell_price').val(report.TB_POST.sell_price);
-    $('#product_model').val(report.TB_POST.product_model+'('+report.TB_POST.TB_PRODUCT.product_name+')');
-    var post_imgs = report.TB_POST.post_pictures.split(',');
-    for(i in post_imgs){
-      $('#post_img_'+ i ).attr('src', post_imgs[i]);
-    }
-    if($('#post_status').val()==999){
-      $('.postDelete').css("display", "none");
-    }else{
-      $('.postDelete').css("display", "inline");
-    }
-
-    if(report.report_status==0){ //신고 처리 안함
-      $('#report_result_span').text("신고 처리내용:");
-      $('#report_result').attr("readonly", false);
-      $('#report_result').val("");
-
-      $('#resultBtn').css("display", "inline");
-      $('#postDeleteBtn').css("display", "none");
-
-    }else{
-      if($('#post_status').val()==1){ // 글 삭제만 하는 버튼 보이기
-        $('.postDelete').css("display", "none");
-        $('#postDeleteBtn').css("display", "inline");
-      }else{
-        $('#postDeleteBtn').css("display", "none");
-      }
-
-      $('#report_result_span').text("신고 처리완료");
-      $('#report_result').attr("readonly", true);
-      $('#report_result').val(report.result);
-
-      $('#resultBtn').css("display", "none");
-    }
-
-
-
-  }
-
-  var getReportStatusName = function(status){
-    switch(status){
-      case 0 : return '처리대기';
-      case 1 : return '처리완료';
-    }
-  }
-
-  var getPostStatusName = function(status){
-    switch(status){
-      case 0 : return '판매완료';
-      case 1 : return '판매중';
-      case 999 : return '삭제';
-    }
-  }
-
-
-
-  var makeReportTable = function(table, results){
-    for(i in results){
-      var appendData = [];
-      appendData.push(i);
-      appendData.push(getReportType(results[i].post_id, results[i].comment_id));
-      appendData.push(results[i].user_id);
-      appendData.push(results[i].text);
-      appendData.push(getReportStatusName(results[i].report_status));
-      appendData.push(results[i].result);
-      appendData.push($.format.date( Date.parse(results[i].createdAt), "yyyy-MM-dd a hh:mm:ss" ));
-      table.row.add(appendData).draw();
-    }
-  }
-
-
-</script>
-
 <style >
-  div.container {
-    width:80%;
-  }
   .hidden{
       display:none;
   }
@@ -209,11 +26,11 @@
 
 </style>
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.8/datatables.min.css"/>
 <link rel="stylesheet" href="./css/datatable/jquery.dataTables.min.css" />
 <link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
 <!-- <link rel="stylesheet" href="/stylesheets/jquery.dataTables.min.css" /> -->
-
 
 </head>
 <body>
@@ -230,26 +47,23 @@
       <a class="navbar-brand" href="#">Selphone</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse">
-
       <ul class="nav navbar-nav">
-        <li ><a href="./post_jungoform.html">임시게시하기</a></li>
-        <li ><a href="./post_delete.html">게시글관리</a></li>
-        <li ><a href="http://api.selphone.co.kr/naver-login" target="_blank">블로그업로드</a></li>
-        <li ><a href="./post_orderPayment.html">결제 정보 관리</a></li>
-        <li class="active"><a href="#">신고 내역</a></li>
-        <li><a href="./content_upload.html">콘텐츠 올리기</a></li>
+        <li><a href="./dashboard.html">Dash board</a></li>
+        <li><a href="./posts.html">게시글관리</a></li>
+        <li><a href="./board.html">게시판관리</a></li>
+        <li><a href="./orders.html">결제 정보 관리</a></li>
+        <li class="active"><a href="./reports.html">신고 내역</a></li>
+        <li><a href="./content_upload.html">셀폰 콘텐츠</a></li>
+        <li><a href="./users.html">회원관리</a></li>
       </ul>
-
        <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a id="employee_id" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ></a>
+          <a id="userIdNav" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a onclick="javascript:logoutReq(this, event)">Log out</a></li>
-
+            <li><a id="logoutBtn" >로그아웃</a></li>
           </ul>
         </li>
       </ul>
-
     </div>
   </div>
 </nav>
@@ -270,7 +84,7 @@
         <label for="">금지 유저 추가기재 사항 : </label>
         <input name="comment" id="van_comment" size="50"/>
       </fieldset>
-      <input type="submit" value="전송">
+      <input type="submit"  class="btn btn-primary" value="전송">
     </form>
   </div>
   <br><br><br>
@@ -373,43 +187,195 @@
   </body>
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
    -->
+
+   <script src="./script/jquery-2.1.4.min.js" ></script>
+  <script src="./script/jquery-dateFormat.min.js"></script>
+  <!--<script src="./script/custom/logincheck.js" ></script>-->
+  <script src="./script/custom/showModalDialog.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+  <script src="./script/custom/common.js" ></script>
   <script src="./script/bootstrap/bootstrap.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.8/datatables.min.css"/>
   <script src="./script/datatable/jquery.dataTables.min.js" ></script>
+  <script type="text/javascript" >
+
+    var reports;
+
+    $(function(){
+      $('#dialog_post').dialog({
+        autoOpen: false,
+        resizable: true,
+        width : "500px",
+        buttons : {
+          Close : function() {
+              $(this).dialog("close"); // button 실행을 직접 선언하려면 function안에 기능을 써준다.
+          }
+        }
+      });
+    });
+
+    $(document).ready(function(){
+      loginCheck().done(function(data){
+        if(!data.is_login){
+          alert("로그인이 필요합니다.")
+          location.href = "./login.html"
+        }
+      })
+
+      $('#example tbody').on('mouseover', 'tr', function (){
+          var data = table.row(this).data();
+          $(this).css('cursor','pointer');
+      });
+      $('#example tbody').on('click', 'tr', function (){
+          var data = table.row(this).data();
+          var index = data[0];
+          makePostDialog(index);
+          $('#dialog_post').dialog('open');
+      });
+
+      $("#download_btn").on('click', function () {
+        var uri = $("#example").battatech_excelexport({
+            containerid: "example"
+            , datatype: 'table'
+            , returnUri: true
+        });
+        $(this).attr('download', 'ExportToExcel.xls').attr('href', uri).attr('target', '_blank');
+      });
+
+
+      var table = $('#example').DataTable();
+      table.clear().draw();
+
+      ajax('GET', '/reports', null, {})
+      .done(function(result){
+        console.log('result', result);
+        reports = result.results
+        makeReportTable(table, reports)
+      })
+      .fail(function(err){
+        alert(result)
+      });
+    });
+
+    var getReportType = function(post_id, comment_id){
+      if(comment_id == null){
+        return post_id+'번 글 신고'
+      }else{
+        return post_id+'번 글 '+comment_id+'번 댓글 신고'
+      }
+    }
+
+    var makePostDialog = function(index){
+
+      var report = reports[index]
+      $('#report_id').val(report.id);
+      $('#text').val(report.text);
+      $('#type').val(getReportType(report.post_id, report.comment_id));
+      $('#post_id').val(report.TB_POST.id);
+      $('#post_status').val(report.TB_POST.post_status);
+      $('#post_status_name').val(getPostStatusName(report.TB_POST.post_status));
+      if(report.TB_POST.TB_USER == undefined){
+        $('#poster').val("삭제된 유저");
+    }else{
+      $('#poster').val(report.TB_POST.TB_USER.user_id);
+    }
+      $('#post_description').val(report.TB_POST.post_description);
+      $('#sell_price').val(report.TB_POST.sell_price);
+      $('#product_model').val(report.TB_POST.product_model+'('+report.TB_POST.TB_PRODUCT.product_name+')');
+      var post_imgs = report.TB_POST.post_pictures.split(',');
+      for(i in post_imgs){
+        $('#post_img_'+ i ).attr('src', post_imgs[i]);
+      }
+      if($('#post_status').val()==999){
+        $('.postDelete').css("display", "none");
+      }else{
+        $('.postDelete').css("display", "inline");
+      }
+
+      if(report.report_status==0){ //신고 처리 안함
+        $('#report_result_span').text("신고 처리내용:");
+        $('#report_result').attr("readonly", false);
+        $('#report_result').val("");
+
+        $('#resultBtn').css("display", "inline");
+        $('#postDeleteBtn').css("display", "none");
+
+      }else{
+        if($('#post_status').val()==1){ // 글 삭제만 하는 버튼 보이기
+          $('.postDelete').css("display", "none");
+          $('#postDeleteBtn').css("display", "inline");
+        }else{
+          $('#postDeleteBtn').css("display", "none");
+        }
+
+        $('#report_result_span').text("신고 처리완료");
+        $('#report_result').attr("readonly", true);
+        $('#report_result').val(report.result);
+
+        $('#resultBtn').css("display", "none");
+      }
+
+
+
+    }
+
+    var getReportStatusName = function(status){
+      switch(status){
+        case 0 : return '처리대기';
+        case 1 : return '처리완료';
+      }
+    }
+
+    var getPostStatusName = function(status){
+      switch(status){
+        case 0 : return '판매완료';
+        case 1 : return '판매중';
+        case 999 : return '삭제';
+      }
+    }
+
+
+
+    var makeReportTable = function(table, results){
+      for(i in results){
+        var appendData = [];
+        appendData.push(i);
+        appendData.push(getReportType(results[i].post_id, results[i].comment_id));
+        appendData.push(results[i].user_id);
+        appendData.push(results[i].text);
+        appendData.push(getReportStatusName(results[i].report_status));
+        appendData.push(results[i].result);
+        appendData.push($.format.date( Date.parse(results[i].createdAt), "yyyy-MM-dd a hh:mm:ss" ));
+        table.row.add(appendData).draw();
+      }
+    }
+  </script>
   <script>
     $(document).ready(function(){
       $('#resultBtn').on('click',  function (){
-
         var report_id = $('#report_id').val();
         var report_result = $('#report_result').val();
         var report_datas = "result="+report_result
 
-        ajax('PUT', URL+'/reports/'+report_id, report_datas, function(isSuccess, result){
-          if(isSuccess){
-            var is_checked_delete = $('#postDeleteCheck').is(':checked')
-            if(is_checked_delete){
-              var post_id = $('#post_id').val();
-              var user_id = $('#poster').val();
-              var datas = "post_id="+post_id+"&user_id="+user_id
-              ajax('PUT', URL+'/posts/'+post_id+'/999', datas, function(isSuccess, result){
-                if(isSuccess){
-                  location.reload();
-                }else{
-                  alert(result);
-                  if(result.match('203')){
-                    location.href="./login.html";
-                  }
-                }
-              });
-            }else{
+        ajax('PUT', '/reports/'+report_id, report_datas, {})
+        .done(function(result){
+          var is_checked_delete = $('#postDeleteCheck').is(':checked')
+          if(is_checked_delete){
+            var post_id = $('#post_id').val();
+            var user_id = $('#poster').val();
+            var datas = "post_id="+post_id+"&user_id="+user_id
+            ajax('PUT', '/posts/'+post_id+'/999', datas, {})
+            .done(function(result){
               location.reload();
-            }
+            })
+            .fail(function(err){
+              alert(err);
+            })
           }else{
-            alert(result);
-            if(result.match('203')){
-              location.href="./login.html";
-            }
+            location.reload()
           }
+        })
+        .fail(function(){
+          alert(result);
         });
       });
 
@@ -417,15 +383,12 @@
         var post_id = $('#post_id').val();
         var user_id = $('#poster').val();
         var datas = "post_id="+post_id+"&user_id="+user_id
-        ajax('PUT', URL+'/posts/'+post_id+'/999', datas, function(isSuccess, result){
-          if(isSuccess){
-            location.reload();
-          }else{
-            alert(result);
-            if(result.match('203')){
-              location.href="./login.html";
-            }
-          }
+        ajax('PUT', '/posts/'+post_id+'/999', datas, {})
+        .done(function(result){
+          location.reload();
+        })
+        .fail(function(err){
+          alert(err)
         });
       });
 
@@ -460,20 +423,17 @@
       var do_csv = $("#do_csv").is(":checked");
 
 
-
-
-      ajax("POST", URL+'/users-van', jsonSerialize(data), function(isSuccess, result){
-        if(isSuccess){
-          if(do_csv) jsonToCsvConvertor(result.result, "사기꾼", true);
-          // do something
-          $("input[name=user_id]").focus();
-          $("input[name=user_id]").val("");
-          $("#van_comment").val("");
-          alert("금지유저 추가 성공");
-
-        }else{
-          alert(result);
-        }
+      ajax("POST", '/users-van', jsonSerialize(data), {})
+      .done(function(result){
+        if(do_csv) jsonToCsvConvertor(result.result, "사기꾼", true);
+        // do something
+        $("input[name=user_id]").focus();
+        $("input[name=user_id]").val("");
+        $("#van_comment").val("");
+        alert("금지유저 추가 성공");
+      })
+      .fail(function(err){
+        alert(err)
       })
     })
 

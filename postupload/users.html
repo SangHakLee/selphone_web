@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원관리 </title>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.8/datatables.min.css"/>
+<link rel="stylesheet" href="./css/datatable/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Selphone</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="./dashboard.html">Dash board</a></li>
+          <li><a href="./posts.html">게시글관리</a></li>
+          <li><a href="./board.html">게시판관리</a></li>
+          <li><a href="./orders.html">결제 정보 관리</a></li>
+          <li><a href="./reports.html">신고 내역</a></li>
+          <li><a href="./content_upload.html">셀폰 콘텐츠</a></li>
+          <li class="active"><a href="./users.html">회원관리</a></li>
+        </ul>
+         <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a id="userIdNav" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a id="logoutBtn" >로그아웃</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <br><br><br>
+
+  <div class="container">
+    <div class="panel panel-success">
+    <div class="panel-heading"><h2>푸시 보내기</h2><h4 id="pannelHeader" style="color:red"></h4></div>
+    <div class="panel-body">
+      <div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">개별 푸시</a></li>
+          <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">전체 푸시</a></li>
+          <li role="presentation"><a href="#storeTab" aria-controls="storeTab" role="tab" data-toggle="tab">셀폰 매니저(업체)</a></li>
+        </ul>
+
+        <!--  panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="home">
+            <!-- <form role="form" id="form" name="form" method="post"> -->
+            <form role="form" id="selectFrm"  method="post">
+              <div class="form-group">
+                <label for="message">푸시 내용</label>
+                <textarea class="form-control" rows="5" cols="30" placeholder="푸시 내용" id="message" name="message" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="url">이동 url</label>
+                <input class="form-control" type="text" name="url" id="url">
+                <!-- <input type="text" placeholder="URL" id="url" name="url" value=""><br> -->
+              </div>
+              <div class="form-group">
+                <label for="users">보낼 사용자들
+                </label>
+                <textarea class="form-control" rows="5" cols="30" placeholder="Ex) gg_103401533054236575080" id="users" name="users" required></textarea>
+                <p class="help-block">알림 보낼 사용자 아이디를  입력해주세요.</p>
+              </div>
+              <button type="submit" class="btn btn-primary" value="chat">채팅으로 보내기</button>
+              <button type="submit" class="btn btn-primary" value="noti">알림으로 보내기</button>
+            </form>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="profile">
+            <form role="form" id="allFrm"  method="post">
+              <div class="form-group">
+                <label for="message">푸시 내용</label>
+                <textarea class="form-control" rows="5" cols="30" placeholder="푸시 내용" id="message" name="message" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="all_url">이동 url</label>
+                <input class="form-control" type="text" name="url" id="all_url">
+                <!-- <input type="text" placeholder="URL" id="url" name="url" value=""><br> -->
+              </div>
+              <input type="hidden" id="topic" name="topic" value="Users">
+              <button type="submit" class="btn btn-primary" value="chat">공지사항 채팅으로 보내기</button>
+              <button type="submit" class="btn btn-primary" value="noti">공지사항 알림으로 보내기</button>
+              <button type="submit" class="btn btn-primary" value="noti_url">알림으로 보내기(url 필수)</button>
+            </form>
+          </div>
+           <div role="tabpanel" class="tab-pane" id="storeTab">
+            <form role="form" id="storeFrm"  method="post">
+              <div class="form-group">
+                <label for="message">공지사항 내용</label>
+                <textarea class="form-control" rows="5" cols="30" placeholder="공지사항 내용" id="message" name="message" required></textarea>
+              </div>
+              <input type="hidden"  name="topic" value="Stores">
+              <!-- <button type="submit" class="btn btn-primary" value="chat">공지사항 채팅으로 보내기</button> -->
+              <button type="submit" class="btn btn-primary" value="noti">공지사항 알림으로 보내기</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  </body>
+  <script src="./script/jquery-2.1.4.min.js" ></script>
+  <script src="./script/custom/common.js" ></script>
+  <script src="./script/bootstrap/bootstrap.min.js"></script>
+  <script type="text/javascript" >
+    $(document).ready(function(){
+      loginCheck().done(function(data){
+        if(!data.is_login){
+          alert("로그인이 필요합니다.")
+          location.href = "./login.html"
+        }
+      });
+      if(URL == PRD_URL){
+        $("#pannelHeader").text("운영")
+      }else{
+        $("#pannelHeader").text("개발")
+      }
+
+    });
+
+    $('#selectFrm').submit(function(e){
+      e.preventDefault();
+      var type = $(this).find("button[type=submit]:focus").attr("value");
+      var end_point;
+      if(type == 'chat') end_point = '/push_chat'
+      else if(type == 'noti') end_point = '/push'
+      var users_value = $('#users').val().replace(/\n|\r\n|\r/gi, ",") // 엔터를 , 로 변경
+      var users_count = users_value.split(',').length;
+      $('#users').val(users_value)
+      var msg = users_count+'명에게 푸시를 보냅니다.\n\n';
+      if( $('#url').val() == "" ){
+        msg += 'url이 비었습니다. 푸시를 보내면 셀폰 어플로 이동합니다. ex) 공지사항 전송'
+      }else{
+        msg += 'url이 있습니다.. 푸시를 보내면 바로 해당 url로 이동합니다. ex) 이벤트 페이지'
+      }
+      if(!confirm(msg)) return false;
+
+
+      ajax('POST', '/employees'+end_point, $(this).serialize(), {})
+      .done(function(result){
+        console.log('result', result);
+      })
+      .fail(function(err){
+        alert('개별 푸시 실패');
+        console.log("개별 푸시 실패", err);
+      });
+    });
+
+    $("#allFrm").submit(function(e){
+      e.preventDefault();
+      var type = $(this).find("button[type=submit]:focus").attr("value");
+      var end_point;
+      if(type == 'chat') end_point = '/push_chat'
+      else if(type == 'noti') end_point = '/push'
+      else if(type == 'noti_url') end_point = '/push'
+
+      var msg = '모든 사용자에게 푸시를 보냅니다.\n\n';
+      if( $('#all_url').val() == "" ){
+        if(type == 'noti')
+          msg += 'url이 비었습니다. 알림 푸시로 공지사항을 보냅니다. ex) 공지사항 전송'
+        else if(type == 'chat')
+          msg += 'url이 비었습니다. 채팅 메세지로 공지사항을 보냅니다. ex) 셀폰팀 알림 메세지'
+      }else{
+        msg += 'url이 있습니다.. 푸시를 보내면 바로 해당 url로 이동합니다. ex) 이벤트 페이지'
+      }
+      if(!confirm(msg)) return false;
+
+
+      ajax('POST', '/employees'+end_point, $(this).serialize(), {})
+      .done(function(result){
+        console.log('result', result);
+      })
+      .fail(function(err){
+        alert('전체 푸시 실패');
+        alert(err.responseText);
+        console.log(err);
+      });
+    })
+
+    $("#storeFrm").submit(function(e){
+      e.preventDefault();
+      var type = $(this).find("button[type=submit]:focus").attr("value");
+      var end_point;
+      if(type == 'chat') end_point = '/push_chat'
+      else if(type == 'noti') end_point = '/push'
+
+      console.log('/employees'+end_point);
+      console.log($(this).serialize());
+
+      ajax('POST', '/employees'+end_point, $(this).serialize(), {})
+      .done(function(result){
+        console.log('result', result);
+      })
+      .fail(function(err){
+        alert('전체 푸시 실패');
+        alert(err);
+        console.log(err);
+      });
+    })
+
+  </script>
+
+</html>

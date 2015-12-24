@@ -19,7 +19,6 @@
 		  <fieldset class="form-group">
 		    <label for="product_model">핸드폰 모델</label>
 		    <select class="form-control" name="product_model" id="product_model" required>
-		      <option value="1">1</option>
 		    </select>
 		  </fieldset>
 		  <fieldset class="form-group">
@@ -55,19 +54,60 @@
 		</form>
 	</div>
 </body>
-<script src="./script/jquery-1.11.0.min.js"></script>
-<script src="./script/custom/logincheck.js"></script>
-<script src="./script/custom/ajaxRequest.js"></script>
-<script src="./script/custom/loginjs.js"></script>
+<script src="./script/jquery-2.1.4.min.js" ></script>
+<script src="./script/custom/common.js"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-	$("#submit").click(function(e){
-		e.preventDefault(); // 올리기 막기
-		// var formData = $("#addSelphonePostFrm").serialize();
-		var formData = new FormData($("#addSelphonePostFrm"));
-		console.log('formData', formData);
+	$(document).ready(function(){
+		getProdoctListSelectTag($('#product_model'));
+
+		$("#addSelphonePostFrm").submit(function(e){
+			e.preventDefault(); // 올리기 막기
+			var formData   = new FormData(),
+					$form = $(this),
+					params    = $form.serializeArray(),
+					post_pictures = $("#post_pictures");
+
+			$.each(params, function(i, val) {
+				formData.append(val.name, val.value);
+      });
+
+			console.log("post_pictures", post_pictures);
+			return;
+
+      $.each(post_pictures, function(i, file) {
+      	console.log("file.files[i]", file.files[i]);
+				formData.append('post_pictures', file.files[i]);
+      });
+
+			ajax('POST', '/selphone-posts', formData, {processData:false,contentType: false})
+	    .done(function(data){
+	    	console.log("data", data);
+	      // location.reload();
+	    })
+	    .fail(function(err){
+	      console.log("err", err);
+	      // alert("추가에 실패했습니다.")
+	    });
+		});
 	});
-});
+
+	var getProdoctListSelectTag = function(_select){
+		ajax('GET', '/products', null, {})
+    .done(function(data){
+    	data = data.results
+    	for( i in data){
+    		var o = new Option("value", data[i].product_model);
+				/// jquerify the DOM object 'o' so we can use the html method
+				$(o).html(data[i].product_name);
+				_select.append(o);
+			}
+    })
+    .fail(function(err){
+      console.log("err", err);
+      alert("핸드폰 모델 가져오기 실패")
+      location.reload();
+    });
+	}
 
 </script>
 </html>

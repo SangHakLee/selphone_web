@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>중고매매 개인거래 임시 등록</title>
+
+<style >
+  .hidden{
+      display:none;
+  }
+  .display{
+      display:block;
+  }
+  dialog{
+      width:1000;
+      height:auto;
+  }
+</style>
+
+<link rel="stylesheet" href="./css/datatable/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/dt/dt-1.10.8/datatables.min.css"/>
+
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Selphone</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="./dashboard.html">Dash board</a></li>
+        <li><a href="./posts.html">게시글관리</a></li>
+        <li><a href="./board.html">게시판관리</a></li>
+        <li class="active"><a href="./orders.html">결제 정보 관리</a></li>
+        <li><a href="./reports.html">신고 내역</a></li>
+        <li><a href="./content_upload.html">셀폰 콘텐츠</a></li>
+        <li><a href="./users.html">회원관리</a></li>
+      </ul>
+       <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a id="userIdNav" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a id="logoutBtn" >로그아웃</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+  <br><br><br>
+
+  <div class="container">
+    <br>
+    <button id="selphonePost" type="button" class="btn btn-default btn-lg btn-primary" >셀폰 보증 글 작성하기</button>
+  </div>
+
+  <div class="container">
+    <br><br>
+    <hr>
+    <div class="btn-group" role="group" aria-label="...">
+      <button type="button" class="btn btn-default" >전체주문</button>
+      <button type="button" class="btn btn-default" value="입금대기">입금대기</button>
+      <button type="button" class="btn btn-default" value="배송준비중">배송준비중</button>
+      <button type="button" class="btn btn-default" value="배송중">배송중</button>
+      <button type="button" class="btn btn-default" value="배송완료">배송완료</button>
+      <button type="button" class="btn btn-default" value="주문취소">주문취소</button>
+    </div>
+
+    <br><br><br>
+      <!-- <table id="order_table" class="display" cellspacing="0" width="100%"> -->
+      <table id="example" class="display" style="table-layout:fixed" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>INDEX</th>
+                <!-- <th>결제 ID</th> -->
+                <th>주문 ID</th>
+                <!-- <th>글 Id</th> -->
+                <th>결제 수단</th>
+                <th>가격</th>
+                <th>받는 사람</th>
+                <th>받는 전화번호</th>
+                <!-- <th>받는 이메일</th> -->
+                <!-- <th>주소</th> -->
+                <!-- <th>가상계좌 입금 계좌</th> -->
+                <!-- <th>가상계좌 입금 은행</th> -->
+                <!-- <th>가상계좌 입금 만료일</th> -->
+                <th>주문 상태</th>
+            </tr>
+        </thead>
+
+        <tfoot>
+            <tr>
+                <th>INDEX</th>
+                <!-- <th>결제 ID</th> -->
+                <th>주문 ID</th>
+                <!-- <th>글 Id</th> -->
+                <th>결제 수단</th>
+                <th>가격</th>
+                <th>받는 사람</th>
+                <th>받는 전화번호</th>
+                <!-- <th>받는 이메일</th> -->
+                <!-- <th>주소</th> -->
+                <!-- <th>가상계좌 입금 계좌</th> -->
+                <!-- <th>가상계좌 입금 은행</th> -->
+                <!-- <th>가상계좌 입금 만료일</th> -->
+                <th>주문 상태</th>
+            </tr>
+        </tfoot>
+
+        <tbody >
+
+
+        </tbody>
+    </table>
+  </div>
+
+  <div id="dialog" title="운송장 번호를 입력해주세요">
+    <form id="dialog_form" action="">
+      <input id="dialog_order_id"   type="hidden">
+      <input id="dialog_order_url"  type="hidden">
+
+      <label for='trace_company_code'>택배회사를 선택해주세요</label>
+      <select name="trace_company_code" id="trace_company_code">
+        <option value="100">대한통운</option>
+        <option value="200">한진택배</option>
+      </select>
+      <label>운송장번호</label><input id="trace_number" name="trace_number" type="text" >
+      <input type="button" value="전송" onclick="changeOrderTrace()">
+    </form>
+  </div>
+
+  <div id="dialog_detail" title="주문 상세">
+    <div class="form-group">
+      <label for="payment_id">결제 ID</label>
+      <input type="text" class="form-control" id="payment_id" value="payment_id" readonly>
+    </div>
+    <div class="form-group">
+      <label for="order_id">주문자 정보</label>
+      <table>
+        <tr>
+          <td>주문자 아이디</td>
+          <td><input type="text" class="form-control" id="user_id" value="user_id" size="35" readonly></td>
+        </tr>
+        <tr>
+          <td>이메일</td>
+          <td><input type="text" class="form-control" id="receive_email" value="receive_email" size="35" readonly></td>
+        </tr>
+        <tr>
+          <td>배송지 주소</td>
+          <td><input type="text" class="form-control" id="address" value="address" size="35" readonly></td>
+        </tr>
+      </table>
+    </div>
+    <div class="form-group">
+      <label for="order_id">추가 주문 정보</label><br>
+      <textarea name="payment_comment" id="payment_comment" cols="30" rows="5" readonly></textarea>
+    </div>
+
+    <form id="form_selphone_post">
+      <input type="hidden" id="selphone_post_id" />
+      <div class="form-group">
+        <label for="order_id">글 정보</label>
+        <table>
+          <tr>
+            <td>글 제목</td>
+            <td><input type="text" class="form-control" id="post_title" name="post_title" value="post_title" ></td>
+          </tr>
+          <tr>
+            <td>글 내용</td>
+            <td><textarea id="post_description" name="post_description" cols="30" rows="5" ></textarea></td>
+          </tr>
+          <tr>
+            <td>가격</td>
+            <td><input type="text" class="form-control" id="sell_price" value="sell_price" ></td>
+          </tr>
+          <tr>
+            <td>글 휴대폰 모델</td>
+            <td><input type="text" class="form-control" id="product_model" value="product_model" readonly></td>
+          </tr>
+          <tr>
+            <td>글 사진</td>
+            <td><img id="post_img_0" width="100px" height="100px" src="" alt=""><img id="post_img_1" width="100px" height="100px" src="" alt=""><img id="post_img_2" width="100px" height="100px" src="" alt=""></td>
+          </tr>
+        </table>
+      </div>
+      <button type="button" class="btn btn-default" onclick="changeSelphonePost()">글 정보 변경</button>
+    </form>
+  </div>
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+     -->
+    <script src="./script/jquery-2.1.4.min.js" ></script>
+    <script src="./script/jquery-dateFormat.min.js"></script>
+    <script src="./script/custom/showModalDialog.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script src="./script/bootstrap/bootstrap.min.js"></script>
+    <script src="./script/datatable/jquery.dataTables.min.js" ></script>
+    <script src="./script/custom/common.js" ></script>
+
+    <script type="text/javascript" >
+
+      $(document).ready(function(){
+        loginCheck().done(function(data){
+          if(!data.is_login){
+            alert("로그인이 필요합니다.")
+            location.href = "./login.html"
+          }
+        });
+        var Orders = function(orders){
+          var orders;
+          return{
+            setOrders : function(_orders){
+              orders = _orders
+            },
+            getAll : function(){
+              return orders
+            },
+            getOrder : function(_id){
+              for(i in orders){
+                if(orders[i].id == _id)
+                  return orders[i];
+              }
+              return null;
+            }
+          }
+        }
+        $('button').click(function(event){
+          var text = event.originalEvent.toElement.value;
+          var e = $.Event('keydown');
+          e.which = 13;
+          e.keyCode = 13;
+          $('input[type=search]').val(text)
+          .focus().trigger(e);
+        })
+        var table = $('#example').DataTable({"order":[[1,"desc"]]});
+        table.clear().draw();
+        $('#example tbody').on('click', 'tr', function (){
+            var data = table.row(this).data();
+            var index = data[0];
+            // console.log('index', index);
+            makeOrderDetailDialog(index);
+            $('#dialog_detail').dialog('open');
+            // alert( 'You clicked on '+data[0]+'\'s row' );
+        });
+        ajax('GET', '/orders', null, {}).done(function(data){
+          // orders = data.results;
+          orders = Orders(data.results);
+          makeOrderTable(table, orders.getAll())
+        });
+      });
+      // dialog 창
+      $(function(){
+        $('#dialog').dialog({
+          autoOpen: false,
+          resizable: true,
+        });
+        $('#dialog_detail').dialog({
+          autoOpen: false,
+          resizable: true,
+          width : "500px",
+          buttons : {
+            Close : function() {
+                $(this).dialog("close"); // button 실행을 직접 선언하려면 function안에 기능을 써준다.
+            }
+          }
+        });
+      });
+      function numberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+      var formatDate = function(date){
+        // 20150814164800
+        var new_date = "";
+        new_date += date.substr(0,4) + "년 ";
+        new_date += date.substr(4,2) + "월 ";
+        new_date += date.substr(6,2) + "일 ";
+        new_date += date.substr(8,2) + "시 ";
+        new_date += date.substr(10,2) + "분 ";
+        new_date += date.substr(12,2) + "초 ";
+        return new_date;
+      }
+      var getOrderStatusName = function(status){
+        var status_name='';
+        switch(status){
+          case 100 : status_name = '입금대기';    break;
+          case 200 : status_name = '결제완료';    break;
+          case 300 : status_name = '배송준비중';   break;
+          case 400 : status_name = '배송중';      break;
+          case 500 : status_name = '배송완료';    break;
+          case 999 : status_name = '주문취소';    break;
+          case 988 : status_name = '환불';    break;
+        }
+        return status_name;
+      }
+      var getOrderStatusCode = function(status_name){
+        var status_code = 0;
+        switch(status_name){
+          case '입금대기'   : status_code = 100;    break;
+          case '결제완료'   : status_code = 200;    break;
+          case '배송준비중' : status_code = 300;   break;
+          case '배송중'    : status_code = 400;      break;
+          case '배송완료'   : status_code = 500;    break;
+          case '주문취소'   : status_code = 999;    break;
+          case '환불'     : status_code = 988;    break;
+        }
+        return status_code;
+      }
+      var validNextStatus = function(now_status){
+        var next_status = []
+        switch(now_status){
+          case 100 : next_status.push(999);   break;
+          case 200 : next_status.push(300); next_status.push(999);   break;
+          case 300 : next_status.push(400); next_status.push(999);   break;
+          case 400 : next_status.push(500);    break;
+          case 500 : next_status.push(988);    break;
+        }
+        return next_status;
+      }
+      var changeOrderTrace = function(){
+        var url = $('#dialog_order_url').val()
+        if($('#trace_number').val() == ''){ alert('운송장번호를 입렵해주세요'); $('#trace_number').focus(); return;}
+        if(!$.isNumeric($('#trace_number').val())) {alert('숫자만 입력해주세요'); $('#trace_number').val(''); $('#trace_number').focus(); return;}
+        var data = $('#dialog_form').serialize();
+        ajax('PUT', url, data, {})
+        .done(function(data){
+          alert('변경에 성공 하습니다.')
+          location.reload();
+        })
+        .fail(function(err){
+          alert(err)
+        });
+      }
+      var changeOrderStatus = function(order_id, input_tag){
+        var data = {}
+        var status_name = $(input_tag).val()
+        var status = getOrderStatusCode(status_name);
+        var url = '/orders/'+order_id+'/'+status
+        console.log('status : ', status)
+        var msg = '현재 주문을 '+status_name+' 변경하시겠습니까?'
+        if(confirm(msg) != true) return;
+        if(status == 400) {
+          $('#dialog_order_id').val(order_id)
+          $('#dialog_order_url').val(url)
+          $('#dialog').dialog('open');
+          return;
+        }
+        ajax('PUT', url, data, {})
+        .done(function(data){
+          alert('변경에 성공 하습니다.')
+          $('#dialog_detail').dialog('open');
+        })
+        .fail(function(err){
+          alert(err)
+        });
+      }
+      /**
+       * [changeInputVal input태그의 값 변경]
+       * @param  {[type]} order_id [description]
+       * @param  {[type]} text     [description]
+       */
+      var changeInputVal = function(order_id, text){
+        $('#'+order_id).val(text);
+      }
+      var makeOrderDetailDialog = function(index){
+        // console.log('orders : ', orders.getOrder(index))
+        var order = orders.getOrder(index);
+        $('#selphone_post_id').val(order.TB_SELPHONE_POST.id);
+        $('#payment_id').val(order.payment_id);
+        $('#user_id').val(order.TB_USER.user_id +"("+order.TB_USER.user_name+")");
+        $('#receive_email').val(order.receive_email);
+        $('#address').val(order.address + " " + order.address_detail);
+        $('#payment_comment').val(order.payment_comment);
+        $('#post_title').val(order.TB_SELPHONE_POST.post_title);
+        $('#post_description').val(order.TB_SELPHONE_POST.post_description);
+        $('#sell_price').val(order.TB_SELPHONE_POST.sell_price);
+        $('#product_model').val(order.TB_SELPHONE_POST.product_model);
+        var post_imgs = order.TB_SELPHONE_POST.post_pictures.split(',');
+        for(i in post_imgs){
+          $('#post_img_'+ i ).attr('src', post_imgs[i]);
+        }
+      }
+      var changeSelphonePost = function(){
+        var data = $('#form_selphone_post').serialize();
+        console.log(data);
+        var url = DEV_URL + "/selphone-posts/"+ $('#selphone_post_id').val()
+        ajax('PUT', url, data, function(isSuccess, result){
+          if(isSuccess){
+            alert('변경에 성공 하습니다.')
+            location.reload();
+          }else
+            alert(result)
+        });
+      }
+      var makeOrderNextStatus = function(order_id, status_code, status_name){
+        var selector = '';
+        selector += '<div>'
+        if(status_code == 999){
+          selector += '<label for="status">현재상태 : '+status_name+' <br> </label> '
+        }else{
+          selector += '<label for="status">현재상태 : '+status_name+' <br> </label> <select name="status" onchange="changeInputVal('+order_id+', this.options[this.selectedIndex].innerHTML)">';
+          switch(status_code){
+            case 100 : selector += '<option value="999" selected="selected">주문취소</option>';
+            break;
+            case 200 : selector += '<option value="300" selected="selected">배송준비중</option> <option value="999">주문취소</option>';
+            break;
+            case 300 : selector += '<option value="400" selected="selected">배송중</option>    <option value="999">주문취소</option>';
+            break;
+            case 400 : selector += '<option value="500" selected="selected">빼송완료</option>  <option value="999">주문취소</option>';
+            break;
+            case 500 : selector += '<option value="988" selected="selected">환불</option>';
+            break;
+          }
+          selector += '<br><input id='+order_id+' class="btn_status" type="button" value='+getOrderStatusName(validNextStatus(status_code)[0])+' onclick="javascript:changeOrderStatus('+ order_id +', this)" />';
+        }
+        selector += '</div>'
+        return selector
+        //return '<input id='+order_id+' class="btn_status" type="button" value='+status_name+' onclick="javascript:changeOrderStatus('+ order_id +', '+status_code+')" />'
+      }
+      var makeOrderTable = function(table, results){
+        for(i in results){
+          var appendData = [];
+          // appendData.push(i); // 인덱스 방법
+          appendData.push(results[i].id);
+          appendData.push(results[i].order_id);
+          appendData.push(results[i].payment_type);
+          appendData.push(numberWithCommas(results[i].price));
+          appendData.push(results[i].receive_name+"("+results[i].user_id+")");
+          appendData.push(results[i].receive_number);
+          appendData.push(makeOrderNextStatus(results[i].order_id, results[i].status_code, getOrderStatusName(results[i].status_code)));
+          table.row.add(appendData).draw();
+        }
+      }
+
+      function selphonePost(){
+        var popHtml = "selphonePost_add.html";
+        var popOption = "width=600, height=720, top=100, left=100, resizable=yes, scrollbars=no, status=no;";    //팝업창 옵션(optoin)
+        window.open(popHtml,"",popOption);
+      };
+      $("#selphonePost").click(function(){
+        selphonePost()
+      })
+    </script>
+</body>
+
+</html>

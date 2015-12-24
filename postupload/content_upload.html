@@ -9,9 +9,7 @@
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
   <style>
-    html, body {
-      height: 100%;
-    }
+
     #actions {
       margin: 2em 0;
     }
@@ -91,18 +89,19 @@
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-          <li ><a href="./post_jungoform.html">임시게시하기</a></li>
-          <li ><a href="./post_delete.html">게시글관리</a></li>
-          <li ><a href="http://api.selphone.co.kr/naver-login" target="_blank">블로그업로드</a></li>
-          <li ><a href="./post_orderPayment.html">결제 정보 관리</a></li>
-          <li ><a href="./report.html">신고 내역</a></li>
-          <li class="active"><a href="#">콘텐츠 올리기</a></li>
+          <li><a href="./dashboard.html">Dash board</a></li>
+          <li><a href="./posts.html">게시글관리</a></li>
+          <li><a href="./board.html">게시판관리</a></li>
+          <li><a href="./orders.html">결제 정보 관리</a></li>
+          <li><a href="./reports.html">신고 내역</a></li>
+          <li class="active"><a href="./content_upload.html">셀폰 콘텐츠</a></li>
+          <li><a href="./users.html">회원관리</a></li>
         </ul>
          <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
-            <a id="employee_id" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ></a>
+            <a id="userIdNav" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a onclick="javascript:logoutReq(this, event)">Log out</a></li>
+              <li><a id="logoutBtn" >로그아웃</a></li>
             </ul>
           </li>
         </ul>
@@ -290,12 +289,9 @@
   </body>
   <script src="./script/jquery-2.1.4.min.js"></script>
   <script src="./script/dropzone.js"></script>
-  <script src="./script/custom/logincheck.js" ></script>
-  <script src="./script/custom/ajaxRequest.js"></script>
-  <script src="./script/custom/loginjs.js"></script>
-  <script src="./script/custom/common.js" ></script>
   <script src="./script/bootstrap/bootstrap.min.js" ></script>
   <script src="./script/uploadPreview.js" ></script>
+  <script src="./script/custom/common.js" ></script>
   <script>
     function editToggle(now){
       if((now.innerHTML).match("컨텐츠 수정하기")){
@@ -314,12 +310,17 @@
     }
 
     (function(){
-      sessionCheckReq();
+      loginCheck().done(function(data){
+        if(!data.is_login){
+          alert("로그인이 필요합니다.")
+          location.href = "./login.html"
+        }
+      });
       $("#contentEditBtn").click(function(){
         // console.log();
         editToggle($(this)[0]);
         getAllContents();
-      })
+      });
       $.uploadPreview({
         input_field: "#file_md_content_out_picture",   // Default: .image-upload
         preview_box: "#md_content_out_picture",  // Default: .image-preview
@@ -338,41 +339,32 @@
       $('#addSelphonePostFrm').submit(function(e) { // 수정 폼 전송 이벤트
         console.log('e', e);
         console.log('this', this);
-        updateContent(e, function(isSuccess, result){
-          if(isSuccess){
-            // for(i in contents){
-            //   if(contents[i].id == result.id){
-            //     delete result.TB_USER;
-            //     contents[i] = result;
-            //   }
-            // }
-            alert('성공');
-            //나중에 바뀐 데이터만 바꿔주는 걸로
-            location.reload();
-          }else{
-            alert('실패 :'+result);
-          }
-        });
+        updateContent(e)
+        .done(function(result){
+          alert('성공');
+          //나중에 바뀐 데이터만 바꿔주는 걸로
+          location.reload();
+        })
+        .fail(function(err){alert("실패")})
       });
 
       $('#delete').click(function(){
         // if(!check()) return;
         // confirm("해당 컨텐츠를 삭제하시겠습니다?");
-        deleteContent(function(isSuccess, result){
-          if(isSuccess){
-            alert('성공');
-            location.reload();
-          }else{
-            alert('실패 :'+result);
-          }
+        //
+        var content_id = $("#md_content_id").val()
+        ajax("DELETE", "/contents/"+content_id, null, { processData: false, contentType: false})
+        .done(function(){
+          alert('성공');
+          location.reload();
         })
-      })
+        .fail(function(err){
+          alert(err);
+        });
+      });
 
     })(jQuery);
 
-    var DEV_URL = 'http://54.178.140.51'
-    var PRD_URL = 'api.selphone.co.kr'
-    var URL = DEV_URL;
 
     function getExtension(name){
       return "."+name.split('.')[1];
@@ -382,7 +374,7 @@
       return url.replace(/.*\s?url\([\'\"]?/, '').replace(/[\'\"]?\).*/, '')
     }
 
-    function updateContent(e, callback){
+    function updateContent(e){
       var contents = [];
       var content = {};
       e.preventDefault();
@@ -410,25 +402,11 @@
           }
           return true; // continue;
         }
-        // console.log('val.name', val.name);
-        // console.log('val.value', val.value);
+
         formData.append(val.name, val.value);
       });
 
-
-      // if(out_picture){
-      //   formData.append("content_out_picture", out_picture);
-      // }else{
-      //   formData.delete("content_out_picture");
-      // }
-      // if(background_picture){
-      //   formData.append("content_background_picture", background_picture);
-      // }else{
-      //   formData.delete("content_background_picture");
-      // }
-
       $.each(files, function(i, file) {
-        // console.log('file', file.files[0]);
         if(file.files[0])
           formData.append("content_pictures", file.files[0]);
       });
@@ -446,51 +424,10 @@
       console.log('contents', contents);
       formData.append("content_contents", JSON.stringify(contents));
 
-      $.ajax({
-        type : 'PUT',
-        url : 'http://54.178.140.51/contents/'+content_id,
-        crossDomain: true ,//multidomain optiond
-        data : formData,
-        processData: false, // processData false 해야만 formData 갈수 있다 Illegal invocation
-        contentType: false, // contentType false 해야만 body 내용이 이상하게 안간다
-        xhrFields: {withCredentials: true},
-        dataType: 'json',
-        success: function(data, textStatus, jqXHR) {
-          callback(true, data.result)
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          callback(false, jqXHR.responseText)
-        }
-      });
+      return ajax("PUT", "/contents/"+content_id, formData, {processData:false,contentType: false});
     }
 
     Dropzone.autoDiscover = false;
-    function assert(value, employee){
-      if(!value){
-        alert('로그인이 필요합니다.');
-        location.href="./login.html";
-        return false;
-      }
-    };
-
-    function deleteContent(callback){
-      var content_id = $("#md_content_id").val()
-      $.ajax({
-        type : 'DELETE',
-        url : 'http://54.178.140.51/contents/'+content_id,
-        crossDomain: true ,//multidomain optiond
-        processData: false, // processData false 해야만 formData 갈수 있다 Illegal invocation
-        contentType: false, // contentType false 해야만 body 내용이 이상하게 안간다
-        xhrFields: {withCredentials: true},
-        dataType: 'json',
-        success: function(data, textStatus, jqXHR) {
-          callback(true, data)
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          callback(false, jqXHR.responseText)
-        }
-      });
-    }
 
     var error = false;
     var contents = null;
@@ -551,7 +488,7 @@
     previewNode.parentNode.removeChild(previewNode);
 
     var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-      url: "http://54.178.140.51/contents", // Set the url
+      url: URL+"/contents", // Set the url
       thumbnailWidth: 250,
       thumbnailHeight: 250,
       parallelUploads: 20,
@@ -650,16 +587,14 @@
 
     function getAllContents(){
       if(!contents){
-        ajax('GET', URL+'/contents', '', function(isSuccess, result){
-          if(isSuccess){
-            contents = result.results;
-            appendContents(contents);
-          }
-          else{
-            if(result.match('203'))
-              location.href="./post_delete.html";
-          }
-        });
+        ajax('GET', '/contents', null, {})
+        .done(function(result){
+          contents = result.results;
+          appendContents(contents);
+        })
+        .fail(function(err){
+          alert(err)
+        })
       }
     }
 
