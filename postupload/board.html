@@ -79,9 +79,7 @@
                     <tbody>
                     </tbody>
                   </table>
-                  <button id="add_faq" type="button" class="btn btn-primary pull-right"  data-toggle="popover" data-placement="top">추가하기</button>
-
-                  <!-- <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">Launch demo modal</button> -->
+                  <button id="addFaqBtn" type="button" class="btn btn-primary pull-right">추가하기!</button>
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="selphone_notice">
@@ -94,7 +92,7 @@
                     <tbody>
                     </tbody>
                   </table>
-                  <button id="add_selphone" type="button" class="btn btn-primary pull-right"  data-toggle="popover" data-placement="top">추가하기</button>
+                  <button id="addSelphoneBtn" value="sell" type="button" class="btn btn-primary pull-right">추가하기</button>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="manager_notice">
                   <table id="selManagerTable" class="table">
@@ -106,7 +104,7 @@
                     <tbody>
                     </tbody>
                   </table>
-                  <button id="add_manager" type="button" class="btn btn-primary pull-right"  data-toggle="popover" data-placement="top">추가하기</button>
+                  <button id="addManagerBtn" type="button" class="btn btn-primary pull-right" >추가하기</button>
                 </div>
               </div>
 
@@ -118,51 +116,36 @@
 
       </div>
     </div>
-    <textarea id="myTextarea"><p style="font-size: 15px;"></textarea>
+    <!-- <textarea id="myTextarea"><p style="font-size: 15px;"></textarea> -->
   </div>
 
-  <div id="popover-content-faq" class="hide">
-    <form id="addFaqForm" role="form">
-      <div class="form-group">
-        <label for="popoverTitle">제목</label>
-        <textarea class="form-control" name="title" id="popoverTitle" placeholder="제목을 입력하세요" required></textarea>
+
+    <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">추가하기</h4>
+        </div>
+        <div class="modal-body">
+          <form id="modalForm" role="form">
+            <div class="form-group">
+              <label for="popoverTitle">제목</label>
+              <textarea class="form-control" name="title" id="popoverTitle" placeholder="제목을 입력하세요" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="myTextarea">내용</label>
+              <textarea id="myTextarea" name="contents" placeholder="내용을 입력하세요"></textarea>
+            </div>
+            <div>
+              <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+              <button type="submit" class="btn btn-primary">저장</button>
+            </div>
+          </form>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="popoverContents">내용</label>
-        <textarea class="form-control" name="contents" rows="5" id="popoverContents" placeholder="내용을 입력하세요" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="popoverOrder">순서</label>
-        <input type="number" class="form-control" name="order" id="popoverOrder" placeholder="순서를 입력하세요" required>
-      </div>
-      <button type="submit" class="btn btn-primary pull-center">저장</button>
-    </form>
-  </div>
-  <div id="popover-content-selphone" class="hide">
-    <form id="addSelphoneForm" role="form">
-      <div class="form-group">
-        <label for="popoverTitle">제목</label>
-        <textarea class="form-control" name="title" id="popoverTitle" placeholder="제목을 입력하세요" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="popoverContents">내용</label>
-        <textarea class="form-control" name="contents" rows="5" id="popoverContents" placeholder="내용을 입력하세요" required></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary pull-center">저장</button>
-    </form>
-  </div>
-  <div id="popover-content-manager" class="hide">
-    <form id="addManagerForm" role="form">
-      <div class="form-group">
-        <label for="popoverTitle">제목</label>
-        <textarea class="form-control" name="title" id="popoverTitle" placeholder="제목을 입력하세요" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="popoverContents">내용</label>
-        <textarea class="form-control" name="contents" rows="5" id="popoverContents" placeholder="내용을 입력하세요" required></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary pull-center">저장</button>
-    </form>
+    </div>
   </div>
 
 </body>
@@ -176,9 +159,68 @@
 <script src='http://cdn.tinymce.com/4/tinymce.min.js'></script>
 <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/js/bootstrap-editable.min.js"></script> -->
 <script type="text/javascript" >
+  var Faqs = function(faq){
+    var faq;
+    return{
+      set : function(_faq){
+        faq = _faq
+      },
+      all : function(){
+        return faq
+      },
+      get : function(_id){
+        for(i in faq){
+          if(faq[i].id == _id)
+            return faq[i];
+        }
+        return null;
+      }
+    }
+  }
 
-  $(document)
-  .ready(function(){
+  var SelNotice = function(notice){
+    var notice;
+    return{
+      set : function(_notice){
+        notice = _notice
+      },
+      all : function(){
+        return notice
+      },
+      get : function(_id){
+        for(i in notice){
+          if(notice[i].id == _id)
+            return notice[i];
+        }
+        return null;
+      }
+    }
+  }
+
+  var ManagerNotice = function(notice){
+    var notice;
+    return{
+      set : function(_notice){
+        notice = _notice
+      },
+      all : function(){
+        return notice
+      },
+      get : function(_id){
+        for(i in notice){
+          if(notice[i].id == _id)
+            return notice[i];
+        }
+        return null;
+      }
+    }
+  }
+  $(document).on('focusin', function(e) { // link를 수정못하게 하는 에러 해결책
+    if ($(event.target).closest(".mce-window").length) {
+      e.stopImmediatePropagation();
+    }
+  });
+  $(document).ready(function(){
     loginCheck().done(function(data){
       if(!data.is_login){
         alert("로그인이 필요합니다.")
@@ -189,80 +231,105 @@
         getFaqs();
         getSelphoneNotices();
         getMangerNotices();
-        addSaveBtn();
-        $('#add_faq').click(function(){
-          console.log("tinymce", tinymce.activeEditor.getContent());
-        })
+
       }
-    });
-  })
-  .on('submit', '#addFaqForm', function(e){
-    e.preventDefault();
-    ajax('POST', '/faqs', $(this).serialize(), {})
-    .done(function(data){
-      location.reload();
-    })
-    .fail(function(err){
-      console.log("err", err);
-      alert("추가에 실패했습니다.")
-    });
-  })
-  .on('submit', '#addSelphoneForm', function(e){
-    e.preventDefault();
-    ajax('POST', '/selphone-notices', $(this).serialize(), {})
-    .done(function(data){
-      location.reload();
-    })
-    .fail(function(err){
-      console.log("err", err);
-      alert("추가에 실패했습니다.")
-    });
-  })
-  .on('submit', '#addManagerForm', function(e){
-    e.preventDefault();
-    ajax('POST', '/manager-notices', $(this).serialize(), {})
-    .done(function(data){
-      location.reload();
-    })
-    .fail(function(err){
-      console.log("err", err);
-      alert("추가에 실패했습니다.")
     });
   });
 
-  var addSaveBtn = function(){
-    $('#add_faq').popover({
-      // container : 'body',
-      title : '자주묻는 질문 추가',
-      html : true,
-      content : function(){
-        return  $("#popover-content-faq").html();
-      }
-    });
-    $('#add_selphone').popover({
-      // container : 'body',
-      title : '셀폰공지 추가',
-      html : true,
-      content : function(){
-        return  $("#popover-content-selphone").html();
-      }
-    });
-    $('#add_manager').popover({
-      // container : 'body',
-      title : '업체공지 추가',
-      html : true,
-      content : function(){
-        return  $("#popover-content-manager").html();
-      }
-    });
-  };
+  $('#addFaqBtn').click(function(e){
+    initModal()
+    $('#myModalLabel').text("자주묻는 질문 추가")
+    $('#modalForm').submit(function(e){
+      e.preventDefault();
+      ajax('POST', '/faqs', $(this).serialize(), {})
+      .done(function(data){
+        location.reload();
+      })
+      .fail(function(err){
+        console.log("err", err);
+        alert("추가에 실패했습니다.")
+      });
+    })
+  });
+  $('#addSelphoneBtn').click(function(e){
+    initModal()
+    $('#myModalLabel').text("셀폰 공지 추가")
+    $('#modalForm').submit(function(e){
+      e.preventDefault();
+      ajax('POST', '/selphone-notices', $(this).serialize(), {})
+      .done(function(data){
+        location.reload();
+      })
+      .fail(function(err){
+        console.log("err", err);
+        alert("추가에 실패했습니다.")
+      });
+    })
+  });
+  $('#addManagerBtn').click(function(e){
+    initModal()
+    // $('#myModal').modal('show');
+    $('#myModalLabel').text("업체 공지 추가")
+    $('#modalForm').submit(function(e){
+      e.preventDefault();
+      ajax('POST', '/manager-notices', $(this).serialize(), {})
+      .done(function(data){
+        location.reload();
+      })
+      .fail(function(err){
+        console.log("err", err);
+        alert("추가에 실패했습니다.")
+      });
+    })
+  });
 
+  $('table tbody').on('click', 'tr', function (e){
+    // console.log("$(this).attr('class')", $(this).attr('class'));
+    var url;
+    var _class;
+    switch($(this).attr('class')){
+      case 'faqTable' : url = '/faqs/' ; _class = faqs; break;
+      case 'selNoticeTable' : url = '/selphone-notices/' ;  _class = s_notices; break;
+      case 'selManagerTable' : url = '/manager-notices/' ;  _class = m_notices; break;
+    }
+    var nodes = $(this).contents()
+    // console.log("형제 ", nodes);
+    var id = nodes[0].innerHTML
+    var title = nodes[1].innerHTML;
+    // var contents = nodes[2].innerHTML;
+    var deleteBtn
+    if(nodes.length > 4){
+      deleteBtn = nodes[4]
+    }else{
+      deleteBtn = nodes[3]
+    }
+    // console.log("$(this)", $(this));
+    // console.log("id", id);
+    // console.log("faqs", _class.get(id).contents);
+    tinymce.activeEditor.setContent(_class.get(id).contents);
+    // if( !$(this).hasClass('deleteBtn') ){
+      $('#myModal').modal('show');
+      $('#popoverTitle').val(title)
+      $('#myModalLabel').text("수정하기")
+      $('#modalForm').submit(function(e){
+        e.preventDefault();
+        ajax('PUT', url+id, $(this).serialize(), {})
+        .done(function(data){
+          location.reload()
+        })
+        .fail(function(err){
+          console.log("err", err);
+          alert(err)
+        });
+      });
+    // }
+  });
 
   // rich text editor
   var tinymceInit = function(){
     tinymce.init({
       selector: '#myTextarea',
-      height: 150,
+      height: 300,
       theme: 'modern',
       plugins: [
         'advlist autolink lists link image charmap print preview hr anchor pagebreak',
@@ -270,8 +337,8 @@
         'insertdatetime media nonbreaking save table contextmenu directionality',
         'emoticons template paste textcolor colorpicker textpattern imagetools',
       ],
-      toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-      toolbar2: 'print preview media | forecolor backcolor emoticons',
+      toolbar1: 'insertfile undo redo | styleselect | bold italic | bullist numlist  | link image',
+      toolbar2: ' preview media | forecolor backcolor',
       image_advtab: true,
       content_css: [
         'http://fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css',
@@ -283,7 +350,8 @@
   var getFaqs = function(){
     ajax('GET', '/faqs', null, {})
     .done(function(data){
-      makeTable('faqTable', data.results);
+      faqs = Faqs(data.results);
+      makeTable('faqTable', faqs.all());
     })
     .fail(function(err){
       alert(err)
@@ -293,97 +361,63 @@
   var getSelphoneNotices = function(){
     ajax('GET', '/selphone-notices', null, {})
     .done(function(data){
-      makeTable('selNoticeTable', data.results);
+      s_notices = SelNotice(data.results);
+      makeTable('selNoticeTable', s_notices.all());
     })
     .fail(function(err){
       alert(err)
     });
-  }
+  };
 
   var getMangerNotices = function(){
     ajax('GET', '/manager-notices', null, {})
     .done(function(data){
-      makeTable('selManagerTable', data.results);
+      m_notices = ManagerNotice(data.results);
+      makeTable('selManagerTable', m_notices.all());
     })
     .fail(function(err){
       alert(err)
     });
-  }
+  };
 
   var focusNowTab = function(){
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-      // save the latest tab; use cookies if you like 'em better:
       localStorage.setItem('lastTab', $(this).attr('href'));
     });
-    // go to the latest tab, if it exists:
     var lastTab = localStorage.getItem('lastTab');
     if (lastTab) {
       $('[href="' + lastTab + '"]').tab('show');
     }
-  }
+  };
+
+  var initModal = function(){
+    $('#myModal').modal('show');
+    $('#popoverTitle').val("")
+    tinymce.activeEditor.setContent("");
+  };
 
   var makeTable = function(table_id, results){
     for( i in results ){
       var id = results[i].id
       var html = '';
-          html += '<tr class="'+table_id+'">';
+          html += '<tr id="'+id+'" class="'+table_id+'">';
           html += '<td>'+id+'</td>';
-          html += '<td><div data-pk="'+id+'" id="title" data-type="textarea">'+results[i].title+'</div></td>'
-          html += '<td><div data-pk="'+id+'" id="contents" data-type="textarea" >'+results[i].contents+'</div></td>'
-          if(table_id == 'faqTable') html += '<td><div data-pk="'+id+'" id="order" data-type="text" >'+results[i].order+'</div></td>'
-          html += '<td><button class="deleteBtn btn btn-danger" value="'+id+'"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'
+          html += '<td>'+results[i].title+'</td>'
+          html += '<td class="contents">'+results[i].contents+'</td>'
+          if(table_id == 'faqTable') html += '<td>'+results[i].order+'</td>'
+          html += '<td class="deleteBtn"><button class="deleteBtn btn btn-danger" value="'+id+'"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'
           html += '</tr>'
       $('#'+table_id+' tbody').append(html);
     }
 
-
-    $.fn.editable.defaults.mode = 'inline';
-    $('tbody div').editable({
-      url: URL+'/employees/notice',
-      ajaxOptions: {
-          type: 'put',
-          dataType: 'json',
-      },
-      validate: function(value) {
-        if($.trim(value) == '') {
-            return '값을 입력해주세요';
-        }
-      },
-      params: function(params) {
-        var datas = {
-          id : params.pk,
-        }
-        datas[params['name']] = params.value
-        switch(table_id){
-          case 'faqTable' : datas.board_type = 'faq'; break;
-          case 'selNoticeTable' : datas.board_type = 'selphone'; break;
-          case 'selManagerTable' : datas.board_type = 'manager'; break;
-        }
-        return datas
-      },
-      error: function(res, value){
-        if(res.status === 500) {
-          console.log(res.responseText);
-          return '변경에 실패했습니다.';
-        } else {
-          return res.responseText;
-        }
-      },
-      send: 'always',
-      title : "변경정보를 입력해주세요.",
-      rows : 10
-    });
-
     $('tbody button.deleteBtn').unbind().click(function(){
-      var delete_datas = 'board_type='
+      var url;
       switch($(this).parents('tr').attr('class')){
-        case 'faqTable' : delete_datas+='faq' ; break;
-        case 'selNoticeTable' : delete_datas+='selphone' ; break;
-        case 'selManagerTable' : delete_datas+='manager' ; break;
+        case 'faqTable' : url='/faqs/' ; break;
+        case 'selNoticeTable' : url='/selphone-notices/' ; break;
+        case 'selManagerTable' : url='/manager-notices/' ; break;
       }
-
-      console.log(delete_datas);
-      ajax('DELETE', '/employees/notice/'+$(this).val(), delete_datas, {})
+      ajax('DELETE', url+$(this).val(), null, {})
       .done(function(data){
         location.reload();
       })

@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="./css/bootstrap/bootstrap.min.css">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<link rel="stylesheet" href="./css/monthpicker.css">
 
 </head>
 <body>
@@ -27,6 +28,7 @@
         <ul class="nav navbar-nav">
           <li><a href="./dashboard.html">Dash board</a></li>
           <li><a href="./posts.html">게시글관리</a></li>
+          <li><a href="./board.html">게시판관리</a></li>
           <li><a href="./orders.html">결제 정보 관리</a></li>
           <li><a href="./reports.html">신고 내역</a></li>
           <li><a href="./content_upload.html">셀폰 콘텐츠</a></li>
@@ -47,14 +49,62 @@
   <br><br><br>
 
   <div class="container">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h2 id="store_id" class="panel-title">업체선택</h2>
+      </div>
+      <div class="panel-body">
+        <div class="input-group">
+          <span class="input-group-addon" id="basic-addon1">관리 업체 선택</span>
+          <select id="selectManage" class="form-control">
+            <option>업체를 선택해주세요.</option>
+          </select>
+        </div>
+        <div>
+          <table id="storePricesTable" class="table">
+            <thead>
+              <tr>
+                <th>모델이름</th><th>모델명</th><th>가격</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h2 class="panel-title">월별 업체 클릭수</h2>
+      </div>
+      <div class="panel-body">
+        <div>
+          <h3> 가져오는 달 <span id="get-month" class="label label-default"></span>&nbsp&nbsp&nbsp<a id="download_btn" class="btn  btn-info"  download="">엑셀로 뽑기</a></h3>
+        </div>
+        <div>
+          <table id="storeClickTable" class="table">
+            <thead>
+              <tr>
+                <th>업체명</th><th>클릭수</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
 
   </body>
   <script src="./script/jquery-2.1.4.min.js" ></script>
+  <script src="./script/custom/moment.js" ></script>
+  <script src="./script/excelexport.js" ></script>
   <script src="./script/custom/common.js" ></script>
   <script src="./script/bootstrap/bootstrap.min.js"></script>
+  <script src="./script/monthpicker.js"></script>
   <script type="text/javascript" >
     $(document).ready(function(){
       loginCheck().done(function(data){
@@ -62,16 +112,92 @@
           alert("로그인이 필요합니다.")
           location.href = "./login.html"
         }else{
+          $('#get-month').text(moment().subtract(1, 'M').format('YYYY-MM')) // 가져오는달.
+          getMangeStores();
           getStoresClick();
+          $("#selectManage").change(function(){
+             $("select option:selected").each(function (idx, item) {
+              // console.log("$(this).val()", $(this).val());
+              $('#store_id').text($(this).text())
+              getStorePrices( $(this).val() );
+             });
+          });
         }
       });
-
     });
+
+    $("#download_btn").on('click', function () {
+      console.log('aaa');
+      var uri = $("#storeClickTable").battatech_excelexport({
+          containerid: "storeClickTable"
+          , datatype: 'table'
+          , returnUri: true
+      });
+      var month = moment().subtract(1, 'M').format('MM')
+      // console.log('month', month);
+      $(this).attr('download', month+'월 클릭수.xls').attr('href', uri).attr('target', '_blank');
+    });
+
+    var makeStorePricesTable = function(results){
+      $('#storePricesTable tbody').append('');
+      for ( i in results){
+        var html = '';
+          html += '<tr>';
+          html += '<td>'+results[i].product_name+'</td>';
+          html += '<td>'+results[i].product_model+'</td>'
+          html += '<td>'+results[i].product_price+'</td>'
+          html += '</tr>'
+        $('#storePricesTable tbody').append(html);
+      }
+    }
+
+    var makeStoreClickTable = function(results){
+      $('#storeClickTable tbody').append('');
+      for ( i in results){
+        var html = '';
+          html += '<tr>';
+          html += '<td>'+results[i].store_name+'</td>';
+          html += '<td>'+results[i].store_click+'</td>'
+          html += '</tr>'
+        $('#storeClickTable tbody').append(html);
+      }
+    }
+
+    var getStorePrices = function(store_id){
+      var query = '?store_id='+store_id
+      ajax('GET', '/stores-prices'+query , null, {})
+      .done(function(results){
+        // console.log('result', results.results);
+        makeStorePricesTable(results.results)
+      })
+      .fail(function(err){
+        alert('실패');
+        console.log(err);
+      });
+    }
+
+    var getMangeStores = function(){
+      ajax('GET', '/stores-manage' , null, {})
+      .done(function(results){
+        // console.log('result', results);
+        results = results.results
+        for (i in results){
+          var o = new Option("value", results[i].store_id);
+          $(o).html(results[i].store_name);
+          $('#selectManage').append(o);
+        }
+      })
+      .fail(function(err){
+        alert('실패');
+        console.log(err);
+      });
+    }
 
     var getStoresClick = function(query){
       ajax('GET', '/employees/stores-monthly-click?'+ ( query || '') , null, {})
-      .done(function(result){
-        console.log('result', result);
+      .done(function(results){
+        console.log('results', results);
+        makeStoreClickTable(results.results);
       })
       .fail(function(err){
         alert('실패');
