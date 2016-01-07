@@ -1,0 +1,26 @@
+{
+  "name": "new_selphone_web",
+  "version": "0.0.0",
+  "authors": [
+    "sanghakLee <leesanghak7298@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "install": {
+    "path": {
+      "css": "css",
+      "js": "js"
+    }
+  },
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "bootstrap-css": "~3.3.4",
+    "jquery": "~2.1.4"
+  }
+}

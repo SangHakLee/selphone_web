@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko"  xml:lang="ko">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Content-Style-Type" content="text/css">
+		<meta http-equiv="Content-Script-Type" content="text/javascript">
+
+		<script type="text/javascript" src="./script/jquery-1.9.0.js"></script>
+		<script type="text/javascript" src="./script/dev_jquery.js"></script>
+		<script type="text/javascript" src="./script/handle_data.js"></script>
+		<script type="text/javascript" >
+
+		function productListRes(response, isSuccess, status){
+
+			var getData = response.results;
+			//var myProduct = window.opener.myProduct;
+			console.log(window.opener);
+			var myProduct = window.opener.eachProductModels;
+			var candidateProduct = [];
+
+			for(i in getData){
+				candidateProduct.push(getData[i]);
+			}
+
+			for(i in myProduct){
+
+				for(j in candidateProduct){
+
+					if(myProduct[i]==candidateProduct[j].product_model){
+						console.log('myProduct[i]: ',myProduct[i]);
+						console.log('candidateProduct[j]: ',candidateProduct[j]);
+
+						candidateProduct.splice(j, 1)
+
+						break;
+					}
+				}
+
+			}
+
+			var argCount = candidateProduct.length;
+			var appendList = "";
+			for(var i = 0; i < argCount; i++){
+				appendList += "<div name='eachmodel'><input type='text' id='product_name' name='product_name' placeholder='모델이름' value='" + candidateProduct[i].product_name + "' readonly/>"
+				+ "<input type='text' id='product_model' name='product_model' placeholder='모델명' value='" + candidateProduct[i].product_model + "'readonly/>"
+				+"<input type='button' name='addproduct' value='추가' onclick='javascript:addProduct(this)'/></div>";
+			}
+
+			$('#list').html(appendList);
+		};
+
+		function requestProductList(){
+			var targetUrl = '/products-all';
+			ajaxRequest('GET', targetUrl, null, productListRes);
+		};
+
+		requestProductList();
+
+
+		function addProduct(row){
+			var addData = {};
+			addData.add_product_name = row.parentElement.children[0].value;
+			addData.add_product_model = row.parentElement.children[1].value;
+
+			var eventData={}
+			eventData.data = addData;
+			parent.postMessage(eventData,"*")
+			opener.addList(addData);
+			self.close();
+		};
+
+		</script>
+
+	</head>
+<body>
+<div>
+	<p><h2>추가 가능 휴대폰 리스트</h2></p>
+  <form id="list" name="list" method="post">
+  </form>
+</div>
+</body>
+</html>

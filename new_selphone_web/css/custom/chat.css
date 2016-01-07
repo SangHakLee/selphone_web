@@ -1,0 +1,12 @@
+.user_picture{
+	width : 100px;
+}
+
+.user_info{
+	/*text-align: left;*/
+	float: left;
+}
+
+.user_message{
+	float: right;
+}

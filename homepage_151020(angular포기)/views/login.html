@@ -1,0 +1,133 @@
+
+
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+<script src="https://apis.google.com/js/api:client.js"></script>
+
+
+<style type="text/css">
+    #customBtn {
+      display: inline-block;
+      background: #4285f4;
+      color: white;
+      width: 190px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+    #customBtn:hover {
+      cursor: pointer;
+    }
+    span.label {
+      font-weight: bold;
+    }
+    span.icon {
+      background: url() transparent 5px 50% no-repeat;
+      display: inline-block;
+      vertical-align: middle;
+      width: 42px;
+      height: 42px;
+      border-right: #2265d4 1px solid;
+    }
+    span.buttonText {
+      display: inline-block;
+      vertical-align: middle;
+      padding-left: 42px;
+      padding-right: 42px;
+      font-size: 14px;
+      font-weight: bold;
+      /* Use the Roboto font that is loaded in the <head> */
+      font-family: 'Roboto', sans-serif;
+    }
+</style>
+
+<!-- 로그인 modal -->
+
+<div data-ng-controller="loginCtrl">
+    <div class="modal-header">
+        <h4 class="modal-title">로그인</h4>
+    </div>
+    <div class="modal-body">
+        <div style="text-align:center">
+            <!-- <a href="javascript:loginWithKakao()" id="custom-login-btn"> -->
+            <a href="" id="custom-login-btn" data-ng-click="loginWithKakaoBtn()">
+                 <img width="350px" src="http://mud-kage.kakao.co.kr/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg"></img>
+            </a>
+            <br>
+            <a href="" data-ng-click="loginWithNaverBtn()">
+                 <img width="350px" src="./homepage/img/login_btn.png" width="231" height="50" id="NaverIdLoginBTN">
+            </a>
+
+            <div id="gSignInWrapper" data-ng-click="loginWithGoogleBtn()">
+                <div id="customBtn" class="customGPlusSignIn">
+                  <span class="icon"></span>
+                  <span class="buttonText">Google</span>
+                </div>
+            </div>
+        </div>
+	        로그인을 함으로써 셀폰의 <a href="">개인정보취급방침</a>,<a href="">서비스 이용약관</a>,
+	        <a href="">위치기반 서비스 이용약관</a>에 동의 하시게 됩니다.
+	    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" type="button">취소</button>
+    </div>
+</div><!-- /.modal-dialog -->
+
+<!--
+<script>
+    // var googleUser = {};
+    var startApp = function(callback) {
+      gapi.load('auth2', function(){
+        auth2 = gapi.auth2.init({
+          client_id: '175032780584-dtio8mn52t1n2jg97bickkcvfmlftvtk.apps.googleusercontent.com',
+          cookiepolicy: 'single_host_origin',
+          scope: 'profile'
+        });
+        attachSignin(document.getElementById('customBtn'), callback);
+      });
+    };
+
+    var attachSignin = function(element, callback) {
+    	auth2.attachClickHandler(
+    		element,
+    		{},
+    		function(googleUser){
+				authSuccess(googleUser, callback)
+	    	},
+    		function(error){
+	    		alert(JSON.stringify(error, undefined, 2));
+    		}
+    	);
+    };
+	
+	var authSuccess = function(googleUser, callback){
+      callback(googleUser.getAuthResponse().access_token);
+    };
+    
+    function loginWithGoogle(callback){
+	    startApp(function(accessToken){
+		    console.log('access_token', accessToken);
+		    var data = {
+		        "accessToken":accessToken,
+		        "type" : "google",
+		        "regId" : "web"
+		    };
+		    $.ajax({
+		        url: "http://54.178.140.51/login",
+		        type : "post",
+		        data : data,
+		        crossDomain : true,
+		        xhrFields: {withCredentials: true}, // 이게 세션 유지하는거
+		        success: function(res) {
+			        console.log('success', res.result);
+		          	callback(true, res)
+		        },
+		        error: function(res) {
+		          	callback(false, res.responseText)
+		          	alert("로그인 실패"+res.responseText);
+		        }
+		    });
+	    });	    
+    }
+
+
+  </script>
+-->

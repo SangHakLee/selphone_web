@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko"  xml:lang="ko">
+<meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
+ <head>
+  <style>
+   .inline{display:inline;}
+  </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <!-- <script src="baas.io.js"></script> -->
+    <!-- <script src="http://code.jquery.com/jquery-1.9.0b1.js"></script> -->
+    <script type="text/javascript" src="./script/jquery-1.9.0.js"></script>
+    <!--<script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js'></script>-->
+    <!--<script src="./script/js.cookie.js"></script>-->
+
+    <script type="text/javascript" src="./script/price_list.js"></script>
+    <script type="text/javascript" src="./script/selphone.js"></script>
+    <script type="text/javascript">
+      window.name = "parent";
+      //console.log('$.browser : ', $.browser);
+      var ua = window.navigator.userAgent;
+      var msie = ua.indexOf("MSIE");
+      var msieVersion = parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)));
+      console.log('browser : ', window.navigator.userAgent);
+      console.log('browser : ', msieVersion);
+
+      if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)){// If Internet Explorer, return version number
+            if(5 < msieVersion && msieVersion < 10){
+              alert('Please Internet Explorer Update');
+              var script = document.createElement('script');
+              script.src = './script/ieAjax.js';
+              script.type = 'text/javascript';
+              document.getElementsByTagName('head')[0].appendChild(script);
+            }else{
+              console.log('IE 10~');              // If another browser, return 0
+              var script = document.createElement('script');
+              script.src = './script/dev_jquery.js';
+              script.type = 'text/javascript';
+              document.getElementsByTagName('head')[0].appendChild(script);
+            }
+
+      }else{
+            console.log('otherbrowser');              // If another browser, return 0
+            var script = document.createElement('script');
+            script.src = './script/dev_jquery.js';
+            script.type = 'text/javascript';
+            document.getElementsByTagName('head')[0].appendChild(script);
+      }
+
+
+    </script>
+
+    <!-- <script src="store.js"></script> -->
+  </head>
+<!-- <DOCTYPE html> -->
+<!-- <html> -->
+
+  <body>
+  <div class="container">
+    <div id="store_login" style="width:300px; visibility:visible">
+
+      <form class="form-signin"  id="form_login" name="form_login" method="post"  >
+        <h2 class="form-signin-heading">업체 로그인</h2>
+        <input class="form-control" type="text" id="login_id"  name="store_id" size="40" placeholder="ID"><br>
+        <input class="form-control" type="password" id="login_password" name="store_password" size="40" placeholder="PASSWORD"> <br>
+        <input type="hidden" id="type" name="type" value="store_web" />
+
+        <!-- <input type="submit" id="btn_login" name="btn_login" value="로그인"
+        /> -->
+        <input class="btn btn-lg btn-primary btn-block" type="button" id="btn_login" name="btn_login" value="로그인" onclick="javascript:loginReq()" />
+      </form>
+      <!-- <input type="button" id="btn_login" name="btn_login" value="로그인" onclick="javascript:requestStore()" /> -->
+    </div>
+  </div> <!-- container -->
+   <br>
+
+  <div id="store_summary" class="inline" style="width:1000px; visibility:hidden">
+    <div class="inline" style="width:200px;"><b>로그인:</b>
+      <div class="inline" id="result_login" name="result_login" ></div>
+    </div>
+    <div class="inline" style="width:200px;"><b>업체명:</b>
+      <div id="result_storename" name="result_storename" class="inline" style="width:200px;"></div>
+    </div>
+    <div class="inline" style="width:200px;"><b>주소:</b>
+      <div id="result_storeaddress" name="result_storeaddress" class="inline" style="width:600px;">
+
+    </div>
+    <input type="button" id="btn_logout" name="btn_logout" value="로그아웃" onclick='javascript:logoutRes()' />
+    <br><br><br>
+    <div style="width:1000px;">
+      <div><b>업체 메시지</b></div>
+
+      <span style="display:inline-block;">
+      <form>
+        <textarea id="result_message" name="store_message" rows="3" cols="70"> </textarea>
+      </form>
+      </span>
+
+      <input type="button" id="btn_message" name="ben_message" value="메시지수정" onclick="javascript:messageReq();"/>
+
+    </div>
+
+
+    </div>
+
+
+
+  </div>
+  <br><br><br>
+
+  <div style="float:left">
+
+    <div id="store_managed_list" class="none" style="visibility:hidden;">
+      <label for="">업체/지점 아이디 : </label>
+      <select id="managed_ids" name="store_id" value="">
+      </select>
+    </div>
+
+    <div id="store_plist" class="inline" style="visibility:hidden;">
+      <input type="button" id="btn_getlist"  name="btn_price" value="가격 조회" onclick='javascript:storeReq()' />
+
+    </div >
+    <div id="box_issuccess" class="inline" style="visibility:hidden;">
+      <label>조회 : </label> <label id="req_issuccess"></label>
+    </div>
+
+  </div>
+  <br><br><br>
+
+
+
+  <div id="plist_form" style="visibility:hidden">
+
+ <!--  <div class="inline">요청 : <div id="result_priceUpdateInfo"></div>개</div> -->
+    <div class="inline">총 : <div id="store_pcount" style="display:inline;"></div>개
+      <input type="button" id="btn_update" name="btn_update" value="업데이트" onclick="javascript:startUpdate()" />
+      <b id="result_priceUpdateInfo" ></b><br>
+
+    </div>
+
+
+    <br>
+    <div style="display:inline; width:700px">
+
+      <span style="display:inline-block; width:200px">모델이름</span>
+      <span style="display:inline-block; width:200px">모델명</span>
+      <span style="display:inline-block; width:200px">가격</span>
+      <span style="display:inline-block; width:100px">
+
+
+
+      </span>
+    </div>
+
+    <form id="form_info" name="form_info" style="display:hidden">
+
+      <!-- 업체명: <b id="store_name" name="store_name"></b><br>
+      업체 주소: <b id="address" name="address"></b><br> -->
+
+
+        <!-- <input type="text" id="input_date" name="input_date" size="40" placeholder="갱신일자(140814)">  -->
+
+
+    </form>
+    <div>
+     <input style="align:right" type="button" id="btn_addlist" name="btn_addlist" value="모델추가" onclick="javascript:openList()" />
+   </div>
+  </div>
+ <script>
+
+ </script>
+  </body>
+</html>

@@ -818,8 +818,6 @@
     <script src="./homepage/js/naverLogin.js"></script> <!-- 네이버에서 제공하는 sdk -->
     <script src="./homepage/js/login_naver.js"></script>
 
-    <!-- 구글 로그인 -->
-    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 
     <script>
         var DEV_HOST = "http://54.178.140.51"
@@ -841,10 +839,6 @@
                         });
                     break;
                     case 'naver' :
-
-                        onSignIn();
-                        return;
-
                         loginWithNaver(function(isSuccess, result){
                             if(isSuccess){
                                 SessionInfoService.reset(); // 이전 쿠키 데이터 다 지움

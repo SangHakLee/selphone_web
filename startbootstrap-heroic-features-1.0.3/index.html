@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>셀폰</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/heroic-features.css" rel="stylesheet">
+
+    <!-- font-awesome CSS -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <!-- custom style - Ryan -->
+    <style>
+        .thumbnail{
+           /* width: 100%;
+            height: auto;
+            overflow: hidden;*/
+        }
+
+        /*상단 nav 배경색*/
+        .navbar-inverse {
+            background-color:#46619C;
+            border-color: #46619C;
+        }
+
+        li#ic_cheat_blue{
+            background-image: url('images/icon/ic_cheat_blue.png');
+        }
+
+        .cheater{ /*사기꾼일때*/
+            background-color: red;
+            color: white;
+        }
+
+        .post{
+            border: solid black 0.5px;
+/*            width: 30%;
+            height: 30%;*/
+            /*display: inline;*/
+        }
+    </style>
+
+</head>
+
+<body data-ng-app="selphoneApp">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#main">셀폰</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#posts">사고팔기</a>
+                    </li>
+                    <li>
+                        <a href="#">Services</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                </ul>
+                <ul class="input-group"  style="width: 20em; margin: 0.5em 0.5em;">
+                    <li><a href="" data-toggle="modal" data-target="#myModal"><i class="fa fa-exclamation-triangle fa-lg"></i></a></li>
+                    <div class="input-group-btn search-panel">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span id="search_concept">제조사</span> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">삼성</a></li>
+                            <li><a href="#">애플</a></li>
+                            <li><a href="#">엘지</a></li>
+                            <li><a href="#">펜텍</a></li>
+                            <li><a href="#">기타</a></li>
+                        </ul>
+                    </div>
+                    <input type="hidden" name="search_param" value="all" id="search_param">
+                    <input type="text" class="form-control" name="x" placeholder="">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                </ul>
+
+                <!-- <ul class="nav navbar-nav navbar-right">
+
+                    <li><a href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-exclamation-triangle fa-lg"></i></a></li>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-search fa-lg"></i> <span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><input type="text"></li>
+                        <li><a href="#">삼성</a></li>
+                        <li><a href="#">애플</a></li>
+                        <li><a href="#">엘지</a></li>
+                        <li><a href="#">펜텍</a></li>
+                        <li><a href="#">기타</a></li>
+                      </ul>
+                    </li>
+                </ul> -->
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- 사기 조회 Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-ng-controller="checkCheaterController">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"><i class="fa fa-exclamation-triangle fa-lg"></i> 사기피해 신고조회</h4>
+                </div>
+                <div class="modal-body">
+                    <p ng-class="cheater">판매자의 사기여부를 조회하실수 있어요</p>
+                    <!-- <p style="background-color:red">판매자의 사기여부를 조회하실수 있어요</p> -->
+                    <p>전화번호/계좌번호를 입력하시면 경찰청에 사기피해</p>
+                    <p>신고 되었는지 확인해서 결과를 알려드려요.</p>
+                    <p>(최근 3개월동안 3회이상 경찰에 신고접수된 건들과</p>
+                    <p>비교하고 있어요)</p>
+
+                    <label class="radio-inline">
+                        <input type="radio" name="type" id="inlineRadio1" value="H" data-ng-model="type"> 전화번호
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="type" id="inlineRadio2" value="A" data-ng-model="type"> 계좌번호
+                    </label>
+                    <br><br>
+                    <input type="text" class="form-control" name="keyword" placeholder="전화번호 혹은 계좌번호 입력" data-ng-model="keyword">
+
+                    <br>
+                    <h2>{{cheat.message}}</h2>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" data-ng-click="checkCheater(type, keyword)">조회</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <ng-view></ng-view>
+
+        <hr>
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Your Website 2014</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- angular -->
+    <script src="js/angular.min.js"></script>
+    <!-- angular route -->
+    <script src="js/angular-route.min.js"></script>
+    <!-- 공통 모듈 -->
+    <script src="js/common.js"></script>
+
+
+    <script>
+
+        var DER_HOST = "http://54.178.140.51"
+        url = DER_HOST;
+        var product_users = {}
+
+        // ajax('GET', url+'/products-users?sort=update', null, function(isSuccess, results){
+        //     console.log(isSuccess);
+        //     console.log(results);
+        // })
+        // http('GET', url+'/products-users?sort=update', null)
+
+        var app = angular.module('selphoneApp', ['ngRoute']);
+
+
+        app.config(function($routeProvider){
+            $routeProvider.when("/main", {
+                templateUrl : "main.html",
+                cotroller : "postsController"
+            });
+
+            $routeProvider.when("/posts", {
+                templateUrl : "posts.html",
+                cotroller : "postsController"
+            });
+
+            $routeProvider.otherwise({redirectTo:"/main"})
+        })
+
+        app.controller('checkCheaterController', ['$scope', '$http', function($scope, $http){
+            var keyword = $scope.keyword
+            var type = $scope.type
+
+            $scope.checkCheater = function(type, keyword){
+                console.log('keyword', keyword);
+                console.log('type', type);
+                // !! 유효성 검사 필요
+                var end_point = '/cheat-valid?type='+type+'&keyword='+keyword;
+                console.log('end_point ', end_point);
+                // return;
+                http($http, 'GET', url+end_point, null, function(isSuccess, data){
+                  console.log('data', data.result);
+                  console.log('data', data.result.message);
+                  $scope.cheat = data.result;
+                })
+            }
+
+        }])
+
+        app.controller('productUsersController', ['$scope', '$http', function($scope, $http){
+            console.log('productUsersController');
+            http($http, 'GET', url+'/products-users?sort=update', null, function(isSuccess, data){
+                // console.log('data.results1', data.results);
+                // $scope.product_name = data.results[0].TB_PRODUCT.product_name
+                // $scope.product_main_picture = data.results[0].product_main_picture
+                $scope.products = data.results;
+            })
+        }]);
+
+
+        app.controller('adsController', ['$scope', '$http', function($scope, $http){
+            http($http, 'GET', url+'/ads', null, function(isSuccess, data){
+                console.log('data.results2', data.results);
+                // $scope.product_name = data.results[0].TB_PRODUCT.product_name
+                // $scope.product_main_picture = data.results[0].product_main_picture
+                $scope.ads = data.results;
+            });
+        }]);
+    </script>
+</body>
+
+</html>

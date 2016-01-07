@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta name="naver-site-verification" content="2ed519f80987a038251742fdd713dfff7aab292f"/>
+<meta name="google-site-verification" content="izQYEqG79lqMEdgtrjaqkWZMyH4b-egs8t0AxBF3E3I" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>내가 잘파는 이유, 셀폰</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./homepage/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Foundation -->
+    <link href="./homepage/css/foundation.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="./homepage/css/agency.css" rel="stylesheet">
+    <link href="./homepage/css/color.css" rel="stylesheet">
+    <link href="./homepage/css/custom.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="./homepage/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+	    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+<link href="http://fonts.googleapis.com/earlyaccess/nanumgothic.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body id="page-top" class="index" data-ng-app="selphoneApp">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">셀폰</a>
+
+
+
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#selphonePosts">셀폰 보증 휴대폰</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#services">서비스</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#about">회사</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#team">구성원</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#contact">제휴문의</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="" data-toggle="modal" data-target="#loginModal">로그인</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="intro-text">
+                <div class="intro-heading">폰 사고 팔 땐? 셀폰</div>
+                <div class="intro-lead-in">중고폰/깨진액정 거래 중개 서비스</div>
+
+ <!-- <a href="https://play.google.com/store/apps/details?id=kr.co.selphone"  target="_blank" class="btn btn-lg btn-outline">
+                        <i class="fa fa-download"> &nbsp;</i>앱 다운로드 </a> -->
+                <div class="googleplay btn">
+                  <a href="https://play.google.com/store/apps/details?id=kr.co.selphone" target="_blank"><img width="100%" src="./homepage/img/ic_playstore.png" /></a>
+                </div>
+						<br><br>
+
+
+            </div>
+        </div>
+    </header>
+
+
+
+    <!-- Services Section -->
+    <section id="selphonePosts" data-ng-controller="selphonePostsCtrl">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">셀폰 보증 휴대폰</h2>
+                 <br>
+                </div>
+            </div>
+            <div class="row row-eq-height">
+                <div class="col-sm-4 col-lg-4 col-md-4" data-ng-repeat="selphone_post in selphone_posts">
+                <!-- <div class="col-sm-4 col-lg-4 col-md-4"> -->
+                    <div class="thumbnail">
+                        <a href="" data-toggle="modal" data-target="#myModal" ng-click="getSelphonePost(selphone_post)"  style="text-decoration:none">
+                            <img src="{{selphone_post.post_main_picture}}" alt="...">
+                            <div class="caption">
+                                <p>{{selphone_post.post_title}}</p>
+                                <h4 class="pull-right selphone-blue">{{selphone_post.sell_price|currency:undefined:0}}</h4>
+                                <h4>{{selphone_post.TB_PRODUCT.product_name}}</h4>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div><!--end elphonePosts Services row -->
+        </div ><!--end elphonePosts Services container -->
+    </div><!--end elphonePosts Services Section -->
+
+
+    <!-- 셀폰 보증 제품 조회 Modal -->
+    <!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-ng-controller="checkCheaterController"> -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-ng-controller="selphonePostsCtrl">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel"> 셀폰 보증 제품 - {{md_product_name}}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="thumbnail">
+                        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                <li data-target="#carousel-example-generic" data-slide-to="{{$index}}" data-ng-class="{active:!$index}" data-ng-repeat="picture in pictures"></li>
+                            </ol>
+
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner" role="listbox">
+                                <div class="item" ng-class="{active:!$index}" data-ng-repeat="picture in pictures">
+                                    <img src="{{picture}}" alt="...">
+                                    <div class="carousel-caption">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Controls -->
+                            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="caption-full">
+                            <h4 class="pull-right">{{md_sell_price|currency:undefined:0}}</h4>
+                            <h2 class="selphone-blue">{{md_product_name}}</h2>
+                            <h3>{{md_post_title}}</h3>
+                    </div>
+                    <div class="well well-sm">
+                        <h4 class="selphone-blue">상품설명</h4>
+                        <p>{{md_post_description}}</p>
+                    </div>
+                    <div class="well well-sm table-responsive">
+                        <h4 class="selphone-blue">기타정보</h4>
+                        <table class="table">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td class="selphone-blue">통신사</td>
+                                    <td>{{md_post_product_telecom}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="selphone-blue">저장용량</td>
+                                    <td>{{md_post_product_storage}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="selphone-blue">배송비</td>
+                                    <td>우리가 받을 사람입니까? 안받아요.</td>
+                                </tr>
+                                <tr>
+                                    <td class="selphone-blue">배송일정</td>
+                                    <td>1시이전 당일배송, 1시이후 익일배송</td>
+                                </tr>
+                                <tr>
+                                    <td class="selphone-blue">구성풍</td>
+                                    <td>셀폰에서 무료로 제공하는 LG정품 충전기</td>
+                                </tr>
+                                <tr>
+                                    <td class="selphone-blue">시은품</td>
+                                    <td>예쁜 셀폰펜 및 기분이 좋다면 포스트잇도 서비스!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="caption-full">
+                        <button type="button" class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#selphonePostInfoModal">셀폰 보증 판매글 안내</button>
+                    </div>
+                </div><!-- end modal-body -->
+                <div class="modal-footer">
+                    <!-- <button type="submit" class="btn btn-primary" data-ng-click="checkCheater(type, keyword)">조회</button> -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#loginModal">{{md_sell_price|currency:undefined:0}} 구매하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 셀폰 보증 안내 modal -->
+    <div class="modal fade" id="selphonePostInfoModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">셀폰 보증 판매글 안내</h4>
+                </div>
+                <div class="modal-body">
+                    <img style="width: 400px; height: 264px;" src="./homepage/img/img_selphon_post_info.jpg" alt="셀폰 보증 판매글 안내">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- 로그인 modal -->
+    <div class="modal fade" id="loginModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">로그인</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align:center">
+                        <a href="javascript:loginWithKakao()" id="custom-login-btn">
+                             <img width="350px" src="http://mud-kage.kakao.co.kr/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg"></img>
+                        </a>
+                        <br>
+                         <a href="">
+                             <img width="350px" src="./homepage/img/login_btn.png" width="231" height="50" id="NaverIdLoginBTN">
+                         </a>
+                    </div>
+                    로그인을 함으로써 셀폰의 <a href="">개인정보취급방침</a>,<a href="">서비스 이용약관</a>,
+                    <a href="">위치기반 서비스 이용약관</a>에 동의 하시게 됩니다.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기 </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">셀폰 서비스를 소개합니다</h2>
+                 <!--   <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>-->
+				 <br>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-4">
+
+                  <span class="fa-stack fa-4x">
+                      <img width="100%" src="./homepage/img/icon/ic_sell.png" />
+                  </span>
+                  <h4 class="service-heading">휴대폰 판매</h4>
+                  <p class="text-muted">개인거래or매입업체 골라서<br>나의 중고폰을 판매할 수 있어요</p>
+                </div>
+
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                      <img width="100%" src="./homepage/img/icon/ic_buy.png" />
+                    </span>
+                    <h4 class="service-heading">휴대폰 구매</h4>
+                    <p class="text-muted">개인 또는 매입업체에서 A급 중고폰을 살 수 있어요</p>
+                </div>
+
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                      <img width="100%" src="./homepage/img/icon/ic_place.png" />
+                    </span>
+                    <h4 class="service-heading">위치 확인</h4>
+                    <p class="text-muted">지도를 통해 내 주변에서 가까운<br>판매자, 업체를 볼 수 있어요</p>
+                </div>
+
+			         <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                    <img width="100%" src="./homepage/img/icon/ic_money.png" />
+                  </span>
+                  <h4 class="service-heading">매입 가격</h4>
+                  <p class="text-muted">판매하려는 중고폰/깨진액정을 검색해보세요<br>최저가~최고가를 한눈에 확인할 수 있어요</p>
+              </div>
+
+              <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                    <img width="100%" src="./homepage/img/icon/ic_info.png" />
+                  </span>
+                  <h4 class="service-heading">업체 정보</h4>
+                  <p class="text-muted">업체정보를 조회해서 홈페이지, 주소<br>전화번호 등의 다양한 정보를 살펴보세요</p>
+              </div>
+
+               <div class="col-md-4">
+                  <span class="fa-stack fa-4x">
+                    <img width="100%" src="./homepage/img/icon/ic_chat.png" />
+                  </span>
+                  <h4 class="service-heading">실시간 상담</h4>
+                  <p class="text-muted">매입업체 사장님, 판매자와 전화, 채팅을 통해서<br>좀 더 정확한 매입가격을 알아보세요</p>
+              </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+  <div class="container text-center">
+ <a href="https://play.google.com/store/apps/details?id=kr.co.selphone"  target="_blank" class="btn btn-xl" >
+                        <i class="fa fa-download"> &nbsp;</i>앱 다운로드 </a>
+  </div>
+
+
+
+    <!-- About Section -->
+    <section id="about" class="bg-light-gray">
+        <div class="container">
+
+
+
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">우리는 셀폰을 서비스하는 <img  width='180px'  src="./homepage/img/logos/logo.png"> 입니다</h2>
+					<br>
+                    <h3 class="section-subheading text-muted"><b> <img  width='100px'  src="./homepage/img/logos/logo.png"></b> 회사는	증권회사 출신의 입사동기 3명이서 창업한 회사입니다<br><br>
+세 친구 중 한명인 박상권 공동창업자는 취미로 휴대폰을 300개 이상을 매매해왔습니다.<br>
+
+지인이 손해를 보고 전화기를 팔까 싶으면 박 창업자는 대신 팔아주기도 하며 친구들 사이에선 유명한 휴대폰 매매업자로 통했습니다.<br>
+하지만 자신이 직접 매입업체를 찾아다니며 휴대폰을 팔면서 느낀 불편함은 한두 가지가 아니었습니다.<br>
+개인 대 업체의 거래이다 보니 가격 설정과 물건 상태 모두가 중구난방인 형국임을 느꼈습니다.<br>
+
+이 아이템으로 우리가 앱을 만들면 같은 불편함을 호소하는 이들에게 도움을 줄 수 있을 것 같았습니다.<br>
+이날의 모임은 증권회사에서 3명의 직원이 퇴사를 결심하는 날이었습니다.<br><br>
+
+<a href='http://www.gukjenews.com/news/articleView.html?idxno=217088' target="_blank"><b>기사 더보기</b></a><br>
+					</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="timeline">
+                        <li>
+                            <div class="timeline-image">
+                                <img class="img-circle img-responsive" src="./homepage/img/about/1.png" alt="">
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>2014.08</h4>
+                                    <h4 class="subheading">플레이스토어 앱 출시</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted"></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="timeline-inverted">
+                            <div class="timeline-image">
+                                <img class="img-circle img-responsive" src="./homepage/img/about/2.jpg" alt="">
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>2014.08</h4>
+                                    <h4 class="subheading">SK플래닛 창업경진대회 대상</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">SK플래닛에서 3개월간 진행한 [인사이더2014]프로그램 입니다.<br>
+									 13대 1이라는 치열한 경쟁률을 뚫고 선정된 10팀의 오픈 IR과 모의 투자 대회가 진행되었습니다.<br>
+
+<a href='https://oic.skplanet.com/front/centernews/viewCenterNews.action?seq=371' target="_blank"><b>더보기</b></a><br>
+									</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="timeline-image">
+                                <img class="img-circle img-responsive" src="./homepage/img/about/3.jpg" alt="">
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>2014.10</h4>
+                                    <h4 class="subheading">스타트업 토크쇼 '쫄지말고투자하라'출연</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">현역 벤처투자자인 Capstone Partners 송은강 대표, IDG Ventures Korea 이희우 대표가 스타트업 창업자를 만나 회사의 성장 가능성과 투자 가능성을 직접 상담합니다.<br>
+									 출연 스타트업의 사업내용과 벤처캐피탈의 시각을 모두 경험해 볼 수 있는 국내 유일 스타트업 진단방송입니다.<br>
+									 <a href='https://www.youtube.com/watch?v=wrj0B0IbaAM' target="_blank"><b>방송보기</b></a><br>
+									</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="timeline-inverted">
+                            <div class="timeline-image">
+                                <img class="img-circle img-responsive" src="./homepage/img/about/4.jpg" alt="">
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>2014.10</h4>
+                                    <h4 class="subheading">대한민국 창업리그 전국 TOP30 선정</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">대한민국 창업리그는 ’07년부터 운영된 국내 최대 규모·최고 권위의 창업경진대회로 전국의 창업경진대회에서 선발된 최우수 수상자를 전국 본선에 추천하는 방식으로 진행됩니다.<br>
+
+									</p>
+                                </div>
+                            </div>
+                        </li>
+
+
+ <li>
+                            <div class="timeline-image">
+                                <img class="img-circle img-responsive" src="./homepage/img/about/5.jpg" alt="">
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>2014.11</h4>
+                                    <h4 class="subheading">트라이앵글 토크콘서트 오픈IR 우수상</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">두 달간 진행된 트라이앵글 토크 콘서트는 지역 간 창업 생태계 불균형 해소를 통해 창조경제 활성화에 기여하고 있는 SK플래닛의 동반성장 프로그램입니다.<br>
+ <a href='https://oic.skplanet.com/front/centernews/viewCenterNews.action?seq=381' target="_blank"><b>더보기</b></a><br>
+									</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="timeline-inverted">
+                            <div class="timeline-image">
+                                <img class="img-circle img-responsive" src="./homepage/img/about/6.png" alt="">
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>2014.12</h4>
+                                    <h4 class="subheading">앱 10만 다운로드 달성</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">앱출시 100일만에 플레이스토어 10만다운로드를 달성하였습니다.<br>
+
+									</p>
+                                </div>
+                            </div>
+                        </li>
+
+
+
+
+						 <li>
+                            <div class="timeline-image">
+                                <img class="img-circle img-responsive" src="./homepage/img/about/7.png" alt="">
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>2015.01</h4>
+                                    <h4 class="subheading">SK플래닛 101스타트업 코리아 3기 선정</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">
+									SK플래닛의 대표 스타트업 프로그램 '101스타트업 코리아'<br>
+									이번 3기는 약 30여명의 심사위원이 3번의 심사를 거쳐 총 10팀이 선정되었습니다.<br>
+									12대 1의 경쟁률을 뚷고 선정된 3기가  처음으로 모인 부트캠프에서 한 스타트업은 각 팀의 발표를 들으며 "이곳은 오션스 일레븐 같다."라는 평을 남겼습니다.<br>
+									 <a href='https://oic.skplanet.com/front/centernews/viewCenterNews.action?seq=383' target="_blank"><b>더보기</b></a><br>
+									</p>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="timeline-inverted">
+                            <div class="timeline-image">
+                                <img class="img-circle img-responsive" src="./homepage/img/about/8.jpg" alt="">
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>2015.03</h4>
+                                    <h4 class="subheading">TIPS운용사 '엔텔스'로부터 투자유치</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">
+									<br>
+									</p>
+                                </div>
+                            </div>
+                        </li>
+
+
+
+					 <li>
+                            <div class="timeline-image">
+                                <img class="img-circle img-responsive" src="./homepage/img/about/9.jpg" alt="">
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4>2015.03</h4>
+                                    <h4 class="subheading">서울 창업기업 투자설명회 수상</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p class="text-muted">
+
+이 행사는 박원순 서울시장을 비롯해 여러 투자자와 예비창업가등이 참석한 행사였습니다.<br>
+									실제 투자를 진행하는 형태로 기획된 이번 설명회에는 상위 5개팀만이 수상하는 영예를 안았습니다<br>
+ <a href='http://www.venturesquare.net/578478' target="_blank"><b>더보기</b></a><br>
+
+									</p>
+                                </div>
+                            </div>
+                        </li>
+
+
+
+
+                        <li class="timeline-inverted" >
+                            <div class="timeline-image" >
+                                <h3>우리와<br>미래를
+                                    <br>함께하세요!</h3>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+  <div class="container text-center">
+ <a href="https://play.google.com/store/apps/details?id=kr.co.selphone"  target="_blank" class="btn btn-xl" >
+                        <i class="fa fa-download"> &nbsp;</i>앱 다운로드 </a>
+  </div>
+
+
+    <!-- Team Section -->
+    <section id="team">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">우리의 놀라운 구성원을 소개합니다</h2>
+                    <h3 class="section-subheading text-muted"></h3>
+                </div>
+            </div>
+            <div class="row">
+
+
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="./homepage/img/team/1.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
+                        <h4>최중필</h4>
+                        <p class="text-muted"><b>CEO & Co-Founder</b></p>
+						 <p class="text-muted">라꾸라꾸를 뼈속까지 싫어하는 대표<br>1의 가능성을 10으로 만드는 능력을 보유</p>
+                        <ul class="list-inline social-buttons">
+
+                            <li><a href="https://www.facebook.com/cjphynmu" target="_blank"><i class="fa fa-facebook"></i></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="./homepage/img/team/2.jpg" width='185px' height='185px' class="img-responsive img-circle" alt="">
+                        <h4>전승철</h4>
+						 <p class="text-muted"><b>CMO & Co-Founder</b></p>
+						 <p class="text-muted">소통으로 다가가 마케팅하고,<br>진심으로 세일즈 하고싶은 순수청년</p>
+                        <ul class="list-inline social-buttons">
+
+                            <li><a href="https://www.facebook.com/seungchul.jeon" target="_blank"><i class="fa fa-facebook"></i></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="./homepage/img/team/3.jpg" width='185px' height='185px' class="img-responsive img-circle" alt="">
+                        <h4>박상권</h4>
+                        <p class="text-muted"><b>Developer & Co-Founder</b></p>
+						 <p class="text-muted">라꾸라꾸를 사랑하는 뼛속까지 개발자<br>휴대폰 300개이상 구입/판매 경험</p>
+                        <ul class="list-inline social-buttons">
+
+                            <li><a href="https://www.facebook.com/gun860912" target="_blank"><i class="fa fa-facebook"></i></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+<!--
+
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="./homepage/img/team/4.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
+                        <h4>임동수</h4>
+                        <p class="text-muted"><b>Developer</b></p>
+						 <p class="text-muted">개발소대 병장<br>개발소대장이 까라면 (생각해보고) 깐다!</p>
+                        <ul class="list-inline social-buttons">
+
+                            <li><a href="https://www.facebook.com/dongsu.lim.1" target="_blank"><i class="fa fa-facebook"></i></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+-->
+
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="./homepage/img/team/5.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
+                        <h4>이상학</h4>
+                        <p class="text-muted"><b>Developer</b></p>
+						 <p class="text-muted">개발소대 상병(진)<br>개발소대장이 까라면 깐다!</p>
+                        <ul class="list-inline social-buttons">
+
+                            <li><a href="https://www.facebook.com/Ryan.7298" target="_blank"><i class="fa fa-facebook"></i></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+
+
+                <div class="col-sm-4">
+                    <div class="team-member">
+                        <img src="./homepage/img/team/6.jpg"  width='185px' height='185px' class="img-responsive img-circle" alt="">
+                        <h4>이지연</h4>
+                        <p class="text-muted"><b>Designer</b></p>
+						 <p class="text-muted">디자인은 내 손에서!<br>무엇이든 만들어 드려요</p>
+                        <ul class="list-inline social-buttons">
+                            <li><a href="https://www.facebook.com/jeeyeon.lee.9" target="_blank"><i class="fa fa-facebook"></i></a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <p class="large text-muted"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<!-- 셀폰 옐로아이디 -->
+
+ <a href='http://goto.kakao.com/ho1jqmha' target="_blank">
+ <img src="./homepage/img/yellow_id.png" class="img-responsive" alt="Responsive image">
+ </a>
+
+
+
+   <section id="contact">
+        <div class="container">
+
+
+
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">매입업체 사장님이신가요?</h2>
+                    <h3 class="section-subheading text-muted">아래 양식으로 저희에게 메일을 보내주시면 제휴관련 안내를 해드립니다</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <form name="sentMessage" id="contactForm" novalidate>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="이름" id="name" required data-validation-required-message="이름을 입력해주세요">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control" placeholder="이메일" id="email" required data-validation-required-message="이메일을 입력해주세요">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group">
+                                    <input type="tel" class="form-control" placeholder="연락처" id="phone" required data-validation-required-message="연락처를 입력해주세요">
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <textarea class="form-control" placeholder="메세지" id="message" required data-validation-required-message="메세지를 입력해주세요"></textarea>
+                                    <p class="help-block text-danger"></p>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-lg-12 text-center">
+                                <div id="success"></div>
+                                <button type="submit" class="btn btn-xl">메일 전송</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-above">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-4">
+                        <h3>회사위치</h3>
+                        <p>서울시 용산구 원효로1가 25 청년창업플러스센터 425호</p>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>그밖의 URL</h3>
+                         <ul class="list-inline quicklinks">
+                            <li>
+                                <a href="https://www.facebook.com/selphoneselphone" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/watch?v=wrj0B0IbaAM" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-youtube"></i></a>
+                            </li>
+                            <!-- 2015.07.20추가 -->
+                            <li>
+                                <a href="http://rocketpunch.com/company/selphone/" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-rocket"></i></a>
+                            </li>
+
+							<!-- 2015.08.04추가 네이버 블로그 -->
+							<li>
+                                <a href="http://blog.naver.com/selphone0" target="_blank" class="btn-social btn-outline"><i class="fa fa-fw fa-bold"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>회사정보</h3>
+                        <p><b>대표이사: &nbsp;</b>최중필<br><b>사업자등록번호: &nbsp;</b>119-87-06779<br><b>고객센터: &nbsp;</b>010-3057-8698<br><span style="margin-left:65px"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; 선의의경쟁 2015
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+// <script>
+//   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+//   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+//   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+//   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+//   ga('create', 'UA-54112184-1', 'auto');
+//   ga('send', 'pageview');
+
+// </script>
+
+
+
+
+
+    <!-- jQuery -->
+    <script src="./homepage/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./homepage/js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="./homepage/js/classie.js"></script>
+    <script src="./homepage/js/cbpAnimatedHeader.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="./homepage/js/jqBootstrapValidation.js"></script>
+    <script src="./homepage/js/contact_me.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="./homepage/js/agency.js"></script>
+
+    <!-- angular -->
+    <script src="./homepage/js/angular.min.js"></script>
+
+    <!-- foundation.js -->
+    <script src="./homepage/js/foundation.min.js"></script>
+    <script src="./homepage/js/foundation.equalizer.js"></script>
+
+    <!-- 필터 한국에 맞게 i18n 지정 -->
+    <script src="./homepage/js/angular-locale_ko.js"></script>
+
+    <!-- 공통 모듈 -->
+    <script src="./homepage/js/common.js"></script>
+
+    <!-- 카카오톡 로그인 -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script src="./homepage/js/login_kakao.js"></script>
+
+    <script>
+
+        var DEV_HOST = "http://54.178.140.51"
+        var PRD_HOST = "http://api.selphone.co.kr"
+        url = DEV_HOST;
+
+        var app = angular.module('selphoneApp', []);
+
+
+        app.controller('selphonePostsCtrl', ['$scope', '$http', function($scope, $http){
+            console.log('selphonePostsCtrl');
+            http($http, 'GET', url+'/selphone-posts', null, function(isSuccess, data){
+                // console.log('data.results1', data.results);
+                var selphone_posts = data.results
+                for (i in selphone_posts){
+                    selphone_posts[i].post_main_picture = selphone_posts[i].post_pictures.split(',')[0];
+                }
+                $scope.selphone_posts = selphone_posts
+
+                $scope.getSelphonePost =function(selphone_post){
+                    console.log('selphone_post', selphone_post);
+                    $scope.md_product_name = selphone_post.TB_PRODUCT.product_name
+                    $scope.md_sell_price = selphone_post.sell_price
+                    $scope.md_post_title = selphone_post.post_title
+                    $scope.md_post_description = selphone_post.post_description
+                    $scope.md_post_product_storage = selphone_post.post_product_storage
+                    $scope.md_post_product_telecom = selphone_post.post_product_telecom
+                    $scope.pictures = selphone_post.post_pictures.split(',')
+                }
+            })
+        }]);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+<!-- <script src="../js/services/fact.js"></script>	 -->
+<!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
+
+<!-- SelphonePost Section -->
+<section id="selphonePosts" data-ng-controller="selphonePostsCtrl">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">셀폰 보증 휴대폰{{test}}</h2>
+             <br>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-lg-4 col-md-4" data-ng-repeat="selphone_post in selphone_posts">
+            <!-- <div class="col-sm-4 col-lg-4 col-md-4"> -->
+                <div class="thumbnail">
+                    <a href="" data-toggle="modal" ng-click="getSelphonePost(selphone_post)"  style="text-decoration:none">
+<!--                             <img src="{{selphone_post.post_main_picture}}" alt="..."> -->
+                        <div class="caption">
+                            <p>{{selphone_post.post_title}}</p>
+                            <h4 class="pull-right selphone-blue">{{selphone_post.sell_price|currency:undefined:0}}</h4>
+                            <h4>{{selphone_post.TB_PRODUCT.product_name}}</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div><!--end SelphonePosts Services row -->
+    </div><!--end SelphonePosts Services container -->
+</section><!--eend SelphonePost Services Section -->
+
+

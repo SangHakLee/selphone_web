@@ -58,8 +58,12 @@ var loginCheck = function(){ //즉시 실행함수
   return ajax("GET", "/employees/check_isLogin", null, {})
   .done(function(data){
     if(data.is_login){
-      var user = User(data.user_id);
-      $("#userIdNav").text(user.getUser())
+      var user = User(data.session);
+      if(user.getUser().type != 'employee'){
+        alert('직원으로 로그인해주세요.');
+        logout();
+      }
+      $("#userIdNav").text(user.getUser()._id)
       console.log('로그인');
     }else{
       console.log('안로그린');
